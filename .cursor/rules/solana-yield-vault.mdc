@@ -1,0 +1,75 @@
+# Solana Yield Vault Development Rules
+
+## Project Structure
+This is a Solana-based automated USDC yield aggregator built with Anchor framework. The main entry point is [programs/yield-vault/src/lib.rs](mdc:programs/yield-vault/src/lib.rs), which contains the core smart contract logic.
+
+### Key Components
+- **On-Chain Program**: Rust/Anchor smart contract in [programs/yield-vault/](mdc:programs/yield-vault/)
+- **Configuration**: [Anchor.toml](mdc:Anchor.toml) for program deployment settings
+- **Dependencies**: [Cargo.toml](mdc:Cargo.toml) for Rust dependencies
+- **Tests**: [tests/yield-vault.ts](mdc:tests/yield-vault.ts) for TypeScript integration tests
+
+## Development Patterns
+
+### Anchor Framework Usage
+- Always use `anchor_lang::prelude::*` for imports
+- Use `#[program]` macro to define the main program module
+- Implement proper account validation with `#[derive(Accounts)]` structs
+- Use `declare_id!()` macro for program ID declaration
+
+### Solana Best Practices
+- Implement proper error handling with `Result<()>` return types
+- Use `msg!()` macro for logging and debugging
+- Follow the vault-keeper model: on-chain execution, off-chain intelligence
+- Implement secure CPI (Cross-Program Invocation) patterns
+
+### Security Requirements
+- All privileged instructions must use `#[account(constraint = ...)]` for authority checks
+- Never hardcode private keys or sensitive data
+- Implement input validation for all user-provided data
+- Use PDAs (Program Derived Addresses) for program-controlled accounts
+
+## Architecture Guidelines
+
+### Phase 1: Kamino Integration
+- Focus on foundational vault functionality
+- Implement deposit/withdraw operations
+- Integrate with Kamino Lend program using CPI
+- Build basic keeper monitoring (read-only)
+
+### Phase 2: Multi-Protocol Support
+- Add MarginFi integration
+- Implement automated yield switching logic
+- Build intelligent rebalancing algorithms
+- Add comprehensive monitoring and alerting
+
+### State Management
+- Use singleton PDAs for global vault state
+- Implement proper share token minting/burning
+- Track protocol allocations and current yields
+- Maintain audit trail of all operations
+
+## Code Quality Standards
+- Use meaningful variable names (e.g., `vault_state`, `keeper_authority`)
+- Implement comprehensive error handling
+- Add detailed logging for debugging
+- Follow Rust naming conventions (snake_case)
+- Use strong typing for all account structures
+
+## Testing Strategy
+- Write unit tests for all instruction logic
+- Implement integration tests using [tests/yield-vault.ts](mdc:tests/yield-vault.ts)
+- Test both success and failure scenarios
+- Verify CPI interactions with external programs
+- Test authority constraints and security measures
+
+## Deployment Workflow
+- Use `anchor build` for compilation
+- Deploy to Devnet first for testing
+- Verify program builds match source code
+- Use secure key management for production
+- Implement proper monitoring and alerting
+description:
+globs:
+alwaysApply: true
+---

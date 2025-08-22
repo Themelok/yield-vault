@@ -1,0 +1,33 @@
+---
+description:
+Best USDC Solana APY
+Goal is to create an automated service, which finds the lending protocol with best % APY for stablecoins (only USDC).
+If the % APY changes and a better protocol is found after some time, automatically withdraw and deposit into the best.
+Take into account that quick withdrawals and deposits periodically might lead to losses.
+
+Lending protocol for this task: 
+- marginfi
+- kamino
+
+Example:
+App finds that Kamino’s USDC APY is 4% and the highest at the moment. App deposits there.
+After a week, Kamino’s USDC drops to 3% and marginfi’s APY increases to 4.25%. App withdrawals from kamino and deposits in marginfi’s USDC.
+
+Requirements:
+Lending protocols: marginfi and kamino.finance
+Stablecoin: only USDC
+Create a Solana program, which:
+owner can deposit USDC
+owner can withdrawal USDC
+integrates with Kamino’s deposit and withdraw functionality
+integrates with marginfi’s deposit and withdraw token functionality
+migration between lending protocols
+
+  4. Create a Rust application, which:
+has information of the USDC APY of both protocols.
+has a simple logic on how to consider which is the best USDC APY farm between the two protocols.
+integrates with 3.
+triggers 3. on deposits, and migrates the USDC funds once there is a better opportunity than the current existing
+globs:
+alwaysApply: true
+---

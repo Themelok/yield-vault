@@ -1,0 +1,96 @@
+---
+globs: *.rs
+alwaysApply: false
+---
+# Rust and Anchor Development Patterns
+
+## Anchor Framework Patterns
+- Use `anchor_lang::prelude::*` for standard imports
+- Always implement `#[derive(Accounts)]` for instruction account validation
+- Use `#[program]` macro to define the main program module
+- Implement proper error handling with `Result<()>` return types
+
+## Solana Program Structure
+- Use `declare_id!()` macro for program ID declaration
+- Implement instructions as public functions within the program module
+- Use `msg!()` macro for logging and debugging information
+- Follow the pattern: `pub fn instruction_name(ctx: Context<InstructionAccounts>) -> Result<()>`
+
+## Account Validation
+- Use `#[account(constraint = ...)]` for authority checks
+- Validate account ownership with proper constraints
+- Check account mutability requirements
+- Implement proper PDA (Program Derived Address) validation
+
+## CPI (Cross-Program Invocation) Patterns
+- Use `CpiContext::new_with_signer()` for secure CPI calls
+- Pass proper signer seeds for PDA authority
+- Validate all required accounts before CPI execution
+- Handle CPI errors gracefully with proper error propagation
+
+## State Management
+- Use singleton PDAs for global program state
+- Implement proper account initialization in `initialize` instructions
+- Use strong typing for all state structures
+- Implement proper state validation and updates
+
+## Error Handling
+- Define custom error types using `#[error_code]` attribute
+- Use descriptive error messages
+- Implement proper error propagation through the call stack
+- Handle edge cases and invalid inputs gracefully
+
+## Security Best Practices
+- Never hardcode addresses or sensitive data
+- Implement proper access control for all privileged operations
+- Validate all user inputs thoroughly
+- Use secure random number generation when needed
+- Implement proper reentrancy protection
+
+
+# Rust and Anchor Development Patterns
+
+## Anchor Framework Patterns
+- Use `anchor_lang::prelude::*` for standard imports
+- Always implement `#[derive(Accounts)]` for instruction account validation
+- Use `#[program]` macro to define the main program module
+- Implement proper error handling with `Result<()>` return types
+
+## Solana Program Structure
+- Use `declare_id!()` macro for program ID declaration
+- Implement instructions as public functions within the program module
+- Use `msg!()` macro for logging and debugging information
+- Follow the pattern: `pub fn instruction_name(ctx: Context<InstructionAccounts>) -> Result<()>`
+
+## Account Validation
+- Use `#[account(constraint = ...)]` for authority checks
+- Validate account ownership with proper constraints
+- Check account mutability requirements
+- Implement proper PDA (Program Derived Address) validation
+
+## CPI (Cross-Program Invocation) Patterns
+- Use `CpiContext::new_with_signer()` for secure CPI calls
+- Pass proper signer seeds for PDA authority
+- Validate all required accounts before CPI execution
+- Handle CPI errors gracefully with proper error propagation
+
+## State Management
+- Use singleton PDAs for global program state
+- Implement proper account initialization in `initialize` instructions
+- Use strong typing for all state structures
+- Implement proper state validation and updates
+
+## Error Handling
+- Define custom error types using `#[error_code]` attribute
+- Use descriptive error messages
+- Implement proper error propagation through the call stack
+- Handle edge cases and invalid inputs gracefully
+
+## Security Best Practices
+- Never hardcode addresses or sensitive data
+- Implement proper access control for all privileged operations
+- Validate all user inputs thoroughly
+- Use secure random number generation when needed
+- Implement proper reentrancy protection
+
+

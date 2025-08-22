@@ -1,0 +1,50 @@
+# Testing and Integration Patterns
+
+## Test Structure
+- Use the existing test framework in [tests/yield-vault.ts](mdc:tests/yield-vault.ts)
+- Follow the pattern established in the project for Solana program testing
+- Use `ts-mocha` as configured in [package.json](mdc:package.json)
+
+## Solana Testing Best Practices
+- Test both success and failure scenarios
+- Verify account validation and authority checks
+- Test CPI interactions with external programs
+- Validate state changes after instruction execution
+- Test edge cases and boundary conditions
+
+## Integration Testing
+- Test complete user workflows (deposit → yield → withdraw)
+- Verify keeper automation logic
+- Test multi-protocol interactions (Kamino, MarginFi)
+- Validate yield calculation accuracy
+- Test rebalancing mechanisms
+
+## Test Data Management
+- Use realistic test data that mirrors mainnet conditions
+- Implement proper test account setup and cleanup
+- Use deterministic test values for reproducible results
+- Mock external API calls when appropriate
+
+## Error Testing
+- Test invalid account inputs
+- Test unauthorized access attempts
+- Test network failure scenarios
+- Test insufficient balance conditions
+- Verify proper error message propagation
+
+## Performance Testing
+- Test transaction execution times
+- Verify gas optimization
+- Test with realistic transaction volumes
+- Monitor memory usage patterns
+
+## Security Testing
+- Test access control mechanisms
+- Verify PDA validation
+- Test reentrancy protection
+- Validate input sanitization
+- Test privilege escalation attempts
+description:
+globs:
+alwaysApply: false
+---
