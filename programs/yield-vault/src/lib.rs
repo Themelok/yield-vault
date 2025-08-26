@@ -54,13 +54,17 @@ pub mod yield_vault {
         let cpi_deposit_accounts = kamino_cpi::accounts::DepositReserveLiquidity {
             owner:                          ctx.accounts.vault_account.to_account_info(),
             reserve:                        ctx.accounts.kamino_reserve.to_account_info(),
+            // Lending Market accounts
             lending_market:                 ctx.accounts.kamino_lending_market.to_account_info(),
             lending_market_authority:       ctx.accounts.kamino_lending_market_authority.to_account_info(),
+            // Reserve accounts
             reserve_liquidity_mint:         ctx.accounts.usdc_mint.to_account_info(),
             reserve_liquidity_supply:       ctx.accounts.kamino_reserve_liquidity_supply.to_account_info(),
-            reserve_collateral_mint:        ctx.accounts.kamino_usdc_collateral_mint.to_account_info(),
+            reserve_collateral_mint:        ctx.accounts.kamino_usdc_collateral_mint.to_account_info(), // TODO: check if this is correct
+            // User accounts
             user_source_liquidity:          ctx.accounts.usdc_vault.to_account_info(),
             user_destination_collateral:    ctx.accounts.kamino_usdc_collateral_vault.to_account_info(),
+            // Token programs
             collateral_token_program:       ctx.accounts.token_program.to_account_info(),
             liquidity_token_program:        ctx.accounts.token_program.to_account_info(),
             instruction_sysvar_account:     ctx.accounts.instruction_sysvar_account.to_account_info(),
@@ -84,14 +88,18 @@ pub mod yield_vault {
 
         let cpi_accounts_kamino = kamino_cpi::accounts::RedeemReserveCollateral {
             owner:                         ctx.accounts.vault_account.to_account_info(), // PDA
+            
             reserve:                       ctx.accounts.kamino_reserve.to_account_info(),
             lending_market:                ctx.accounts.kamino_lending_market.to_account_info(),
             lending_market_authority:      ctx.accounts.kamino_lending_market_authority.to_account_info(),
+            // Reserve accounts
             reserve_liquidity_mint:        ctx.accounts.usdc_mint.to_account_info(),
             reserve_liquidity_supply:      ctx.accounts.kamino_reserve_liquidity_supply.to_account_info(),
             reserve_collateral_mint:       ctx.accounts.kamino_usdc_collateral_mint.to_account_info(),
+            // User accounts
             user_source_collateral:        ctx.accounts.kamino_usdc_collateral_vault.to_account_info(),
             user_destination_liquidity:    ctx.accounts.usdc_vault.to_account_info(),
+
             collateral_token_program:      ctx.accounts.token_program.to_account_info(),
             liquidity_token_program:       ctx.accounts.token_program.to_account_info(),
             instruction_sysvar_account:    ctx.accounts.instruction_sysvar_account.to_account_info(),
