@@ -16,6 +16,7 @@ import {
 import { assert } from "chai";
 import * as fs from "fs";
 import * as os from "os";
+import { getBankVaultAuthority, BankVaultType } from "@mrgnlabs/marginfi-client-v2"; 
 
 // let USDC_MINT: PublicKey;
 let USER_USDC_ATA: PublicKey;
@@ -36,9 +37,10 @@ const KLEND_LENDING_MARKET_AUTHORITY = new PublicKey("9DrvZvyWh1HuAoZxvYWMvkf2XC
 
 // Marginfi:
 const MARGINFI_PROGRAM = new PublicKey("MFv2hWf31Z9kbCa1snEPYctwafyhdvnV7FZnsebVacA");
-const MARGINFI_BANK = new PublicKey("2s37akK2eyBbp8DZgCm7RtsaEz8eJP3Nxd4urLHQv7yB");
 const MARGINFI_GROUP = new PublicKey("4qp6Fx6tnZkY5Wropq9wUYgtFxXKwE6viZxFHg3rdAG8");
-
+const MARGINFI_BANK = new PublicKey("2s37akK2eyBbp8DZgCm7RtsaEz8eJP3Nxd4urLHQv7yB");
+const MARGINFI_BANK_USDC_LIQUIDITY_VAULT = new PublicKey("7jaiZR5Sk8hdYN9MxTpczTcwbWpb5WEoxSANuUwveuat");
+const MARGINFI_BANK_USDC_LIQUIDITY_VAULT_AUTH = new PublicKey("3uxNepDbmkDNq6JhRja5Z8QwbTrfmkKP8AKZV5chYDGG");
 // const mint_authority = new PublicKey("BJE5MMbqXjVwjAF7oxwPYXnTXDyspzZyt4vwenNw5ruG");
 
 describe("yield-vault", () => {
@@ -47,6 +49,7 @@ describe("yield-vault", () => {
   const program = anchor.workspace.yieldVault as Program<YieldVault>;
   const user = anchor.web3.Keypair.fromSecretKey(Uint8Array.from(JSON.parse(fs.readFileSync(`${os.homedir()}/.config/solana/user.json`, "utf8"))));
   
+
   const [vault_account_pda, vault_seed] = PublicKey.findProgramAddressSync([VAULT_SEED, user.publicKey.toBuffer()], program.programId);
   const connection = program.provider.connection;
 
@@ -88,12 +91,7 @@ describe("yield-vault", () => {
     }
     console.log("✅ Klen lending market authority found:", KLEND_LENDING_MARKET_AUTHORITY.toBase58());
 
-    let ownerAta = await getOrCreateAssociatedTokenAccount(
-      connection,
-      user,
-      USDC_MINT,
-      user.publicKey
-    );
+    let ownerAta = await getOrCreateAssociatedTokenAccount(connection, user, USDC_MINT, user.publicKey);
     USER_USDC_ATA = ownerAta.address;
     if (!USER_USDC_ATA) {
       throw new Error("User USDC ATA not found");
@@ -106,22 +104,51 @@ describe("yield-vault", () => {
       throw new Error("Vault USDC ATA not found");
     }
     console.log("✅ Vault USDC ATA:", VAULT_USDC_ATA.toBase58());
+
+    const marginfi_bank_usdc_liquidity_vault_auth = await connection.getAccountInfo(MARGINFI_BANK_USDC_LIQUIDITY_VAULT_AUTH);
+    if (!marginfi_bank_usdc_liquidity_vault_auth) {
+      throw new Error("Marginfi bank USDC liquidity vault authority not found. Make sure to start test validator with --clone 3uxNepDbmkDNq6JhRja5Z8QwbTrfmkKP8AKZV5chYDGG");
+    }
+    console.log("✅ Marginfi bank USDC liquidity vault authority found:", MARGINFI_BANK_USDC_LIQUIDITY_VAULT_AUTH.toBase58());
+
+    // Validate Marginfi bank account
+    const marginfi_bank = await connection.getAccountInfo(MARGINFI_BANK);
+    if (!marginfi_bank) {
+      throw new Error("Marginfi bank not found. Make sure to start test validator with --clone 2s37akK2eyBbp8DZgCm7RtsaEz8eJP3Nxd4urLHQv7yB");
+    }
+    console.log("✅ Marginfi bank found:", MARGINFI_BANK.toBase58());
+
+    // Validate Marginfi group account
+    const marginfi_group = await connection.getAccountInfo(MARGINFI_GROUP);
+    if (!marginfi_group) {
+      throw new Error("Marginfi group not found. Make sure to start test validator with --clone 4qp6Fx6tnZkY5Wropq9wUYgtFxXKwE6viZxFHg3rdAG8");
+    }
+    console.log("✅ Marginfi group found:", MARGINFI_GROUP.toBase58());
+
+    // Validate Marginfi bank liquidity vault
+    const marginfi_bank_liquidity_vault = await connection.getAccountInfo(MARGINFI_BANK_USDC_LIQUIDITY_VAULT);
+    if (!marginfi_bank_liquidity_vault) {
+      throw new Error("Marginfi bank USDC liquidity vault not found. Make sure to start test validator with --clone 7jaiZR5Sk8hdYN9MxTpczTcwbWpb5WEoxSANuUwveuat");
+    }
+    console.log("✅ Marginfi bank USDC liquidity vault found:", MARGINFI_BANK_USDC_LIQUIDITY_VAULT.toBase58());
   });
 
   it("Is initialized!", async () => {
     const MARGINFI_ACCOUNT = Keypair.generate();
+    console.log("📦 MARGINFI_ACCOUNT", MARGINFI_ACCOUNT.publicKey.toBase58());
     const tx = await program.methods.initialize().accounts({
-      owner: user.publicKey,
+      user: user.publicKey,
       usdcMint: USDC_MINT,
       kaminoUsdcCollateralMint: KLEND_COLLATERAL_MINT,
       marginfiAccount: MARGINFI_ACCOUNT.publicKey,
       marginfiGroup: MARGINFI_GROUP,
     }).signers([user, MARGINFI_ACCOUNT]).rpc();
     console.log("Your transaction signature", tx);
+    
     await bumpSlot(connection, program.provider.wallet.payer);
-
+    await bumpSlot(connection, program.provider.wallet.payer);
     // Verify vault account is initialized
-    const vault_account = await program.account.vault.fetch(vault_account_pda);
+    const vault_account = await program.account.userVault.fetch(vault_account_pda);
     assert.equal(vault_account.owner.toBase58(), user.publicKey.toBase58());
     assert.equal(vault_account.bump, vault_seed);
 
@@ -130,33 +157,70 @@ describe("yield-vault", () => {
 
   });
 
-  // it("Deposit USDC", async () => {
-  //   const tx = await program.methods.depositUsdc(new anchor.BN(45_000_000)).accounts({
-  //     owner:                        user.publicKey,
-  //     ownerUsdcAccount:             USER_USDC_ATA,
-  //     usdcMint:                     USDC_MINT,
-  //     kaminoLendingMarket:          KLEND_MAIN_LENDING_MARKET,
-  //     kaminoReserve:                KLEND_USDC_RESEVE,
-  //     kaminoUsdcCollateralMint:     KLEND_COLLATERAL_MINT,
-  //     kaminoLendingMarketAuthority: KLEND_LENDING_MARKET_AUTHORITY,
-  //     kaminoReserveLiquiditySupply: KLEND_RESERVE_LIQUIDITY_SUPPLY,
-  //   }).signers([user]).rpc();
-  //   console.log("Deposit transaction signature", tx);
-  // })
+  it("Deposit USDC to Marginfi", async () => {
+    const marginfi_account = await program.account.userVault.fetch(vault_account_pda);
+    console.log("👀 Fetched Marginfi account:", marginfi_account.marginfiAccount.toBase58());
 
-  // it("Withdraw USDC", async () => {
-  //   const tx = await program.methods.withdrawUsdc(new anchor.BN(10_000_000)).accounts({
-  //     owner: user.publicKey,
-  //     ownerUsdcAccount: USER_USDC_ATA,
-  //     usdcMint: USDC_MINT,
-  //     kaminoLendingMarket: KLEND_MAIN_LENDING_MARKET,
-  //     kaminoReserve: KLEND_USDC_RESEVE,
-  //     kaminoUsdcCollateralMint: KLEND_COLLATERAL_MINT,
-  //     kaminoLendingMarketAuthority: KLEND_LENDING_MARKET_AUTHORITY,
-  //     kaminoReserveLiquiditySupply: KLEND_RESERVE_LIQUIDITY_SUPPLY,
-  //   }).signers([user]).rpc();
-  //   console.log("Withdraw transaction signature", tx);
-  // })
+    const tx = await program.methods.depositUsdcMarginfi(new anchor.BN(45_000_000)).accounts({
+      owner: user.publicKey,
+      ownerUsdcAccount: USER_USDC_ATA,
+      usdcMint: USDC_MINT,
+      marginfiGroup: MARGINFI_GROUP,
+      marginfiAccount: marginfi_account.marginfiAccount,
+      marginfiBank: MARGINFI_BANK,
+      marginfiBankLiquidityVault: MARGINFI_BANK_USDC_LIQUIDITY_VAULT,
+    }).signers([user]).rpc();
+    console.log("Marginfi Deposit transaction signature", tx);
+    await bumpSlot(connection, program.provider.wallet.payer);
+  })
+
+  it("Withdraw USDC from Marginfi", async () => {
+    // fetch marginfi account from vault
+    const marginfi_account = await program.account.userVault.fetch(vault_account_pda);
+    console.log("👀 Fetched Marginfi account:", marginfi_account.marginfiAccount.toBase58());
+
+    const tx = await program.methods.withdrawUsdcMarginfi(new anchor.BN(10_000_000)).accounts({
+      owner: user.publicKey,
+      ownerUsdcAccount: USER_USDC_ATA,
+      usdcMint: USDC_MINT,
+      marginfiGroup: MARGINFI_GROUP,
+      marginfiAccount: marginfi_account.marginfiAccount,
+      marginfiBank: MARGINFI_BANK,
+      marginfiBankLiquidityVault: MARGINFI_BANK_USDC_LIQUIDITY_VAULT,
+      marginfiBankLiquidityVaultAuthority: MARGINFI_BANK_USDC_LIQUIDITY_VAULT_AUTH,
+    }).signers([user]).rpc();
+    console.log("Marginfi Withdraw transaction signature", tx);
+    await bumpSlot(connection, program.provider.wallet.payer);
+  })
+
+  it("Deposit USDC", async () => {
+    const tx = await program.methods.depositUsdc(new anchor.BN(45_000_000)).accounts({
+      owner:                        user.publicKey,
+      ownerUsdcAccount:             USER_USDC_ATA,
+      usdcMint:                     USDC_MINT,
+      kaminoLendingMarket:          KLEND_MAIN_LENDING_MARKET,
+      kaminoReserve:                KLEND_USDC_RESEVE,
+      kaminoUsdcCollateralMint:     KLEND_COLLATERAL_MINT,
+      kaminoLendingMarketAuthority: KLEND_LENDING_MARKET_AUTHORITY,
+      kaminoReserveLiquiditySupply: KLEND_RESERVE_LIQUIDITY_SUPPLY,
+    }).signers([user]).rpc();
+    console.log("Kamino Deposit transaction signature", tx);
+    await bumpSlot(connection, program.provider.wallet.payer);
+  })
+
+  it("Withdraw USDC", async () => {
+    const tx = await program.methods.withdrawUsdc(new anchor.BN(10_000_000)).accounts({
+      owner: user.publicKey,
+      ownerUsdcAccount: USER_USDC_ATA,
+      usdcMint: USDC_MINT,
+      kaminoLendingMarket: KLEND_MAIN_LENDING_MARKET,
+      kaminoReserve: KLEND_USDC_RESEVE,
+      kaminoUsdcCollateralMint: KLEND_COLLATERAL_MINT,
+      kaminoLendingMarketAuthority: KLEND_LENDING_MARKET_AUTHORITY,
+      kaminoReserveLiquiditySupply: KLEND_RESERVE_LIQUIDITY_SUPPLY,
+    }).signers([user]).rpc();
+    console.log("Kamino Withdraw transaction signature", tx);
+  })
 
 
 });
@@ -174,7 +238,7 @@ async function waitNextSlot(conn: Connection) {
   let s = start;
   let tries = 0;
   while (s <= start && tries < 20) {
-    await new Promise((r) => setTimeout(r, 250));
+    await new Promise((r) => setTimeout(r, 2500));
     s = await conn.getSlot();
     console.log("Waiting for next slot...", s);
     tries++;
@@ -182,12 +246,13 @@ async function waitNextSlot(conn: Connection) {
 }
 
 async function bumpSlot(conn: Connection, payer: anchor.web3.Keypair) {
-  // Nudge the validator forward and wait for at least one new slot
+  // Nudge the validator forward
   try {
     await conn.requestAirdrop(payer.publicKey, 1); // localnet only; harmless and cheap
   } catch (_) {
     // ignore if faucet not available; wait loop still helps
   }
+  
   await waitNextSlot(conn);
 }
 

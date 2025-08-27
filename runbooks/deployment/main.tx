@@ -1,0 +1,112 @@
+################################################################
+# Manage yield-vault deployment through Crypto Infrastructure as Code
+################################################################
+
+addon "svm" {
+    rpc_api_url = input.rpc_api_url
+    network_id = input.network_id
+}
+
+action "deploy_yield_vault" "svm::deploy_program" {
+    description = "Deploy yield_vault program"
+    program = svm::get_program_from_anchor_project("yield_vault") 
+    authority = signer.authority
+    payer = signer.payer
+    // Optional: if you want to deploy the program via a cheatcode when targeting a Surfnet, set `instant_surfnet_deployment = true`
+    // Deploying via a cheatcode will write the program data directly to the program account, rather than sending transactions.
+    // This will make deployments instantaneous, but is deviating from how the deployments will take place on devnet/mainnet.
+    // instant_surfnet_deployment = true
+}
+
+
+
+action "setup" "svm::setup_surfnet" {
+    // Clone Klen program account
+    clone_program_account {
+        source_program_id = "KLend2g3cP87fffoy8q1mQqGKjrxjC8boSyAYavgmjD"
+        destination_program_id = "KLend2g3cP87fffoy8q1mQqGKjrxjC8boSyAYavgmjD"
+    }
+    // Clone marginfi program account
+    clone_program_account {
+        source_program_id = "MFv2hWf31Z9kbCa1snEPYctwafyhdvnV7FZnsebVacA"
+        destination_program_id = "MFv2hWf31Z9kbCa1snEPYctwafyhdvnV7FZnsebVacA"
+    }
+    // Set user account
+    set_account {
+        public_key = signer.user.address
+        lamports = 333000000000
+    }
+    set_token_account {
+        public_key = signer.user.address
+        token = "usdc"
+        amount = 1000000000
+    }
+}
+
+// Klend accounts:
+action "getAccountInfo" "std::send_http_request" {
+  url = "http://localhost:8899"
+  method = "POST"
+  body = {
+    "id":1, "jsonrpc":"2.0", "method":"getAccountInfo",
+    "params":[ "7u3HeHxYDLhnCoErrtycNokbQYbWGzLs6JSDqGAv5PfF" ] }
+}
+
+action "getAccountInfo" "std::send_http_request" {
+  url = "http://localhost:8899"
+  method = "POST"
+  body = {
+    "id":1, "jsonrpc":"2.0", "method":"getAccountInfo", 
+    "params":[ "D6q6wuQSrifJKZYpR1M8R4YawnLDtDsMmWM1NbBmgJ59" ] }
+}
+
+action "getAccountInfo" "std::send_http_request" {
+  url = "http://localhost:8899"
+  method = "POST"
+  body = {
+    "id":1, "jsonrpc":"2.0", "method":"getAccountInfo",
+    "params":[ "Bgq7trRgVMeq33yt235zM2onQ4bRDBsY5EWiTetF4qw6" ] }
+}
+
+action "getAccountInfo" "std::send_http_request" {
+  url = "http://localhost:8899"
+  method = "POST"
+  body = {
+    "id":1, "jsonrpc":"2.0", "method":"getAccountInfo",
+    "params":[ "9DrvZvyWh1HuAoZxvYWMvkf2XCzryCpGgHqrMjyDWpmo" ] }
+}
+
+// Marginfi accounts:
+action "getAccountInfo" "std::send_http_request" {
+  url = "http://localhost:8899"
+  method = "POST"
+  body = {
+    "id":1, "jsonrpc":"2.0", "method":"getAccountInfo",
+    "params":[ "2s37akK2eyBbp8DZgCm7RtsaEz8eJP3Nxd4urLHQv7yB" ] }
+}
+
+action "getAccountInfo" "std::send_http_request" {
+  url = "http://localhost:8899"
+  method = "POST"
+  body = {
+    "id":1, "jsonrpc":"2.0", "method":"getAccountInfo",
+    "params":[ "4qp6Fx6tnZkY5Wropq9wUYgtFxXKwE6viZxFHg3rdAG8" ] }
+}
+
+// Marginfi BANK_USDC_LIQUIDITY_VAULT
+action "getAccountInfo" "std::send_http_request" {
+  url = "http://localhost:8899"
+  method = "POST"
+  body = {
+    "id":1, "jsonrpc":"2.0", "method":"getAccountInfo",
+    "params":[ "7jaiZR5Sk8hdYN9MxTpczTcwbWpb5WEoxSANuUwveuat" ] }
+}
+
+// Marginfi BANK_USDC_LIQUIDITY_VAULT_AUTHORITY
+action "getAccountInfo" "std::send_http_request" {
+  url = "http://localhost:8899"
+  method = "POST"
+  body = {
+    "id":1, "jsonrpc":"2.0", "method":"getAccountInfo",
+    "params":[ "3uxNepDbmkDNq6JhRja5Z8QwbTrfmkKP8AKZV5chYDGG" ] }
+}
