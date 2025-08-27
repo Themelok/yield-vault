@@ -1,0 +1,23 @@
+[package]
+name = "marginfi-cpi-local"
+version = "0.1.0"
+edition = "2021"
+
+[lib]
+name = "marginfi_cpi_local"
+path = "src/lib.rs"
+
+[features]
+# Anchor requires an idl-build feature to be present from v0.30+
+idl-build = ["anchor-lang/idl-build"]
+default = ["cpi"]
+anchor-debug = []
+no-entrypoint = []
+no-idl = []
+no-log-ix-name = []
+cpi = ["no-entrypoint"]
+
+
+[dependencies]
+anchor-gen = "0.4.1"
+anchor-lang = "0.31.1"

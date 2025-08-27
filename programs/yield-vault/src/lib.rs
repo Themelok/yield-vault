@@ -11,13 +11,19 @@ use anchor_spl::associated_token::AssociatedToken;
 use kamino_lend::cpi as kamino_cpi;
 use kamino_lend::program::KaminoLending;
 
-declare_id!("7hZaF7cQzn6Yej5f6N6kjLTeZuhB6UTqG8GMhtkoD5tk");
+use marginfi_cpi_local::program::Marginfi;
+use marginfi_cpi_local::cpi::accounts as mfi_accounts; 
+use marginfi_cpi_local::cpi as mfi_cpi;              
+
+
+declare_id!("5urWt3YZS2aXYPhr7LbkQxTHB9o9FDPevV8N1PEeYkYu");
 
 // Most lending protocols (Kamino included) define:
 // •	deposit_reserve_liquidity(amount) → amount in liquidity units (USDC)
 // •	redeem_reserve_collateral(amount) → amount in collateral units (kUSDC)
 #[program]
 pub mod yield_vault {
+
     use super::*;
 
     pub fn initialize(ctx: Context<Initialize>) -> Result<()> {
@@ -27,6 +33,38 @@ pub mod yield_vault {
         vault.bump = ctx.bumps.vault_account;
         // vault.usdc_vault = ctx.accounts.usdc_vault.key();
 
+
+
+// marginfi_group
+// marginfi_account // Signer // isMut
+// authority // Signer
+// fee_payer // Signer // isMut
+// system_program
+
+        let seeds = [
+            VAULT_SEED,
+            ctx.accounts.owner.to_account_info().key.as_ref(),
+            &[ctx.accounts.vault_account.bump],
+        ];
+        let signer: &[&[&[u8]]] = &[&seeds];
+        
+        let cpi_accounts = mfi_accounts::MarginfiAccountInitialize {
+            marginfi_group:   ctx.accounts.marginfi_group.to_account_info(),
+            marginfi_account: ctx.accounts.marginfi_account.to_account_info(), // fresh Keypair (outer signer)
+            authority:        ctx.accounts.vault_account.to_account_info(),    // PDA authority
+            fee_payer:        ctx.accounts.owner.to_account_info(),
+            system_program:   ctx.accounts.system_program.to_account_info(),
+        };
+        
+        let cpi_ctx = CpiContext::new_with_signer(
+            ctx.accounts.marginfi_program.to_account_info(),
+            cpi_accounts,
+            signer,
+        );
+        mfi_cpi::marginfi_account_initialize(cpi_ctx)?;
+
+        ctx.accounts.vault_account.marginfi_account = ctx.accounts.marginfi_account.key();
+     
         msg!("Vault initialized for owner: {}", owner.to_string());
         Ok(())
     }
@@ -75,6 +113,12 @@ pub mod yield_vault {
             signer,
         );
         kamino_cpi::deposit_reserve_liquidity(cpi_ctx_kamino, amount)?;
+
+
+        // let marginfi_cpi_accounts = mfi_accounts::LendingAccountDeposit{
+
+        // }
+
         Ok(())
     }
 
@@ -142,6 +186,8 @@ pub struct Initialize<'info>{
     #[account(mut)]
     pub owner: Signer<'info>,
     pub usdc_mint: Account<'info, Mint>,
+
+
    
     #[account(
         init,
@@ -172,6 +218,17 @@ pub struct Initialize<'info>{
     pub kamino_usdc_collateral_vault: Account<'info, TokenAccount>,
 
 
+    // Marginfi Specific Accounts:
+    // pub marginfi_program: Program<'info, Marginfi>,
+    /// CHECK: Marginfi group account
+   /// CHECK: marginfi group (owner checked)
+    #[account(owner = Marginfi::id())]
+    pub marginfi_group: UncheckedAccount<'info>,
+    #[account(mut)]
+    pub marginfi_account: Signer<'info>,
+    pub marginfi_program: Program<'info, Marginfi>,
+
+
     // BUILT-IN ACCOUNTS:
     pub system_program: Program<'info, System>,
     pub token_program: Program<'info, Token>,
@@ -187,8 +244,6 @@ pub struct TransferUsdc<'info> {
     pub owner: Signer<'info>,
     #[account(mut, constraint = owner_usdc_account.mint == usdc_mint.key(), constraint = owner_usdc_account.owner == owner.key())]
     pub owner_usdc_account: Account<'info, TokenAccount>,
-
-    
 
     #[account(
         mut,
@@ -249,13 +304,15 @@ pub struct Vault {
     pub bump: u8,               // Bump for the vault
     pub owner: Pubkey,          // Owner of the vault
     // pub usdc_vault: Pubkey,     // Token Account for USDC
+    pub marginfi_account: Pubkey, // Marginfi account
 }
 
 impl Vault {
     pub const LEN: usize = 
     8 + // discriminator
     1 + // bump
-    32; // owner
+    32 + // owner
+    32; // marginfi_account
 
 
 }

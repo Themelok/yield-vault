@@ -1,0 +1,7342 @@
+{
+  "accounts": [
+    {
+      "discriminator": [
+        142,
+        49,
+        166,
+        242,
+        50,
+        66,
+        97,
+        188
+      ],
+      "name": "Bank"
+    },
+    {
+      "discriminator": [
+        63,
+        224,
+        16,
+        85,
+        193,
+        36,
+        235,
+        220
+      ],
+      "name": "FeeState"
+    },
+    {
+      "discriminator": [
+        67,
+        178,
+        130,
+        109,
+        126,
+        114,
+        28,
+        42
+      ],
+      "name": "MarginfiAccount"
+    },
+    {
+      "discriminator": [
+        182,
+        23,
+        173,
+        240,
+        151,
+        206,
+        182,
+        67
+      ],
+      "name": "MarginfiGroup"
+    },
+    {
+      "discriminator": [
+        157,
+        140,
+        6,
+        77,
+        89,
+        173,
+        173,
+        125
+      ],
+      "name": "StakedSettings"
+    }
+  ],
+  "address": "MFv2hWf31Z9kbCa1snEPYctwafyhdvnV7FZnsebVacA",
+  "errors": [
+    {
+      "code": 6000,
+      "msg": "Internal Marginfi logic error",
+      "name": "InternalLogicError"
+    },
+    {
+      "code": 6001,
+      "msg": "Invalid bank index",
+      "name": "BankNotFound"
+    },
+    {
+      "code": 6002,
+      "msg": "Lending account balance not found",
+      "name": "LendingAccountBalanceNotFound"
+    },
+    {
+      "code": 6003,
+      "msg": "Bank deposit capacity exceeded",
+      "name": "BankAssetCapacityExceeded"
+    },
+    {
+      "code": 6004,
+      "msg": "Invalid transfer",
+      "name": "InvalidTransfer"
+    },
+    {
+      "code": 6005,
+      "msg": "Missing Oracle, Bank, LST mint, or Sol Pool",
+      "name": "MissingPythOrBankAccount"
+    },
+    {
+      "code": 6006,
+      "msg": "Missing Pyth account",
+      "name": "MissingPythAccount"
+    },
+    {
+      "code": 6007,
+      "msg": "Missing Bank account",
+      "name": "MissingBankAccount"
+    },
+    {
+      "code": 6008,
+      "msg": "Invalid Bank account",
+      "name": "InvalidBankAccount"
+    },
+    {
+      "code": 6009,
+      "msg": "RiskEngine rejected due to either bad health or stale oracles",
+      "name": "RiskEngineInitRejected"
+    },
+    {
+      "code": 6010,
+      "msg": "Lending account balance slots are full",
+      "name": "LendingAccountBalanceSlotsFull"
+    },
+    {
+      "code": 6011,
+      "msg": "Bank already exists",
+      "name": "BankAlreadyExists"
+    },
+    {
+      "code": 6012,
+      "msg": "Amount to liquidate must be positive",
+      "name": "ZeroLiquidationAmount"
+    },
+    {
+      "code": 6013,
+      "msg": "Account is not bankrupt",
+      "name": "AccountNotBankrupt"
+    },
+    {
+      "code": 6014,
+      "msg": "Account balance is not bad debt",
+      "name": "BalanceNotBadDebt"
+    },
+    {
+      "code": 6015,
+      "msg": "Invalid group config",
+      "name": "InvalidConfig"
+    },
+    {
+      "code": 6016,
+      "msg": "Bank paused",
+      "name": "BankPaused"
+    },
+    {
+      "code": 6017,
+      "msg": "Bank is ReduceOnly mode",
+      "name": "BankReduceOnly"
+    },
+    {
+      "code": 6018,
+      "msg": "Bank is missing",
+      "name": "BankAccountNotFound"
+    },
+    {
+      "code": 6019,
+      "msg": "Operation is deposit-only",
+      "name": "OperationDepositOnly"
+    },
+    {
+      "code": 6020,
+      "msg": "Operation is withdraw-only",
+      "name": "OperationWithdrawOnly"
+    },
+    {
+      "code": 6021,
+      "msg": "Operation is borrow-only",
+      "name": "OperationBorrowOnly"
+    },
+    {
+      "code": 6022,
+      "msg": "Operation is repay-only",
+      "name": "OperationRepayOnly"
+    },
+    {
+      "code": 6023,
+      "msg": "No asset found",
+      "name": "NoAssetFound"
+    },
+    {
+      "code": 6024,
+      "msg": "No liability found",
+      "name": "NoLiabilityFound"
+    },
+    {
+      "code": 6025,
+      "msg": "Invalid oracle setup",
+      "name": "InvalidOracleSetup"
+    },
+    {
+      "code": 6026,
+      "msg": "Invalid bank utilization ratio",
+      "name": "IllegalUtilizationRatio"
+    },
+    {
+      "code": 6027,
+      "msg": "Bank borrow cap exceeded",
+      "name": "BankLiabilityCapacityExceeded"
+    },
+    {
+      "code": 6028,
+      "msg": "Invalid Price",
+      "name": "InvalidPrice"
+    },
+    {
+      "code": 6029,
+      "msg": "Account can have only one liability when account is under isolated risk",
+      "name": "IsolatedAccountIllegalState"
+    },
+    {
+      "code": 6030,
+      "msg": "Emissions already setup",
+      "name": "EmissionsAlreadySetup"
+    },
+    {
+      "code": 6031,
+      "msg": "Oracle is not set",
+      "name": "OracleNotSetup"
+    },
+    {
+      "code": 6032,
+      "msg": "Invalid switchboard decimal conversion",
+      "name": "InvalidSwitchboardDecimalConversion"
+    },
+    {
+      "code": 6033,
+      "msg": "Cannot close balance because of outstanding emissions",
+      "name": "CannotCloseOutstandingEmissions"
+    },
+    {
+      "code": 6034,
+      "msg": "Update emissions error",
+      "name": "EmissionsUpdateError"
+    },
+    {
+      "code": 6035,
+      "msg": "Account disabled",
+      "name": "AccountDisabled"
+    },
+    {
+      "code": 6036,
+      "msg": "Account can't temporarily open 3 balances, please close a balance first",
+      "name": "AccountTempActiveBalanceLimitExceeded"
+    },
+    {
+      "code": 6037,
+      "msg": "Illegal action during flashloan",
+      "name": "AccountInFlashloan"
+    },
+    {
+      "code": 6038,
+      "msg": "Illegal flashloan",
+      "name": "IllegalFlashloan"
+    },
+    {
+      "code": 6039,
+      "msg": "Illegal flag",
+      "name": "IllegalFlag"
+    },
+    {
+      "code": 6040,
+      "msg": "Illegal balance state",
+      "name": "IllegalBalanceState"
+    },
+    {
+      "code": 6041,
+      "msg": "Illegal account authority transfer",
+      "name": "IllegalAccountAuthorityTransfer"
+    },
+    {
+      "code": 6042,
+      "msg": "Unauthorized",
+      "name": "Unauthorized"
+    },
+    {
+      "code": 6043,
+      "msg": "Invalid account authority",
+      "name": "IllegalAction"
+    },
+    {
+      "code": 6044,
+      "msg": "Token22 Banks require mint account as first remaining account",
+      "name": "T22MintRequired"
+    },
+    {
+      "code": 6045,
+      "msg": "Invalid ATA for global fee account",
+      "name": "InvalidFeeAta"
+    },
+    {
+      "code": 6046,
+      "msg": "Use add pool permissionless instead",
+      "name": "AddedStakedPoolManually"
+    },
+    {
+      "code": 6047,
+      "msg": "Staked SOL accounts can only deposit staked assets and borrow SOL",
+      "name": "AssetTagMismatch"
+    },
+    {
+      "code": 6048,
+      "msg": "Stake pool validation failed: check the stake pool, mint, or sol pool",
+      "name": "StakePoolValidationFailed"
+    },
+    {
+      "code": 6049,
+      "msg": "Switchboard oracle: stale price",
+      "name": "SwitchboardStalePrice"
+    },
+    {
+      "code": 6050,
+      "msg": "Pyth Push oracle: stale price",
+      "name": "PythPushStalePrice"
+    },
+    {
+      "code": 6051,
+      "msg": "Oracle error: wrong number of accounts",
+      "name": "WrongNumberOfOracleAccounts"
+    },
+    {
+      "code": 6052,
+      "msg": "Oracle error: wrong account keys",
+      "name": "WrongOracleAccountKeys"
+    },
+    {
+      "code": 6053,
+      "msg": "Pyth Push oracle: wrong account owner",
+      "name": "PythPushWrongAccountOwner"
+    },
+    {
+      "code": 6054,
+      "msg": "Staked Pyth Push oracle: wrong account owner",
+      "name": "StakedPythPushWrongAccountOwner"
+    },
+    {
+      "code": 6055,
+      "msg": "Pyth Push oracle: mismatched feed id",
+      "name": "PythPushMismatchedFeedId"
+    },
+    {
+      "code": 6056,
+      "msg": "Pyth Push oracle: insufficient verification level",
+      "name": "PythPushInsufficientVerificationLevel"
+    },
+    {
+      "code": 6057,
+      "msg": "Pyth Push oracle: feed id must be 32 Bytes",
+      "name": "PythPushFeedIdMustBe32Bytes"
+    },
+    {
+      "code": 6058,
+      "msg": "Pyth Push oracle: feed id contains non-hex characters",
+      "name": "PythPushFeedIdNonHexCharacter"
+    },
+    {
+      "code": 6059,
+      "msg": "Switchboard oracle: wrong account owner",
+      "name": "SwitchboardWrongAccountOwner"
+    },
+    {
+      "code": 6060,
+      "msg": "Pyth Push oracle: invalid account",
+      "name": "PythPushInvalidAccount"
+    },
+    {
+      "code": 6061,
+      "msg": "Switchboard oracle: invalid account",
+      "name": "SwitchboardInvalidAccount"
+    },
+    {
+      "code": 6062,
+      "msg": "Math error",
+      "name": "MathError"
+    },
+    {
+      "code": 6063,
+      "msg": "Invalid emissions destination account",
+      "name": "InvalidEmissionsDestinationAccount"
+    },
+    {
+      "code": 6064,
+      "msg": "Asset and liability bank cannot be the same",
+      "name": "SameAssetAndLiabilityBanks"
+    },
+    {
+      "code": 6065,
+      "msg": "Trying to withdraw more assets than available",
+      "name": "OverliquidationAttempt"
+    },
+    {
+      "code": 6066,
+      "msg": "Liability bank has no liabilities",
+      "name": "NoLiabilitiesInLiabilityBank"
+    },
+    {
+      "code": 6067,
+      "msg": "Liability bank has assets",
+      "name": "AssetsInLiabilityBank"
+    },
+    {
+      "code": 6068,
+      "msg": "Account is healthy and cannot be liquidated",
+      "name": "HealthyAccount"
+    },
+    {
+      "code": 6069,
+      "msg": "Liability payoff too severe, exhausted liability",
+      "name": "ExhaustedLiability"
+    },
+    {
+      "code": 6070,
+      "msg": "Liability payoff too severe, liability balance has assets",
+      "name": "TooSeverePayoff"
+    },
+    {
+      "code": 6071,
+      "msg": "Liquidation too severe, account above maintenance requirement",
+      "name": "TooSevereLiquidation"
+    },
+    {
+      "code": 6072,
+      "msg": "Liquidation would worsen account health",
+      "name": "WorseHealthPostLiquidation"
+    },
+    {
+      "code": 6073,
+      "msg": "Arena groups can only support two banks",
+      "name": "ArenaBankLimit"
+    },
+    {
+      "code": 6074,
+      "msg": "Arena groups cannot return to non-arena status",
+      "name": "ArenaSettingCannotChange"
+    },
+    {
+      "code": 6075,
+      "msg": "The Emode config was invalid",
+      "name": "BadEmodeConfig"
+    },
+    {
+      "code": 6076,
+      "msg": "TWAP window size does not match expected duration",
+      "name": "PythPushInvalidWindowSize"
+    },
+    {
+      "code": 6077,
+      "msg": "Invalid fees destination account",
+      "name": "InvalidFeesDestinationAccount"
+    },
+    {
+      "code": 6078,
+      "msg": "Zero asset price",
+      "name": "ZeroAssetPrice"
+    },
+    {
+      "code": 6079,
+      "msg": "Zero liability price",
+      "name": "ZeroLiabilityPrice"
+    },
+    {
+      "code": 6080,
+      "msg": "Oracle max confidence exceeded: try again later",
+      "name": "OracleMaxConfidenceExceeded"
+    },
+    {
+      "code": 6081,
+      "msg": "Banks cannot close when they have open positions or emissions outstanding",
+      "name": "BankCannotClose"
+    },
+    {
+      "code": 6082,
+      "msg": "Account already migrated",
+      "name": "AccountAlreadyMigrated"
+    }
+  ],
+  "events": [
+    {
+      "discriminator": [
+        29,
+        58,
+        155,
+        191,
+        75,
+        220,
+        145,
+        206
+      ],
+      "name": "EditStakedSettingsEvent"
+    },
+    {
+      "discriminator": [
+        183,
+        159,
+        218,
+        110,
+        61,
+        220,
+        65,
+        1
+      ],
+      "name": "HealthPulseEvent"
+    },
+    {
+      "discriminator": [
+        223,
+        96,
+        81,
+        10,
+        156,
+        99,
+        26,
+        59
+      ],
+      "name": "LendingAccountBorrowEvent"
+    },
+    {
+      "discriminator": [
+        161,
+        54,
+        237,
+        217,
+        105,
+        248,
+        122,
+        151
+      ],
+      "name": "LendingAccountDepositEvent"
+    },
+    {
+      "discriminator": [
+        166,
+        160,
+        249,
+        154,
+        183,
+        39,
+        23,
+        242
+      ],
+      "name": "LendingAccountLiquidateEvent"
+    },
+    {
+      "discriminator": [
+        16,
+        220,
+        55,
+        111,
+        7,
+        80,
+        16,
+        25
+      ],
+      "name": "LendingAccountRepayEvent"
+    },
+    {
+      "discriminator": [
+        3,
+        220,
+        148,
+        243,
+        33,
+        249,
+        54,
+        88
+      ],
+      "name": "LendingAccountWithdrawEvent"
+    },
+    {
+      "discriminator": [
+        104,
+        117,
+        187,
+        156,
+        111,
+        154,
+        106,
+        186
+      ],
+      "name": "LendingPoolBankAccrueInterestEvent"
+    },
+    {
+      "discriminator": [
+        101,
+        119,
+        97,
+        250,
+        169,
+        175,
+        156,
+        253
+      ],
+      "name": "LendingPoolBankCollectFeesEvent"
+    },
+    {
+      "discriminator": [
+        246,
+        35,
+        233,
+        110,
+        93,
+        152,
+        235,
+        40
+      ],
+      "name": "LendingPoolBankConfigureEvent"
+    },
+    {
+      "discriminator": [
+        24,
+        10,
+        55,
+        18,
+        49,
+        150,
+        157,
+        179
+      ],
+      "name": "LendingPoolBankConfigureFrozenEvent"
+    },
+    {
+      "discriminator": [
+        119,
+        140,
+        110,
+        253,
+        150,
+        64,
+        210,
+        62
+      ],
+      "name": "LendingPoolBankConfigureOracleEvent"
+    },
+    {
+      "discriminator": [
+        236,
+        220,
+        201,
+        63,
+        239,
+        126,
+        136,
+        249
+      ],
+      "name": "LendingPoolBankCreateEvent"
+    },
+    {
+      "discriminator": [
+        166,
+        77,
+        41,
+        140,
+        36,
+        94,
+        10,
+        57
+      ],
+      "name": "LendingPoolBankHandleBankruptcyEvent"
+    },
+    {
+      "discriminator": [
+        183,
+        5,
+        117,
+        104,
+        122,
+        199,
+        68,
+        51
+      ],
+      "name": "MarginfiAccountCreateEvent"
+    },
+    {
+      "discriminator": [
+        59,
+        105,
+        171,
+        110,
+        223,
+        136,
+        80,
+        89
+      ],
+      "name": "MarginfiAccountTransferToNewAccount"
+    },
+    {
+      "discriminator": [
+        241,
+        104,
+        172,
+        167,
+        41,
+        195,
+        199,
+        170
+      ],
+      "name": "MarginfiGroupConfigureEvent"
+    },
+    {
+      "discriminator": [
+        233,
+        125,
+        61,
+        14,
+        98,
+        240,
+        136,
+        253
+      ],
+      "name": "MarginfiGroupCreateEvent"
+    }
+  ],
+  "instructions": [
+    {
+      "accounts": [
+        {
+          "name": "marginfi_group",
+          "writable": true
+        },
+        {
+          "docs": [
+            "`global_fee_admin` of the FeeState"
+          ],
+          "name": "global_fee_admin",
+          "relations": [
+            "fee_state"
+          ],
+          "signer": true
+        },
+        {
+          "name": "fee_state",
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  102,
+                  101,
+                  101,
+                  115,
+                  116,
+                  97,
+                  116,
+                  101
+                ]
+              }
+            ]
+          }
+        }
+      ],
+      "args": [
+        {
+          "name": "enable_program_fee",
+          "type": "bool"
+        }
+      ],
+      "discriminator": [
+        231,
+        205,
+        66,
+        242,
+        220,
+        87,
+        145,
+        38
+      ],
+      "docs": [
+        "(global fee admin only) Enable or disable program fees for any group. Does not require the",
+        "group admin to sign: the global fee state admin can turn program fees on or off for any",
+        "group"
+      ],
+      "name": "config_group_fee"
+    },
+    {
+      "accounts": [
+        {
+          "docs": [
+            "Admin of the global FeeState"
+          ],
+          "name": "global_fee_admin",
+          "relations": [
+            "fee_state"
+          ],
+          "signer": true,
+          "writable": true
+        },
+        {
+          "name": "fee_state",
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  102,
+                  101,
+                  101,
+                  115,
+                  116,
+                  97,
+                  116,
+                  101
+                ]
+              }
+            ]
+          },
+          "writable": true
+        }
+      ],
+      "args": [
+        {
+          "name": "admin",
+          "type": "pubkey"
+        },
+        {
+          "name": "fee_wallet",
+          "type": "pubkey"
+        },
+        {
+          "name": "bank_init_flat_sol_fee",
+          "type": "u32"
+        },
+        {
+          "name": "program_fee_fixed",
+          "type": {
+            "defined": {
+              "name": "WrappedI80F48"
+            }
+          }
+        },
+        {
+          "name": "program_fee_rate",
+          "type": {
+            "defined": {
+              "name": "WrappedI80F48"
+            }
+          }
+        }
+      ],
+      "discriminator": [
+        52,
+        62,
+        35,
+        129,
+        93,
+        69,
+        165,
+        202
+      ],
+      "docs": [
+        "(global fee admin only) Adjust fees, admin, or the destination wallet"
+      ],
+      "name": "edit_global_fee_state"
+    },
+    {
+      "accounts": [
+        {
+          "name": "marginfi_group",
+          "relations": [
+            "staked_settings"
+          ]
+        },
+        {
+          "name": "admin",
+          "relations": [
+            "marginfi_group"
+          ],
+          "signer": true
+        },
+        {
+          "name": "staked_settings",
+          "writable": true
+        }
+      ],
+      "args": [
+        {
+          "name": "settings",
+          "type": {
+            "defined": {
+              "name": "StakedSettingsEditConfig"
+            }
+          }
+        }
+      ],
+      "discriminator": [
+        11,
+        108,
+        215,
+        87,
+        240,
+        9,
+        66,
+        241
+      ],
+      "name": "edit_staked_settings"
+    },
+    {
+      "accounts": [
+        {
+          "docs": [
+            "Pays the init fee"
+          ],
+          "name": "payer",
+          "signer": true,
+          "writable": true
+        },
+        {
+          "name": "fee_state",
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  102,
+                  101,
+                  101,
+                  115,
+                  116,
+                  97,
+                  116,
+                  101
+                ]
+              }
+            ]
+          },
+          "writable": true
+        },
+        {
+          "address": "SysvarRent111111111111111111111111111111111",
+          "name": "rent"
+        },
+        {
+          "address": "11111111111111111111111111111111",
+          "name": "system_program"
+        }
+      ],
+      "args": [
+        {
+          "name": "admin",
+          "type": "pubkey"
+        },
+        {
+          "name": "fee_wallet",
+          "type": "pubkey"
+        },
+        {
+          "name": "bank_init_flat_sol_fee",
+          "type": "u32"
+        },
+        {
+          "name": "program_fee_fixed",
+          "type": {
+            "defined": {
+              "name": "WrappedI80F48"
+            }
+          }
+        },
+        {
+          "name": "program_fee_rate",
+          "type": {
+            "defined": {
+              "name": "WrappedI80F48"
+            }
+          }
+        }
+      ],
+      "discriminator": [
+        82,
+        48,
+        247,
+        59,
+        220,
+        109,
+        231,
+        44
+      ],
+      "docs": [
+        "(Runs once per program) Configures the fee state account, where the global admin sets fees",
+        "that are assessed to the protocol"
+      ],
+      "name": "init_global_fee_state"
+    },
+    {
+      "accounts": [
+        {
+          "name": "marginfi_group"
+        },
+        {
+          "name": "admin",
+          "relations": [
+            "marginfi_group"
+          ],
+          "signer": true
+        },
+        {
+          "docs": [
+            "Pays the init fee"
+          ],
+          "name": "fee_payer",
+          "signer": true,
+          "writable": true
+        },
+        {
+          "name": "staked_settings",
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  115,
+                  116,
+                  97,
+                  107,
+                  101,
+                  100,
+                  95,
+                  115,
+                  101,
+                  116,
+                  116,
+                  105,
+                  110,
+                  103,
+                  115
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "marginfi_group"
+              }
+            ]
+          },
+          "writable": true
+        },
+        {
+          "address": "SysvarRent111111111111111111111111111111111",
+          "name": "rent"
+        },
+        {
+          "address": "11111111111111111111111111111111",
+          "name": "system_program"
+        }
+      ],
+      "args": [
+        {
+          "name": "settings",
+          "type": {
+            "defined": {
+              "name": "StakedSettingsConfig"
+            }
+          }
+        }
+      ],
+      "discriminator": [
+        52,
+        35,
+        149,
+        44,
+        69,
+        86,
+        69,
+        80
+      ],
+      "docs": [
+        "(group admin only) Init the Staked Settings account, which is used to create staked",
+        "collateral banks, and must run before any staked collateral bank can be created with",
+        "`add_pool_permissionless`. Running this ix effectively opts the group into the staked",
+        "collateral feature."
+      ],
+      "name": "init_staked_settings"
+    },
+    {
+      "accounts": [
+        {
+          "name": "group",
+          "relations": [
+            "marginfi_account",
+            "bank"
+          ]
+        },
+        {
+          "name": "marginfi_account",
+          "writable": true
+        },
+        {
+          "name": "authority",
+          "relations": [
+            "marginfi_account"
+          ],
+          "signer": true
+        },
+        {
+          "name": "bank",
+          "writable": true
+        },
+        {
+          "name": "destination_token_account",
+          "writable": true
+        },
+        {
+          "name": "bank_liquidity_vault_authority",
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  108,
+                  105,
+                  113,
+                  117,
+                  105,
+                  100,
+                  105,
+                  116,
+                  121,
+                  95,
+                  118,
+                  97,
+                  117,
+                  108,
+                  116,
+                  95,
+                  97,
+                  117,
+                  116,
+                  104
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "bank"
+              }
+            ]
+          },
+          "writable": true
+        },
+        {
+          "name": "liquidity_vault",
+          "relations": [
+            "bank"
+          ],
+          "writable": true
+        },
+        {
+          "name": "token_program"
+        }
+      ],
+      "args": [
+        {
+          "name": "amount",
+          "type": "u64"
+        }
+      ],
+      "discriminator": [
+        4,
+        126,
+        116,
+        53,
+        48,
+        5,
+        212,
+        31
+      ],
+      "name": "lending_account_borrow"
+    },
+    {
+      "accounts": [
+        {
+          "name": "group",
+          "relations": [
+            "marginfi_account",
+            "bank"
+          ]
+        },
+        {
+          "name": "marginfi_account",
+          "writable": true
+        },
+        {
+          "name": "authority",
+          "relations": [
+            "marginfi_account"
+          ],
+          "signer": true
+        },
+        {
+          "name": "bank",
+          "writable": true
+        }
+      ],
+      "args": [],
+      "discriminator": [
+        245,
+        54,
+        41,
+        4,
+        243,
+        202,
+        31,
+        17
+      ],
+      "name": "lending_account_close_balance"
+    },
+    {
+      "accounts": [
+        {
+          "name": "group",
+          "relations": [
+            "marginfi_account",
+            "bank"
+          ]
+        },
+        {
+          "name": "marginfi_account",
+          "writable": true
+        },
+        {
+          "name": "authority",
+          "relations": [
+            "marginfi_account"
+          ],
+          "signer": true
+        },
+        {
+          "name": "bank",
+          "writable": true
+        },
+        {
+          "name": "signer_token_account",
+          "writable": true
+        },
+        {
+          "name": "liquidity_vault",
+          "relations": [
+            "bank"
+          ],
+          "writable": true
+        },
+        {
+          "name": "token_program"
+        }
+      ],
+      "args": [
+        {
+          "name": "amount",
+          "type": "u64"
+        },
+        {
+          "name": "deposit_up_to_limit",
+          "type": {
+            "option": "bool"
+          }
+        }
+      ],
+      "discriminator": [
+        171,
+        94,
+        235,
+        103,
+        82,
+        64,
+        212,
+        140
+      ],
+      "name": "lending_account_deposit"
+    },
+    {
+      "accounts": [
+        {
+          "name": "marginfi_account",
+          "writable": true
+        },
+        {
+          "name": "authority",
+          "relations": [
+            "marginfi_account"
+          ],
+          "signer": true
+        }
+      ],
+      "args": [],
+      "discriminator": [
+        105,
+        124,
+        201,
+        106,
+        153,
+        2,
+        8,
+        156
+      ],
+      "name": "lending_account_end_flashloan"
+    },
+    {
+      "accounts": [
+        {
+          "name": "group",
+          "relations": [
+            "asset_bank",
+            "liab_bank",
+            "liquidator_marginfi_account",
+            "liquidatee_marginfi_account"
+          ]
+        },
+        {
+          "name": "asset_bank",
+          "writable": true
+        },
+        {
+          "name": "liab_bank",
+          "writable": true
+        },
+        {
+          "name": "liquidator_marginfi_account",
+          "writable": true
+        },
+        {
+          "name": "authority",
+          "relations": [
+            "liquidator_marginfi_account"
+          ],
+          "signer": true
+        },
+        {
+          "name": "liquidatee_marginfi_account",
+          "writable": true
+        },
+        {
+          "name": "bank_liquidity_vault_authority",
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  108,
+                  105,
+                  113,
+                  117,
+                  105,
+                  100,
+                  105,
+                  116,
+                  121,
+                  95,
+                  118,
+                  97,
+                  117,
+                  108,
+                  116,
+                  95,
+                  97,
+                  117,
+                  116,
+                  104
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "liab_bank"
+              }
+            ]
+          },
+          "writable": true
+        },
+        {
+          "name": "bank_liquidity_vault",
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  108,
+                  105,
+                  113,
+                  117,
+                  105,
+                  100,
+                  105,
+                  116,
+                  121,
+                  95,
+                  118,
+                  97,
+                  117,
+                  108,
+                  116
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "liab_bank"
+              }
+            ]
+          },
+          "writable": true
+        },
+        {
+          "name": "bank_insurance_vault",
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  105,
+                  110,
+                  115,
+                  117,
+                  114,
+                  97,
+                  110,
+                  99,
+                  101,
+                  95,
+                  118,
+                  97,
+                  117,
+                  108,
+                  116
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "liab_bank"
+              }
+            ]
+          },
+          "writable": true
+        },
+        {
+          "name": "token_program"
+        }
+      ],
+      "args": [
+        {
+          "name": "asset_amount",
+          "type": "u64"
+        }
+      ],
+      "discriminator": [
+        214,
+        169,
+        151,
+        213,
+        251,
+        167,
+        86,
+        219
+      ],
+      "docs": [
+        "Liquidate a lending account balance of an unhealthy marginfi account"
+      ],
+      "name": "lending_account_liquidate"
+    },
+    {
+      "accounts": [
+        {
+          "name": "marginfi_account",
+          "writable": true
+        }
+      ],
+      "args": [],
+      "discriminator": [
+        186,
+        52,
+        117,
+        97,
+        34,
+        74,
+        39,
+        253
+      ],
+      "docs": [
+        "(Permissionless) Refresh the internal risk engine health cache. Useful for liquidators and",
+        "other consumers that want to see the internal risk state of a user account. This cache is",
+        "read-only and serves no purpose except being populated by this ix.",
+        "* remaining accounts expected in the same order as borrow, etc. I.e., for each balance the",
+        "user has, pass bank and oracle: <bank1, oracle1, bank2, oracle2>"
+      ],
+      "name": "lending_account_pulse_health"
+    },
+    {
+      "accounts": [
+        {
+          "name": "group",
+          "relations": [
+            "marginfi_account",
+            "bank"
+          ]
+        },
+        {
+          "name": "marginfi_account",
+          "writable": true
+        },
+        {
+          "name": "authority",
+          "relations": [
+            "marginfi_account"
+          ],
+          "signer": true
+        },
+        {
+          "name": "bank",
+          "writable": true
+        },
+        {
+          "name": "signer_token_account",
+          "writable": true
+        },
+        {
+          "name": "liquidity_vault",
+          "relations": [
+            "bank"
+          ],
+          "writable": true
+        },
+        {
+          "name": "token_program"
+        }
+      ],
+      "args": [
+        {
+          "name": "amount",
+          "type": "u64"
+        },
+        {
+          "name": "repay_all",
+          "type": {
+            "option": "bool"
+          }
+        }
+      ],
+      "discriminator": [
+        79,
+        209,
+        172,
+        177,
+        222,
+        51,
+        173,
+        151
+      ],
+      "name": "lending_account_repay"
+    },
+    {
+      "accounts": [
+        {
+          "name": "marginfi_account",
+          "writable": true
+        },
+        {
+          "name": "bank",
+          "writable": true
+        }
+      ],
+      "args": [],
+      "discriminator": [
+        161,
+        58,
+        136,
+        174,
+        242,
+        223,
+        156,
+        176
+      ],
+      "name": "lending_account_settle_emissions"
+    },
+    {
+      "accounts": [
+        {
+          "name": "marginfi_account",
+          "writable": true
+        }
+      ],
+      "args": [],
+      "discriminator": [
+        187,
+        194,
+        110,
+        84,
+        82,
+        170,
+        204,
+        9
+      ],
+      "docs": [
+        "(Permissionless) Sorts the lending account balances in descending order and removes the \"gaps\"",
+        "(i.e. inactive balances in between the active ones), if any.",
+        "This is necessary to ensure any legacy marginfi accounts are compliant with the",
+        "\"gapless and sorted\" requirements we now have."
+      ],
+      "name": "lending_account_sort_balances"
+    },
+    {
+      "accounts": [
+        {
+          "name": "marginfi_account",
+          "writable": true
+        },
+        {
+          "name": "authority",
+          "relations": [
+            "marginfi_account"
+          ],
+          "signer": true
+        },
+        {
+          "address": "Sysvar1nstructions1111111111111111111111111",
+          "name": "ixs_sysvar"
+        }
+      ],
+      "args": [
+        {
+          "name": "end_index",
+          "type": "u64"
+        }
+      ],
+      "discriminator": [
+        14,
+        131,
+        33,
+        220,
+        81,
+        186,
+        180,
+        107
+      ],
+      "name": "lending_account_start_flashloan"
+    },
+    {
+      "accounts": [
+        {
+          "name": "group",
+          "relations": [
+            "marginfi_account",
+            "bank"
+          ]
+        },
+        {
+          "name": "marginfi_account",
+          "writable": true
+        },
+        {
+          "name": "authority",
+          "relations": [
+            "marginfi_account"
+          ],
+          "signer": true
+        },
+        {
+          "name": "bank",
+          "writable": true
+        },
+        {
+          "name": "destination_token_account",
+          "writable": true
+        },
+        {
+          "name": "bank_liquidity_vault_authority",
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  108,
+                  105,
+                  113,
+                  117,
+                  105,
+                  100,
+                  105,
+                  116,
+                  121,
+                  95,
+                  118,
+                  97,
+                  117,
+                  108,
+                  116,
+                  95,
+                  97,
+                  117,
+                  116,
+                  104
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "bank"
+              }
+            ]
+          }
+        },
+        {
+          "name": "liquidity_vault",
+          "relations": [
+            "bank"
+          ],
+          "writable": true
+        },
+        {
+          "name": "token_program"
+        }
+      ],
+      "args": [
+        {
+          "name": "amount",
+          "type": "u64"
+        },
+        {
+          "name": "withdraw_all",
+          "type": {
+            "option": "bool"
+          }
+        }
+      ],
+      "discriminator": [
+        36,
+        72,
+        74,
+        19,
+        210,
+        210,
+        192,
+        192
+      ],
+      "name": "lending_account_withdraw"
+    },
+    {
+      "accounts": [
+        {
+          "name": "group",
+          "relations": [
+            "marginfi_account",
+            "bank"
+          ]
+        },
+        {
+          "name": "marginfi_account",
+          "writable": true
+        },
+        {
+          "name": "authority",
+          "relations": [
+            "marginfi_account"
+          ],
+          "signer": true
+        },
+        {
+          "name": "bank",
+          "writable": true
+        },
+        {
+          "name": "emissions_mint",
+          "relations": [
+            "bank"
+          ]
+        },
+        {
+          "name": "emissions_auth",
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  101,
+                  109,
+                  105,
+                  115,
+                  115,
+                  105,
+                  111,
+                  110,
+                  115,
+                  95,
+                  97,
+                  117,
+                  116,
+                  104,
+                  95,
+                  115,
+                  101,
+                  101,
+                  100
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "bank"
+              },
+              {
+                "kind": "account",
+                "path": "emissions_mint"
+              }
+            ]
+          }
+        },
+        {
+          "name": "emissions_vault",
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  101,
+                  109,
+                  105,
+                  115,
+                  115,
+                  105,
+                  111,
+                  110,
+                  115,
+                  95,
+                  116,
+                  111,
+                  107,
+                  101,
+                  110,
+                  95,
+                  97,
+                  99,
+                  99,
+                  111,
+                  117,
+                  110,
+                  116,
+                  95,
+                  115,
+                  101,
+                  101,
+                  100
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "bank"
+              },
+              {
+                "kind": "account",
+                "path": "emissions_mint"
+              }
+            ]
+          },
+          "writable": true
+        },
+        {
+          "name": "destination_account",
+          "writable": true
+        },
+        {
+          "name": "token_program"
+        }
+      ],
+      "args": [],
+      "discriminator": [
+        234,
+        22,
+        84,
+        214,
+        118,
+        176,
+        140,
+        170
+      ],
+      "name": "lending_account_withdraw_emissions"
+    },
+    {
+      "accounts": [
+        {
+          "name": "group",
+          "relations": [
+            "marginfi_account",
+            "bank"
+          ]
+        },
+        {
+          "name": "marginfi_account",
+          "writable": true
+        },
+        {
+          "name": "bank",
+          "writable": true
+        },
+        {
+          "name": "emissions_mint",
+          "relations": [
+            "bank"
+          ]
+        },
+        {
+          "name": "emissions_auth",
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  101,
+                  109,
+                  105,
+                  115,
+                  115,
+                  105,
+                  111,
+                  110,
+                  115,
+                  95,
+                  97,
+                  117,
+                  116,
+                  104,
+                  95,
+                  115,
+                  101,
+                  101,
+                  100
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "bank"
+              },
+              {
+                "kind": "account",
+                "path": "emissions_mint"
+              }
+            ]
+          }
+        },
+        {
+          "name": "emissions_vault",
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  101,
+                  109,
+                  105,
+                  115,
+                  115,
+                  105,
+                  111,
+                  110,
+                  115,
+                  95,
+                  116,
+                  111,
+                  107,
+                  101,
+                  110,
+                  95,
+                  97,
+                  99,
+                  99,
+                  111,
+                  117,
+                  110,
+                  116,
+                  95,
+                  115,
+                  101,
+                  101,
+                  100
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "bank"
+              },
+              {
+                "kind": "account",
+                "path": "emissions_mint"
+              }
+            ]
+          },
+          "writable": true
+        },
+        {
+          "docs": [
+            "registered on `marginfi_account`"
+          ],
+          "name": "destination_account",
+          "writable": true
+        },
+        {
+          "name": "token_program"
+        }
+      ],
+      "args": [],
+      "discriminator": [
+        4,
+        174,
+        124,
+        203,
+        44,
+        49,
+        145,
+        150
+      ],
+      "name": "lending_account_withdraw_emissions_permissionless"
+    },
+    {
+      "accounts": [
+        {
+          "name": "group",
+          "relations": [
+            "bank"
+          ]
+        },
+        {
+          "name": "bank",
+          "writable": true
+        }
+      ],
+      "args": [],
+      "discriminator": [
+        108,
+        201,
+        30,
+        87,
+        47,
+        65,
+        97,
+        188
+      ],
+      "name": "lending_pool_accrue_bank_interest"
+    },
+    {
+      "accounts": [
+        {
+          "name": "marginfi_group",
+          "writable": true
+        },
+        {
+          "name": "admin",
+          "relations": [
+            "marginfi_group"
+          ],
+          "signer": true,
+          "writable": true
+        },
+        {
+          "docs": [
+            "Pays to init accounts and pays `fee_state.bank_init_flat_sol_fee` lamports to the protocol"
+          ],
+          "name": "fee_payer",
+          "signer": true,
+          "writable": true
+        },
+        {
+          "name": "fee_state",
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  102,
+                  101,
+                  101,
+                  115,
+                  116,
+                  97,
+                  116,
+                  101
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "name": "global_fee_wallet",
+          "relations": [
+            "fee_state"
+          ],
+          "writable": true
+        },
+        {
+          "name": "bank_mint"
+        },
+        {
+          "name": "bank",
+          "signer": true,
+          "writable": true
+        },
+        {
+          "name": "liquidity_vault_authority",
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  108,
+                  105,
+                  113,
+                  117,
+                  105,
+                  100,
+                  105,
+                  116,
+                  121,
+                  95,
+                  118,
+                  97,
+                  117,
+                  108,
+                  116,
+                  95,
+                  97,
+                  117,
+                  116,
+                  104
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "bank"
+              }
+            ]
+          }
+        },
+        {
+          "name": "liquidity_vault",
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  108,
+                  105,
+                  113,
+                  117,
+                  105,
+                  100,
+                  105,
+                  116,
+                  121,
+                  95,
+                  118,
+                  97,
+                  117,
+                  108,
+                  116
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "bank"
+              }
+            ]
+          },
+          "writable": true
+        },
+        {
+          "name": "insurance_vault_authority",
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  105,
+                  110,
+                  115,
+                  117,
+                  114,
+                  97,
+                  110,
+                  99,
+                  101,
+                  95,
+                  118,
+                  97,
+                  117,
+                  108,
+                  116,
+                  95,
+                  97,
+                  117,
+                  116,
+                  104
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "bank"
+              }
+            ]
+          }
+        },
+        {
+          "name": "insurance_vault",
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  105,
+                  110,
+                  115,
+                  117,
+                  114,
+                  97,
+                  110,
+                  99,
+                  101,
+                  95,
+                  118,
+                  97,
+                  117,
+                  108,
+                  116
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "bank"
+              }
+            ]
+          },
+          "writable": true
+        },
+        {
+          "name": "fee_vault_authority",
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  102,
+                  101,
+                  101,
+                  95,
+                  118,
+                  97,
+                  117,
+                  108,
+                  116,
+                  95,
+                  97,
+                  117,
+                  116,
+                  104
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "bank"
+              }
+            ]
+          }
+        },
+        {
+          "name": "fee_vault",
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  102,
+                  101,
+                  101,
+                  95,
+                  118,
+                  97,
+                  117,
+                  108,
+                  116
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "bank"
+              }
+            ]
+          },
+          "writable": true
+        },
+        {
+          "address": "SysvarRent111111111111111111111111111111111",
+          "name": "rent"
+        },
+        {
+          "name": "token_program"
+        },
+        {
+          "address": "11111111111111111111111111111111",
+          "name": "system_program"
+        }
+      ],
+      "args": [
+        {
+          "name": "bank_config",
+          "type": {
+            "defined": {
+              "name": "BankConfigCompact"
+            }
+          }
+        }
+      ],
+      "discriminator": [
+        215,
+        68,
+        72,
+        78,
+        208,
+        218,
+        103,
+        182
+      ],
+      "name": "lending_pool_add_bank"
+    },
+    {
+      "accounts": [
+        {
+          "name": "marginfi_group",
+          "relations": [
+            "staked_settings"
+          ],
+          "writable": true
+        },
+        {
+          "name": "staked_settings"
+        },
+        {
+          "name": "fee_payer",
+          "signer": true,
+          "writable": true
+        },
+        {
+          "docs": [
+            "Mint of the spl-single-pool LST (a PDA derived from `stake_pool`)",
+            "",
+            "because the sol_pool and stake_pool will not derive to a valid PDA which is also owned by",
+            "the staking program and spl-single-pool program."
+          ],
+          "name": "bank_mint"
+        },
+        {
+          "name": "sol_pool"
+        },
+        {
+          "docs": [
+            "this key.",
+            "",
+            "If derives the same `bank_mint`, then this must be the correct stake pool for that mint, and",
+            "we can subsequently use it to validate the `sol_pool`"
+          ],
+          "name": "stake_pool"
+        },
+        {
+          "name": "bank",
+          "pda": {
+            "seeds": [
+              {
+                "kind": "account",
+                "path": "marginfi_group"
+              },
+              {
+                "kind": "account",
+                "path": "bank_mint"
+              },
+              {
+                "kind": "arg",
+                "path": "bank_seed"
+              }
+            ]
+          },
+          "writable": true
+        },
+        {
+          "name": "liquidity_vault_authority",
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  108,
+                  105,
+                  113,
+                  117,
+                  105,
+                  100,
+                  105,
+                  116,
+                  121,
+                  95,
+                  118,
+                  97,
+                  117,
+                  108,
+                  116,
+                  95,
+                  97,
+                  117,
+                  116,
+                  104
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "bank"
+              }
+            ]
+          }
+        },
+        {
+          "name": "liquidity_vault",
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  108,
+                  105,
+                  113,
+                  117,
+                  105,
+                  100,
+                  105,
+                  116,
+                  121,
+                  95,
+                  118,
+                  97,
+                  117,
+                  108,
+                  116
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "bank"
+              }
+            ]
+          },
+          "writable": true
+        },
+        {
+          "name": "insurance_vault_authority",
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  105,
+                  110,
+                  115,
+                  117,
+                  114,
+                  97,
+                  110,
+                  99,
+                  101,
+                  95,
+                  118,
+                  97,
+                  117,
+                  108,
+                  116,
+                  95,
+                  97,
+                  117,
+                  116,
+                  104
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "bank"
+              }
+            ]
+          }
+        },
+        {
+          "name": "insurance_vault",
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  105,
+                  110,
+                  115,
+                  117,
+                  114,
+                  97,
+                  110,
+                  99,
+                  101,
+                  95,
+                  118,
+                  97,
+                  117,
+                  108,
+                  116
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "bank"
+              }
+            ]
+          },
+          "writable": true
+        },
+        {
+          "name": "fee_vault_authority",
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  102,
+                  101,
+                  101,
+                  95,
+                  118,
+                  97,
+                  117,
+                  108,
+                  116,
+                  95,
+                  97,
+                  117,
+                  116,
+                  104
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "bank"
+              }
+            ]
+          }
+        },
+        {
+          "name": "fee_vault",
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  102,
+                  101,
+                  101,
+                  95,
+                  118,
+                  97,
+                  117,
+                  108,
+                  116
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "bank"
+              }
+            ]
+          },
+          "writable": true
+        },
+        {
+          "address": "SysvarRent111111111111111111111111111111111",
+          "name": "rent"
+        },
+        {
+          "name": "token_program"
+        },
+        {
+          "address": "11111111111111111111111111111111",
+          "name": "system_program"
+        }
+      ],
+      "args": [
+        {
+          "name": "bank_seed",
+          "type": "u64"
+        }
+      ],
+      "discriminator": [
+        127,
+        187,
+        121,
+        34,
+        187,
+        167,
+        238,
+        102
+      ],
+      "name": "lending_pool_add_bank_permissionless"
+    },
+    {
+      "accounts": [
+        {
+          "name": "marginfi_group",
+          "writable": true
+        },
+        {
+          "name": "admin",
+          "relations": [
+            "marginfi_group"
+          ],
+          "signer": true,
+          "writable": true
+        },
+        {
+          "docs": [
+            "Pays to init accounts and pays `fee_state.bank_init_flat_sol_fee` lamports to the protocol"
+          ],
+          "name": "fee_payer",
+          "signer": true,
+          "writable": true
+        },
+        {
+          "name": "fee_state",
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  102,
+                  101,
+                  101,
+                  115,
+                  116,
+                  97,
+                  116,
+                  101
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "name": "global_fee_wallet",
+          "relations": [
+            "fee_state"
+          ],
+          "writable": true
+        },
+        {
+          "name": "bank_mint"
+        },
+        {
+          "name": "bank",
+          "pda": {
+            "seeds": [
+              {
+                "kind": "account",
+                "path": "marginfi_group"
+              },
+              {
+                "kind": "account",
+                "path": "bank_mint"
+              },
+              {
+                "kind": "arg",
+                "path": "bank_seed"
+              }
+            ]
+          },
+          "writable": true
+        },
+        {
+          "name": "liquidity_vault_authority",
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  108,
+                  105,
+                  113,
+                  117,
+                  105,
+                  100,
+                  105,
+                  116,
+                  121,
+                  95,
+                  118,
+                  97,
+                  117,
+                  108,
+                  116,
+                  95,
+                  97,
+                  117,
+                  116,
+                  104
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "bank"
+              }
+            ]
+          }
+        },
+        {
+          "name": "liquidity_vault",
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  108,
+                  105,
+                  113,
+                  117,
+                  105,
+                  100,
+                  105,
+                  116,
+                  121,
+                  95,
+                  118,
+                  97,
+                  117,
+                  108,
+                  116
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "bank"
+              }
+            ]
+          },
+          "writable": true
+        },
+        {
+          "name": "insurance_vault_authority",
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  105,
+                  110,
+                  115,
+                  117,
+                  114,
+                  97,
+                  110,
+                  99,
+                  101,
+                  95,
+                  118,
+                  97,
+                  117,
+                  108,
+                  116,
+                  95,
+                  97,
+                  117,
+                  116,
+                  104
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "bank"
+              }
+            ]
+          }
+        },
+        {
+          "name": "insurance_vault",
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  105,
+                  110,
+                  115,
+                  117,
+                  114,
+                  97,
+                  110,
+                  99,
+                  101,
+                  95,
+                  118,
+                  97,
+                  117,
+                  108,
+                  116
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "bank"
+              }
+            ]
+          },
+          "writable": true
+        },
+        {
+          "name": "fee_vault_authority",
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  102,
+                  101,
+                  101,
+                  95,
+                  118,
+                  97,
+                  117,
+                  108,
+                  116,
+                  95,
+                  97,
+                  117,
+                  116,
+                  104
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "bank"
+              }
+            ]
+          }
+        },
+        {
+          "name": "fee_vault",
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  102,
+                  101,
+                  101,
+                  95,
+                  118,
+                  97,
+                  117,
+                  108,
+                  116
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "bank"
+              }
+            ]
+          },
+          "writable": true
+        },
+        {
+          "address": "SysvarRent111111111111111111111111111111111",
+          "name": "rent"
+        },
+        {
+          "name": "token_program"
+        },
+        {
+          "address": "11111111111111111111111111111111",
+          "name": "system_program"
+        }
+      ],
+      "args": [
+        {
+          "name": "bank_config",
+          "type": {
+            "defined": {
+              "name": "BankConfigCompact"
+            }
+          }
+        },
+        {
+          "name": "bank_seed",
+          "type": "u64"
+        }
+      ],
+      "discriminator": [
+        76,
+        211,
+        213,
+        171,
+        117,
+        78,
+        158,
+        76
+      ],
+      "docs": [
+        "A copy of lending_pool_add_bank with an additional bank seed.",
+        "This seed is used to create a PDA for the bank's signature.",
+        "lending_pool_add_bank is preserved for backwards compatibility."
+      ],
+      "name": "lending_pool_add_bank_with_seed"
+    },
+    {
+      "accounts": [
+        {
+          "name": "group",
+          "relations": [
+            "bank"
+          ],
+          "writable": true
+        },
+        {
+          "name": "bank",
+          "writable": true
+        },
+        {
+          "name": "admin",
+          "relations": [
+            "group"
+          ],
+          "signer": true,
+          "writable": true
+        }
+      ],
+      "args": [],
+      "discriminator": [
+        22,
+        115,
+        7,
+        130,
+        227,
+        85,
+        0,
+        47
+      ],
+      "name": "lending_pool_close_bank"
+    },
+    {
+      "accounts": [
+        {
+          "name": "group",
+          "relations": [
+            "bank"
+          ]
+        },
+        {
+          "name": "bank",
+          "writable": true
+        },
+        {
+          "name": "liquidity_vault_authority",
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  108,
+                  105,
+                  113,
+                  117,
+                  105,
+                  100,
+                  105,
+                  116,
+                  121,
+                  95,
+                  118,
+                  97,
+                  117,
+                  108,
+                  116,
+                  95,
+                  97,
+                  117,
+                  116,
+                  104
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "bank"
+              }
+            ]
+          }
+        },
+        {
+          "name": "liquidity_vault",
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  108,
+                  105,
+                  113,
+                  117,
+                  105,
+                  100,
+                  105,
+                  116,
+                  121,
+                  95,
+                  118,
+                  97,
+                  117,
+                  108,
+                  116
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "bank"
+              }
+            ]
+          },
+          "writable": true
+        },
+        {
+          "name": "insurance_vault",
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  105,
+                  110,
+                  115,
+                  117,
+                  114,
+                  97,
+                  110,
+                  99,
+                  101,
+                  95,
+                  118,
+                  97,
+                  117,
+                  108,
+                  116
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "bank"
+              }
+            ]
+          },
+          "writable": true
+        },
+        {
+          "name": "fee_vault",
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  102,
+                  101,
+                  101,
+                  95,
+                  118,
+                  97,
+                  117,
+                  108,
+                  116
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "bank"
+              }
+            ]
+          },
+          "writable": true
+        },
+        {
+          "name": "fee_state",
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  102,
+                  101,
+                  101,
+                  115,
+                  116,
+                  97,
+                  116,
+                  101
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "docs": [
+            "(validated in handler). Must already exist, may require initializing the ATA if it does not",
+            "already exist prior to this ix."
+          ],
+          "name": "fee_ata",
+          "writable": true
+        },
+        {
+          "name": "token_program"
+        }
+      ],
+      "args": [],
+      "discriminator": [
+        201,
+        5,
+        215,
+        116,
+        230,
+        92,
+        75,
+        150
+      ],
+      "name": "lending_pool_collect_bank_fees"
+    },
+    {
+      "accounts": [
+        {
+          "name": "group",
+          "relations": [
+            "bank"
+          ],
+          "writable": true
+        },
+        {
+          "name": "admin",
+          "relations": [
+            "group"
+          ],
+          "signer": true
+        },
+        {
+          "name": "bank",
+          "writable": true
+        }
+      ],
+      "args": [
+        {
+          "name": "bank_config_opt",
+          "type": {
+            "defined": {
+              "name": "BankConfigOpt"
+            }
+          }
+        }
+      ],
+      "discriminator": [
+        121,
+        173,
+        156,
+        40,
+        93,
+        148,
+        56,
+        237
+      ],
+      "docs": [
+        "(admin only)"
+      ],
+      "name": "lending_pool_configure_bank"
+    },
+    {
+      "accounts": [
+        {
+          "name": "group",
+          "relations": [
+            "bank"
+          ]
+        },
+        {
+          "name": "emode_admin",
+          "relations": [
+            "group"
+          ],
+          "signer": true
+        },
+        {
+          "name": "bank",
+          "writable": true
+        }
+      ],
+      "args": [
+        {
+          "name": "emode_tag",
+          "type": "u16"
+        },
+        {
+          "name": "entries",
+          "type": {
+            "array": [
+              {
+                "defined": {
+                  "name": "EmodeEntry"
+                }
+              },
+              10
+            ]
+          }
+        }
+      ],
+      "discriminator": [
+        17,
+        175,
+        91,
+        57,
+        239,
+        86,
+        49,
+        71
+      ],
+      "docs": [
+        "(emode_admin only)"
+      ],
+      "name": "lending_pool_configure_bank_emode"
+    },
+    {
+      "accounts": [
+        {
+          "name": "group",
+          "relations": [
+            "bank"
+          ],
+          "writable": true
+        },
+        {
+          "name": "delegate_curve_admin",
+          "relations": [
+            "group"
+          ],
+          "signer": true
+        },
+        {
+          "name": "bank",
+          "writable": true
+        }
+      ],
+      "args": [
+        {
+          "name": "interest_rate_config",
+          "type": {
+            "defined": {
+              "name": "InterestRateConfigOpt"
+            }
+          }
+        }
+      ],
+      "discriminator": [
+        245,
+        107,
+        83,
+        38,
+        103,
+        219,
+        163,
+        241
+      ],
+      "docs": [
+        "(delegate_curve_admin only)"
+      ],
+      "name": "lending_pool_configure_bank_interest_only"
+    },
+    {
+      "accounts": [
+        {
+          "name": "group",
+          "relations": [
+            "bank"
+          ],
+          "writable": true
+        },
+        {
+          "name": "delegate_limit_admin",
+          "relations": [
+            "group"
+          ],
+          "signer": true
+        },
+        {
+          "name": "bank",
+          "writable": true
+        }
+      ],
+      "args": [
+        {
+          "name": "deposit_limit",
+          "type": {
+            "option": "u64"
+          }
+        },
+        {
+          "name": "borrow_limit",
+          "type": {
+            "option": "u64"
+          }
+        },
+        {
+          "name": "total_asset_value_init_limit",
+          "type": {
+            "option": "u64"
+          }
+        }
+      ],
+      "discriminator": [
+        157,
+        196,
+        221,
+        200,
+        202,
+        62,
+        84,
+        21
+      ],
+      "docs": [
+        "(delegate_limits_admin only)"
+      ],
+      "name": "lending_pool_configure_bank_limits_only"
+    },
+    {
+      "accounts": [
+        {
+          "name": "group",
+          "relations": [
+            "bank"
+          ]
+        },
+        {
+          "name": "admin",
+          "relations": [
+            "group"
+          ],
+          "signer": true
+        },
+        {
+          "name": "bank",
+          "writable": true
+        }
+      ],
+      "args": [
+        {
+          "name": "setup",
+          "type": "u8"
+        },
+        {
+          "name": "oracle",
+          "type": "pubkey"
+        }
+      ],
+      "discriminator": [
+        209,
+        82,
+        255,
+        171,
+        124,
+        21,
+        71,
+        81
+      ],
+      "docs": [
+        "(admin only)"
+      ],
+      "name": "lending_pool_configure_bank_oracle"
+    },
+    {
+      "accounts": [
+        {
+          "name": "group",
+          "relations": [
+            "bank",
+            "marginfi_account"
+          ]
+        },
+        {
+          "docs": [
+            "PERMISSIONLESS_BAD_DEBT_SETTLEMENT_FLAG is not set"
+          ],
+          "name": "signer",
+          "signer": true
+        },
+        {
+          "name": "bank",
+          "writable": true
+        },
+        {
+          "name": "marginfi_account",
+          "writable": true
+        },
+        {
+          "name": "liquidity_vault",
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  108,
+                  105,
+                  113,
+                  117,
+                  105,
+                  100,
+                  105,
+                  116,
+                  121,
+                  95,
+                  118,
+                  97,
+                  117,
+                  108,
+                  116
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "bank"
+              }
+            ]
+          },
+          "writable": true
+        },
+        {
+          "name": "insurance_vault",
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  105,
+                  110,
+                  115,
+                  117,
+                  114,
+                  97,
+                  110,
+                  99,
+                  101,
+                  95,
+                  118,
+                  97,
+                  117,
+                  108,
+                  116
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "bank"
+              }
+            ]
+          },
+          "writable": true
+        },
+        {
+          "name": "insurance_vault_authority",
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  105,
+                  110,
+                  115,
+                  117,
+                  114,
+                  97,
+                  110,
+                  99,
+                  101,
+                  95,
+                  118,
+                  97,
+                  117,
+                  108,
+                  116,
+                  95,
+                  97,
+                  117,
+                  116,
+                  104
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "bank"
+              }
+            ]
+          }
+        },
+        {
+          "name": "token_program"
+        }
+      ],
+      "args": [],
+      "discriminator": [
+        162,
+        11,
+        56,
+        139,
+        90,
+        128,
+        70,
+        173
+      ],
+      "docs": [
+        "Handle bad debt of a bankrupt marginfi account for a given bank."
+      ],
+      "name": "lending_pool_handle_bankruptcy"
+    },
+    {
+      "accounts": [
+        {
+          "name": "group",
+          "relations": [
+            "bank"
+          ],
+          "writable": true
+        },
+        {
+          "name": "delegate_emissions_admin",
+          "relations": [
+            "group"
+          ],
+          "signer": true,
+          "writable": true
+        },
+        {
+          "name": "bank",
+          "writable": true
+        },
+        {
+          "name": "emissions_mint"
+        },
+        {
+          "name": "emissions_auth",
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  101,
+                  109,
+                  105,
+                  115,
+                  115,
+                  105,
+                  111,
+                  110,
+                  115,
+                  95,
+                  97,
+                  117,
+                  116,
+                  104,
+                  95,
+                  115,
+                  101,
+                  101,
+                  100
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "bank"
+              },
+              {
+                "kind": "account",
+                "path": "emissions_mint"
+              }
+            ]
+          }
+        },
+        {
+          "name": "emissions_token_account",
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  101,
+                  109,
+                  105,
+                  115,
+                  115,
+                  105,
+                  111,
+                  110,
+                  115,
+                  95,
+                  116,
+                  111,
+                  107,
+                  101,
+                  110,
+                  95,
+                  97,
+                  99,
+                  99,
+                  111,
+                  117,
+                  110,
+                  116,
+                  95,
+                  115,
+                  101,
+                  101,
+                  100
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "bank"
+              },
+              {
+                "kind": "account",
+                "path": "emissions_mint"
+              }
+            ]
+          },
+          "writable": true
+        },
+        {
+          "docs": [
+            "NOTE: This is a TokenAccount, spl transfer will validate it.",
+            ""
+          ],
+          "name": "emissions_funding_account",
+          "writable": true
+        },
+        {
+          "name": "token_program"
+        },
+        {
+          "address": "11111111111111111111111111111111",
+          "name": "system_program"
+        }
+      ],
+      "args": [
+        {
+          "name": "flags",
+          "type": "u64"
+        },
+        {
+          "name": "rate",
+          "type": "u64"
+        },
+        {
+          "name": "total_emissions",
+          "type": "u64"
+        }
+      ],
+      "discriminator": [
+        206,
+        97,
+        120,
+        172,
+        113,
+        204,
+        169,
+        70
+      ],
+      "docs": [
+        "(delegate_emissions_admin only)"
+      ],
+      "name": "lending_pool_setup_emissions"
+    },
+    {
+      "accounts": [
+        {
+          "name": "group",
+          "relations": [
+            "bank"
+          ],
+          "writable": true
+        },
+        {
+          "name": "delegate_emissions_admin",
+          "relations": [
+            "group"
+          ],
+          "signer": true,
+          "writable": true
+        },
+        {
+          "name": "bank",
+          "writable": true
+        },
+        {
+          "name": "emissions_mint"
+        },
+        {
+          "name": "emissions_token_account",
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  101,
+                  109,
+                  105,
+                  115,
+                  115,
+                  105,
+                  111,
+                  110,
+                  115,
+                  95,
+                  116,
+                  111,
+                  107,
+                  101,
+                  110,
+                  95,
+                  97,
+                  99,
+                  99,
+                  111,
+                  117,
+                  110,
+                  116,
+                  95,
+                  115,
+                  101,
+                  101,
+                  100
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "bank"
+              },
+              {
+                "kind": "account",
+                "path": "emissions_mint"
+              }
+            ]
+          },
+          "writable": true
+        },
+        {
+          "name": "emissions_funding_account",
+          "writable": true
+        },
+        {
+          "name": "token_program"
+        }
+      ],
+      "args": [
+        {
+          "name": "emissions_flags",
+          "type": {
+            "option": "u64"
+          }
+        },
+        {
+          "name": "emissions_rate",
+          "type": {
+            "option": "u64"
+          }
+        },
+        {
+          "name": "additional_emissions",
+          "type": {
+            "option": "u64"
+          }
+        }
+      ],
+      "discriminator": [
+        55,
+        213,
+        224,
+        168,
+        153,
+        53,
+        197,
+        40
+      ],
+      "docs": [
+        "(delegate_emissions_admin only)"
+      ],
+      "name": "lending_pool_update_emissions_parameters"
+    },
+    {
+      "accounts": [
+        {
+          "name": "group",
+          "relations": [
+            "bank"
+          ]
+        },
+        {
+          "name": "bank",
+          "writable": true
+        },
+        {
+          "name": "admin",
+          "relations": [
+            "group"
+          ],
+          "signer": true
+        },
+        {
+          "docs": [
+            "Bank fees will be sent to this account which must be an ATA of the bank's mint."
+          ],
+          "name": "destination_account"
+        }
+      ],
+      "args": [],
+      "discriminator": [
+        102,
+        4,
+        121,
+        243,
+        237,
+        110,
+        95,
+        13
+      ],
+      "name": "lending_pool_update_fees_destination_account"
+    },
+    {
+      "accounts": [
+        {
+          "name": "group",
+          "relations": [
+            "bank"
+          ]
+        },
+        {
+          "name": "bank"
+        },
+        {
+          "name": "admin",
+          "relations": [
+            "group"
+          ],
+          "signer": true
+        },
+        {
+          "name": "fee_vault",
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  102,
+                  101,
+                  101,
+                  95,
+                  118,
+                  97,
+                  117,
+                  108,
+                  116
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "bank"
+              }
+            ]
+          },
+          "writable": true
+        },
+        {
+          "name": "fee_vault_authority",
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  102,
+                  101,
+                  101,
+                  95,
+                  118,
+                  97,
+                  117,
+                  108,
+                  116,
+                  95,
+                  97,
+                  117,
+                  116,
+                  104
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "bank"
+              }
+            ]
+          }
+        },
+        {
+          "name": "dst_token_account",
+          "writable": true
+        },
+        {
+          "name": "token_program"
+        }
+      ],
+      "args": [
+        {
+          "name": "amount",
+          "type": "u64"
+        }
+      ],
+      "discriminator": [
+        92,
+        140,
+        215,
+        254,
+        170,
+        0,
+        83,
+        174
+      ],
+      "name": "lending_pool_withdraw_fees"
+    },
+    {
+      "accounts": [
+        {
+          "name": "group",
+          "relations": [
+            "bank"
+          ]
+        },
+        {
+          "name": "bank"
+        },
+        {
+          "name": "fee_vault",
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  102,
+                  101,
+                  101,
+                  95,
+                  118,
+                  97,
+                  117,
+                  108,
+                  116
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "bank"
+              }
+            ]
+          },
+          "writable": true
+        },
+        {
+          "name": "fee_vault_authority",
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  102,
+                  101,
+                  101,
+                  95,
+                  118,
+                  97,
+                  117,
+                  108,
+                  116,
+                  95,
+                  97,
+                  117,
+                  116,
+                  104
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "bank"
+              }
+            ]
+          }
+        },
+        {
+          "name": "fees_destination_account",
+          "relations": [
+            "bank"
+          ],
+          "writable": true
+        },
+        {
+          "name": "token_program"
+        }
+      ],
+      "args": [
+        {
+          "name": "amount",
+          "type": "u64"
+        }
+      ],
+      "discriminator": [
+        57,
+        245,
+        1,
+        208,
+        130,
+        18,
+        145,
+        113
+      ],
+      "name": "lending_pool_withdraw_fees_permissionless"
+    },
+    {
+      "accounts": [
+        {
+          "name": "group",
+          "relations": [
+            "bank"
+          ]
+        },
+        {
+          "name": "bank"
+        },
+        {
+          "name": "admin",
+          "relations": [
+            "group"
+          ],
+          "signer": true
+        },
+        {
+          "name": "insurance_vault",
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  105,
+                  110,
+                  115,
+                  117,
+                  114,
+                  97,
+                  110,
+                  99,
+                  101,
+                  95,
+                  118,
+                  97,
+                  117,
+                  108,
+                  116
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "bank"
+              }
+            ]
+          },
+          "writable": true
+        },
+        {
+          "name": "insurance_vault_authority",
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  105,
+                  110,
+                  115,
+                  117,
+                  114,
+                  97,
+                  110,
+                  99,
+                  101,
+                  95,
+                  118,
+                  97,
+                  117,
+                  108,
+                  116,
+                  95,
+                  97,
+                  117,
+                  116,
+                  104
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "bank"
+              }
+            ]
+          }
+        },
+        {
+          "name": "dst_token_account",
+          "writable": true
+        },
+        {
+          "name": "token_program"
+        }
+      ],
+      "args": [
+        {
+          "name": "amount",
+          "type": "u64"
+        }
+      ],
+      "discriminator": [
+        108,
+        60,
+        60,
+        246,
+        104,
+        79,
+        159,
+        243
+      ],
+      "name": "lending_pool_withdraw_insurance"
+    },
+    {
+      "accounts": [
+        {
+          "name": "marginfi_account",
+          "writable": true
+        },
+        {
+          "name": "authority",
+          "relations": [
+            "marginfi_account"
+          ],
+          "signer": true
+        },
+        {
+          "name": "fee_payer",
+          "signer": true,
+          "writable": true
+        }
+      ],
+      "args": [],
+      "discriminator": [
+        186,
+        221,
+        93,
+        34,
+        50,
+        97,
+        194,
+        241
+      ],
+      "name": "marginfi_account_close"
+    },
+    {
+      "accounts": [
+        {
+          "name": "marginfi_group"
+        },
+        {
+          "name": "marginfi_account",
+          "signer": true,
+          "writable": true
+        },
+        {
+          "name": "authority",
+          "signer": true
+        },
+        {
+          "name": "fee_payer",
+          "signer": true,
+          "writable": true
+        },
+        {
+          "address": "11111111111111111111111111111111",
+          "name": "system_program"
+        }
+      ],
+      "args": [],
+      "discriminator": [
+        43,
+        78,
+        61,
+        255,
+        148,
+        52,
+        249,
+        154
+      ],
+      "docs": [
+        "Initialize a marginfi account for a given group"
+      ],
+      "name": "marginfi_account_initialize"
+    },
+    {
+      "accounts": [
+        {
+          "name": "marginfi_account",
+          "writable": true
+        },
+        {
+          "name": "authority",
+          "relations": [
+            "marginfi_account"
+          ],
+          "signer": true
+        },
+        {
+          "docs": [
+            "User's earned emissions will be sent to the canonical ATA of this wallet.",
+            ""
+          ],
+          "name": "destination_account"
+        }
+      ],
+      "args": [],
+      "discriminator": [
+        73,
+        185,
+        162,
+        201,
+        111,
+        24,
+        116,
+        185
+      ],
+      "name": "marginfi_account_update_emissions_destination_account"
+    },
+    {
+      "accounts": [
+        {
+          "name": "marginfi_group",
+          "writable": true
+        },
+        {
+          "name": "admin",
+          "relations": [
+            "marginfi_group"
+          ],
+          "signer": true
+        }
+      ],
+      "args": [
+        {
+          "name": "new_admin",
+          "type": "pubkey"
+        },
+        {
+          "name": "new_emode_admin",
+          "type": "pubkey"
+        },
+        {
+          "name": "new_curve_admin",
+          "type": "pubkey"
+        },
+        {
+          "name": "new_limit_admin",
+          "type": "pubkey"
+        },
+        {
+          "name": "new_emissions_admin",
+          "type": "pubkey"
+        },
+        {
+          "name": "is_arena_group",
+          "type": "bool"
+        }
+      ],
+      "discriminator": [
+        62,
+        199,
+        81,
+        78,
+        33,
+        13,
+        236,
+        61
+      ],
+      "name": "marginfi_group_configure"
+    },
+    {
+      "accounts": [
+        {
+          "name": "marginfi_group",
+          "signer": true,
+          "writable": true
+        },
+        {
+          "name": "admin",
+          "signer": true,
+          "writable": true
+        },
+        {
+          "name": "fee_state",
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  102,
+                  101,
+                  101,
+                  115,
+                  116,
+                  97,
+                  116,
+                  101
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "address": "11111111111111111111111111111111",
+          "name": "system_program"
+        }
+      ],
+      "args": [
+        {
+          "name": "is_arena_group",
+          "type": "bool"
+        }
+      ],
+      "discriminator": [
+        255,
+        67,
+        67,
+        26,
+        94,
+        31,
+        34,
+        20
+      ],
+      "name": "marginfi_group_initialize"
+    },
+    {
+      "accounts": [
+        {
+          "name": "group",
+          "relations": [
+            "bank"
+          ]
+        },
+        {
+          "name": "bank",
+          "writable": true
+        },
+        {
+          "docs": [
+            "Must use the Pyth Sponsored shard ID (0) or mrgn's (3301)",
+            ""
+          ],
+          "name": "oracle"
+        }
+      ],
+      "args": [],
+      "discriminator": [
+        139,
+        58,
+        192,
+        167,
+        217,
+        110,
+        247,
+        152
+      ],
+      "name": "migrate_pyth_push_oracle"
+    },
+    {
+      "accounts": [
+        {
+          "name": "fee_state",
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  102,
+                  101,
+                  101,
+                  115,
+                  116,
+                  97,
+                  116,
+                  101
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "docs": [
+            "Any group, this ix is permisionless and can propogate the fee to any group"
+          ],
+          "name": "marginfi_group",
+          "writable": true
+        }
+      ],
+      "args": [],
+      "discriminator": [
+        64,
+        3,
+        166,
+        194,
+        129,
+        21,
+        101,
+        155
+      ],
+      "docs": [
+        "(Permissionless) Force any group to adopt the current FeeState settings"
+      ],
+      "name": "propagate_fee_state"
+    },
+    {
+      "accounts": [
+        {
+          "name": "marginfi_group",
+          "relations": [
+            "staked_settings"
+          ]
+        },
+        {
+          "name": "staked_settings"
+        },
+        {
+          "name": "bank",
+          "writable": true
+        }
+      ],
+      "args": [],
+      "discriminator": [
+        210,
+        30,
+        152,
+        69,
+        130,
+        99,
+        222,
+        170
+      ],
+      "name": "propagate_staked_settings"
+    },
+    {
+      "accounts": [
+        {
+          "name": "group",
+          "relations": [
+            "old_marginfi_account"
+          ]
+        },
+        {
+          "name": "old_marginfi_account",
+          "writable": true
+        },
+        {
+          "name": "new_marginfi_account",
+          "signer": true,
+          "writable": true
+        },
+        {
+          "name": "authority",
+          "relations": [
+            "old_marginfi_account"
+          ],
+          "signer": true,
+          "writable": true
+        },
+        {
+          "name": "new_authority"
+        },
+        {
+          "name": "global_fee_wallet",
+          "writable": true
+        },
+        {
+          "address": "11111111111111111111111111111111",
+          "name": "system_program"
+        }
+      ],
+      "args": [],
+      "discriminator": [
+        28,
+        79,
+        129,
+        231,
+        169,
+        69,
+        69,
+        65
+      ],
+      "name": "transfer_to_new_account"
+    }
+  ],
+  "metadata": {
+    "description": "Created with Anchor",
+    "name": "marginfi",
+    "spec": "0.1.0",
+    "version": "0.1.4"
+  },
+  "types": [
+    {
+      "name": "AccountEventHeader",
+      "type": {
+        "fields": [
+          {
+            "name": "signer",
+            "type": {
+              "option": "pubkey"
+            }
+          },
+          {
+            "name": "marginfi_account",
+            "type": "pubkey"
+          },
+          {
+            "name": "marginfi_account_authority",
+            "type": "pubkey"
+          },
+          {
+            "name": "marginfi_group",
+            "type": "pubkey"
+          }
+        ],
+        "kind": "struct"
+      }
+    },
+    {
+      "name": "Balance",
+      "repr": {
+        "kind": "c"
+      },
+      "type": {
+        "fields": [
+          {
+            "name": "active",
+            "type": "u8"
+          },
+          {
+            "name": "bank_pk",
+            "type": "pubkey"
+          },
+          {
+            "docs": [
+              "Inherited from the bank when the position is first created and CANNOT BE CHANGED after that.",
+              "Note that all balances created before the addition of this feature use `ASSET_TAG_DEFAULT`"
+            ],
+            "name": "bank_asset_tag",
+            "type": "u8"
+          },
+          {
+            "name": "_pad0",
+            "type": {
+              "array": [
+                "u8",
+                6
+              ]
+            }
+          },
+          {
+            "name": "asset_shares",
+            "type": {
+              "defined": {
+                "name": "WrappedI80F48"
+              }
+            }
+          },
+          {
+            "name": "liability_shares",
+            "type": {
+              "defined": {
+                "name": "WrappedI80F48"
+              }
+            }
+          },
+          {
+            "name": "emissions_outstanding",
+            "type": {
+              "defined": {
+                "name": "WrappedI80F48"
+              }
+            }
+          },
+          {
+            "name": "last_update",
+            "type": "u64"
+          },
+          {
+            "name": "_padding",
+            "type": {
+              "array": [
+                "u64",
+                1
+              ]
+            }
+          }
+        ],
+        "kind": "struct"
+      }
+    },
+    {
+      "name": "Bank",
+      "repr": {
+        "kind": "c"
+      },
+      "serialization": "bytemuck",
+      "type": {
+        "fields": [
+          {
+            "name": "mint",
+            "type": "pubkey"
+          },
+          {
+            "name": "mint_decimals",
+            "type": "u8"
+          },
+          {
+            "name": "group",
+            "type": "pubkey"
+          },
+          {
+            "name": "_pad0",
+            "type": {
+              "array": [
+                "u8",
+                7
+              ]
+            }
+          },
+          {
+            "name": "asset_share_value",
+            "type": {
+              "defined": {
+                "name": "WrappedI80F48"
+              }
+            }
+          },
+          {
+            "name": "liability_share_value",
+            "type": {
+              "defined": {
+                "name": "WrappedI80F48"
+              }
+            }
+          },
+          {
+            "name": "liquidity_vault",
+            "type": "pubkey"
+          },
+          {
+            "name": "liquidity_vault_bump",
+            "type": "u8"
+          },
+          {
+            "name": "liquidity_vault_authority_bump",
+            "type": "u8"
+          },
+          {
+            "name": "insurance_vault",
+            "type": "pubkey"
+          },
+          {
+            "name": "insurance_vault_bump",
+            "type": "u8"
+          },
+          {
+            "name": "insurance_vault_authority_bump",
+            "type": "u8"
+          },
+          {
+            "name": "_pad1",
+            "type": {
+              "array": [
+                "u8",
+                4
+              ]
+            }
+          },
+          {
+            "docs": [
+              "Fees collected and pending withdraw for the `insurance_vault`"
+            ],
+            "name": "collected_insurance_fees_outstanding",
+            "type": {
+              "defined": {
+                "name": "WrappedI80F48"
+              }
+            }
+          },
+          {
+            "name": "fee_vault",
+            "type": "pubkey"
+          },
+          {
+            "name": "fee_vault_bump",
+            "type": "u8"
+          },
+          {
+            "name": "fee_vault_authority_bump",
+            "type": "u8"
+          },
+          {
+            "name": "_pad2",
+            "type": {
+              "array": [
+                "u8",
+                6
+              ]
+            }
+          },
+          {
+            "docs": [
+              "Fees collected and pending withdraw for the `fee_vault`"
+            ],
+            "name": "collected_group_fees_outstanding",
+            "type": {
+              "defined": {
+                "name": "WrappedI80F48"
+              }
+            }
+          },
+          {
+            "name": "total_liability_shares",
+            "type": {
+              "defined": {
+                "name": "WrappedI80F48"
+              }
+            }
+          },
+          {
+            "name": "total_asset_shares",
+            "type": {
+              "defined": {
+                "name": "WrappedI80F48"
+              }
+            }
+          },
+          {
+            "name": "last_update",
+            "type": "i64"
+          },
+          {
+            "name": "config",
+            "type": {
+              "defined": {
+                "name": "BankConfig"
+              }
+            }
+          },
+          {
+            "docs": [
+              "Bank Config Flags",
+              "",
+              "- EMISSIONS_FLAG_BORROW_ACTIVE: 1",
+              "- EMISSIONS_FLAG_LENDING_ACTIVE: 2",
+              "- PERMISSIONLESS_BAD_DEBT_SETTLEMENT: 4",
+              "- FREEZE_SETTINGS: 8 - banks with this flag enabled can only update deposit/borrow caps",
+              "- CLOSE_ENABLED_FLAG - banks with this flag were created after 0.1.4 and can be closed.",
+              "Banks without this flag can never be closed.",
+              ""
+            ],
+            "name": "flags",
+            "type": "u64"
+          },
+          {
+            "docs": [
+              "Emissions APR. Number of emitted tokens (emissions_mint) per 1e(bank.mint_decimal) tokens",
+              "(bank mint) (native amount) per 1 YEAR."
+            ],
+            "name": "emissions_rate",
+            "type": "u64"
+          },
+          {
+            "name": "emissions_remaining",
+            "type": {
+              "defined": {
+                "name": "WrappedI80F48"
+              }
+            }
+          },
+          {
+            "name": "emissions_mint",
+            "type": "pubkey"
+          },
+          {
+            "docs": [
+              "Fees collected and pending withdraw for the `FeeState.global_fee_wallet`'s canonical ATA for `mint`"
+            ],
+            "name": "collected_program_fees_outstanding",
+            "type": {
+              "defined": {
+                "name": "WrappedI80F48"
+              }
+            }
+          },
+          {
+            "docs": [
+              "Controls this bank's emode configuration, which enables some banks to treat the assets of",
+              "certain other banks more preferentially as collateral."
+            ],
+            "name": "emode",
+            "type": {
+              "defined": {
+                "name": "EmodeSettings"
+              }
+            }
+          },
+          {
+            "docs": [
+              "Set with `update_fees_destination_account`. This should be an ATA for the bank's mint. If",
+              "pubkey default, the bank doesn't support this feature, and the fees must be collected",
+              "manually (withdraw_fees)."
+            ],
+            "name": "fees_destination_account",
+            "type": "pubkey"
+          },
+          {
+            "name": "cache",
+            "type": {
+              "defined": {
+                "name": "BankCache"
+              }
+            }
+          },
+          {
+            "docs": [
+              "Number of user lending positions currently open in this bank",
+              "* For banks created prior to 0.1.4, this is the number of positions opened/closed after",
+              "0.1.4 goes live, and may be negative.",
+              "* For banks created in 0.1.4 or later, this is the number of positions open in total, and",
+              "the bank may safely be closed if this is zero. Will never go negative."
+            ],
+            "name": "lending_position_count",
+            "type": "i32"
+          },
+          {
+            "docs": [
+              "Number of user borrowing positions currently open in this bank",
+              "* For banks created prior to 0.1.4, this is the number of positions opened/closed after",
+              "0.1.4 goes live, and may be negative.",
+              "* For banks created in 0.1.4 or later, this is the number of positions open in total, and",
+              "the bank may safely be closed if this is zero. Will never go negative."
+            ],
+            "name": "borrowing_position_count",
+            "type": "i32"
+          },
+          {
+            "name": "_padding_0",
+            "type": {
+              "array": [
+                "u8",
+                16
+              ]
+            }
+          },
+          {
+            "name": "_padding_1",
+            "type": {
+              "array": [
+                {
+                  "array": [
+                    "u64",
+                    2
+                  ]
+                },
+                19
+              ]
+            }
+          }
+        ],
+        "kind": "struct"
+      }
+    },
+    {
+      "docs": [
+        "A read-only cache of the bank's key metrics, e.g. spot interest/fee rates."
+      ],
+      "name": "BankCache",
+      "repr": {
+        "kind": "c"
+      },
+      "type": {
+        "fields": [
+          {
+            "docs": [
+              "Actual (spot) interest/fee rates of the bank, based on utilization",
+              "* APR (annual percentage rate) values",
+              "* From 0-1000%, as u32, e.g. u32::MAX = 1000%, u:32::MAX/2 = 500%, etc"
+            ],
+            "name": "base_rate",
+            "type": "u32"
+          },
+          {
+            "docs": [
+              "Equivalent to `base_rate` * utilization",
+              "* From 0-1000%, as u32, e.g. u32::MAX = 1000%, u:32::MAX/2 = 500%, etc"
+            ],
+            "name": "lending_rate",
+            "type": "u32"
+          },
+          {
+            "docs": [
+              "Equivalent to `base_rate` * (1 + ir_fees) + fixed_fees",
+              "* From 0-1000%, as u32, e.g. u32::MAX = 1000%, u:32::MAX/2 = 500%, etc"
+            ],
+            "name": "borrowing_rate",
+            "type": "u32"
+          },
+          {
+            "docs": [
+              "* in seconds"
+            ],
+            "name": "interest_accumulated_for",
+            "type": "u32"
+          },
+          {
+            "docs": [
+              "equivalent to (share value increase in the last `interest_accumulated_for` seconds *",
+              "shares), i.e. the delta in `asset_share_value`, in token.",
+              "* Note: if the tx that triggered this cache update increased or decreased the net shares,",
+              "this value still reports using the PRE-CHANGE share amount, since interest is always",
+              "earned on that amount.",
+              "* in token, in native decimals, as I80F48"
+            ],
+            "name": "accumulated_since_last_update",
+            "type": {
+              "defined": {
+                "name": "WrappedI80F48"
+              }
+            }
+          },
+          {
+            "name": "_reserved0",
+            "type": {
+              "array": [
+                "u8",
+                128
+              ]
+            }
+          }
+        ],
+        "kind": "struct"
+      }
+    },
+    {
+      "docs": [
+        "TODO: Convert weights to (u64, u64) to avoid precision loss (maybe?)"
+      ],
+      "name": "BankConfig",
+      "repr": {
+        "kind": "c"
+      },
+      "type": {
+        "fields": [
+          {
+            "name": "asset_weight_init",
+            "type": {
+              "defined": {
+                "name": "WrappedI80F48"
+              }
+            }
+          },
+          {
+            "name": "asset_weight_maint",
+            "type": {
+              "defined": {
+                "name": "WrappedI80F48"
+              }
+            }
+          },
+          {
+            "name": "liability_weight_init",
+            "type": {
+              "defined": {
+                "name": "WrappedI80F48"
+              }
+            }
+          },
+          {
+            "name": "liability_weight_maint",
+            "type": {
+              "defined": {
+                "name": "WrappedI80F48"
+              }
+            }
+          },
+          {
+            "name": "deposit_limit",
+            "type": "u64"
+          },
+          {
+            "name": "interest_rate_config",
+            "type": {
+              "defined": {
+                "name": "InterestRateConfig"
+              }
+            }
+          },
+          {
+            "name": "operational_state",
+            "type": {
+              "defined": {
+                "name": "BankOperationalState"
+              }
+            }
+          },
+          {
+            "name": "oracle_setup",
+            "type": {
+              "defined": {
+                "name": "OracleSetup"
+              }
+            }
+          },
+          {
+            "name": "oracle_keys",
+            "type": {
+              "array": [
+                "pubkey",
+                5
+              ]
+            }
+          },
+          {
+            "name": "_pad0",
+            "type": {
+              "array": [
+                "u8",
+                6
+              ]
+            }
+          },
+          {
+            "name": "borrow_limit",
+            "type": "u64"
+          },
+          {
+            "name": "risk_tier",
+            "type": {
+              "defined": {
+                "name": "RiskTier"
+              }
+            }
+          },
+          {
+            "docs": [
+              "Determines what kinds of assets users of this bank can interact with.",
+              "Options:",
+              "* ASSET_TAG_DEFAULT (0) - A regular asset that can be comingled with any other regular asset",
+              "or with `ASSET_TAG_SOL`",
+              "* ASSET_TAG_SOL (1) - Accounts with a SOL position can comingle with **either**",
+              "`ASSET_TAG_DEFAULT` or `ASSET_TAG_STAKED` positions, but not both",
+              "* ASSET_TAG_STAKED (2) - Staked SOL assets. Accounts with a STAKED position can only deposit",
+              "other STAKED assets or SOL (`ASSET_TAG_SOL`) and can only borrow SOL"
+            ],
+            "name": "asset_tag",
+            "type": "u8"
+          },
+          {
+            "docs": [
+              "Flags for various config options",
+              "* 1 - Always set if bank created in 0.1.4 or later, or if migrated to the new pyth",
+              "oracle setup from a prior version. Not set in 0.1.3 or earlier banks using pyth that have",
+              "not yet migrated. Does nothing for banks that use switchboard.",
+              "* 2, 4, 8, 16, etc - reserved for future use."
+            ],
+            "name": "config_flags",
+            "type": "u8"
+          },
+          {
+            "name": "_pad1",
+            "type": {
+              "array": [
+                "u8",
+                5
+              ]
+            }
+          },
+          {
+            "docs": [
+              "USD denominated limit for calculating asset value for initialization margin requirements.",
+              "Example, if total SOL deposits are equal to $1M and the limit it set to $500K,",
+              "then SOL assets will be discounted by 50%.",
+              "",
+              "In other words the max value of liabilities that can be backed by the asset is $500K.",
+              "This is useful for limiting the damage of orcale attacks.",
+              "",
+              "Value is UI USD value, for example value 100 -> $100"
+            ],
+            "name": "total_asset_value_init_limit",
+            "type": "u64"
+          },
+          {
+            "docs": [
+              "Time window in seconds for the oracle price feed to be considered live."
+            ],
+            "name": "oracle_max_age",
+            "type": "u16"
+          },
+          {
+            "name": "_padding0",
+            "type": {
+              "array": [
+                "u8",
+                2
+              ]
+            }
+          },
+          {
+            "docs": [
+              "From 0-100%, if the confidence exceeds this value, the oracle is considered invalid. Note:",
+              "the confidence adjustment is capped at 5% regardless of this value.",
+              "* 0 falls back to using the default 10% instead, i.e., U32_MAX_DIV_10",
+              "* A %, as u32, e.g. 100% = u32::MAX, 50% = u32::MAX/2, etc."
+            ],
+            "name": "oracle_max_confidence",
+            "type": "u32"
+          },
+          {
+            "name": "_padding1",
+            "type": {
+              "array": [
+                "u8",
+                32
+              ]
+            }
+          }
+        ],
+        "kind": "struct"
+      }
+    },
+    {
+      "docs": [
+        "TODO: Convert weights to (u64, u64) to avoid precision loss (maybe?)"
+      ],
+      "name": "BankConfigCompact",
+      "repr": {
+        "kind": "c"
+      },
+      "type": {
+        "fields": [
+          {
+            "name": "asset_weight_init",
+            "type": {
+              "defined": {
+                "name": "WrappedI80F48"
+              }
+            }
+          },
+          {
+            "name": "asset_weight_maint",
+            "type": {
+              "defined": {
+                "name": "WrappedI80F48"
+              }
+            }
+          },
+          {
+            "name": "liability_weight_init",
+            "type": {
+              "defined": {
+                "name": "WrappedI80F48"
+              }
+            }
+          },
+          {
+            "name": "liability_weight_maint",
+            "type": {
+              "defined": {
+                "name": "WrappedI80F48"
+              }
+            }
+          },
+          {
+            "name": "deposit_limit",
+            "type": "u64"
+          },
+          {
+            "name": "interest_rate_config",
+            "type": {
+              "defined": {
+                "name": "InterestRateConfigCompact"
+              }
+            }
+          },
+          {
+            "name": "operational_state",
+            "type": {
+              "defined": {
+                "name": "BankOperationalState"
+              }
+            }
+          },
+          {
+            "name": "borrow_limit",
+            "type": "u64"
+          },
+          {
+            "name": "risk_tier",
+            "type": {
+              "defined": {
+                "name": "RiskTier"
+              }
+            }
+          },
+          {
+            "docs": [
+              "Determines what kinds of assets users of this bank can interact with.",
+              "Options:",
+              "* ASSET_TAG_DEFAULT (0) - A regular asset that can be comingled with any other regular asset",
+              "or with `ASSET_TAG_SOL`",
+              "* ASSET_TAG_SOL (1) - Accounts with a SOL position can comingle with **either**",
+              "`ASSET_TAG_DEFAULT` or `ASSET_TAG_STAKED` positions, but not both",
+              "* ASSET_TAG_STAKED (2) - Staked SOL assets. Accounts with a STAKED position can only deposit",
+              "other STAKED assets or SOL (`ASSET_TAG_SOL`) and can only borrow SOL"
+            ],
+            "name": "asset_tag",
+            "type": "u8"
+          },
+          {
+            "docs": [
+              "Flags for various config options",
+              "* 1 - Always set if bank created in 0.1.4 or later, or if migrated to the new oracle",
+              "setup from a prior version. Not set in 0.1.3 or earlier banks that have not yet migrated.",
+              "* 2, 4, 8, 16, etc - reserved for future use."
+            ],
+            "name": "config_flags",
+            "type": "u8"
+          },
+          {
+            "name": "_pad0",
+            "type": {
+              "array": [
+                "u8",
+                5
+              ]
+            }
+          },
+          {
+            "docs": [
+              "USD denominated limit for calculating asset value for initialization margin requirements.",
+              "Example, if total SOL deposits are equal to $1M and the limit it set to $500K,",
+              "then SOL assets will be discounted by 50%.",
+              "",
+              "In other words the max value of liabilities that can be backed by the asset is $500K.",
+              "This is useful for limiting the damage of orcale attacks.",
+              "",
+              "Value is UI USD value, for example value 100 -> $100"
+            ],
+            "name": "total_asset_value_init_limit",
+            "type": "u64"
+          },
+          {
+            "docs": [
+              "Time window in seconds for the oracle price feed to be considered live."
+            ],
+            "name": "oracle_max_age",
+            "type": "u16"
+          },
+          {
+            "docs": [
+              "From 0-100%, if the confidence exceeds this value, the oracle is considered invalid. Note:",
+              "the confidence adjustment is capped at 5% regardless of this value.",
+              "* 0% = use the default (10%)",
+              "* A %, as u32, e.g. 100% = u32::MAX, 50% = u32::MAX/2, etc."
+            ],
+            "name": "oracle_max_confidence",
+            "type": "u32"
+          }
+        ],
+        "kind": "struct"
+      }
+    },
+    {
+      "name": "BankConfigOpt",
+      "type": {
+        "fields": [
+          {
+            "name": "asset_weight_init",
+            "type": {
+              "option": {
+                "defined": {
+                  "name": "WrappedI80F48"
+                }
+              }
+            }
+          },
+          {
+            "name": "asset_weight_maint",
+            "type": {
+              "option": {
+                "defined": {
+                  "name": "WrappedI80F48"
+                }
+              }
+            }
+          },
+          {
+            "name": "liability_weight_init",
+            "type": {
+              "option": {
+                "defined": {
+                  "name": "WrappedI80F48"
+                }
+              }
+            }
+          },
+          {
+            "name": "liability_weight_maint",
+            "type": {
+              "option": {
+                "defined": {
+                  "name": "WrappedI80F48"
+                }
+              }
+            }
+          },
+          {
+            "name": "deposit_limit",
+            "type": {
+              "option": "u64"
+            }
+          },
+          {
+            "name": "borrow_limit",
+            "type": {
+              "option": "u64"
+            }
+          },
+          {
+            "name": "operational_state",
+            "type": {
+              "option": {
+                "defined": {
+                  "name": "BankOperationalState"
+                }
+              }
+            }
+          },
+          {
+            "name": "interest_rate_config",
+            "type": {
+              "option": {
+                "defined": {
+                  "name": "InterestRateConfigOpt"
+                }
+              }
+            }
+          },
+          {
+            "name": "risk_tier",
+            "type": {
+              "option": {
+                "defined": {
+                  "name": "RiskTier"
+                }
+              }
+            }
+          },
+          {
+            "name": "asset_tag",
+            "type": {
+              "option": "u8"
+            }
+          },
+          {
+            "name": "total_asset_value_init_limit",
+            "type": {
+              "option": "u64"
+            }
+          },
+          {
+            "name": "oracle_max_confidence",
+            "type": {
+              "option": "u32"
+            }
+          },
+          {
+            "name": "oracle_max_age",
+            "type": {
+              "option": "u16"
+            }
+          },
+          {
+            "name": "permissionless_bad_debt_settlement",
+            "type": {
+              "option": "bool"
+            }
+          },
+          {
+            "name": "freeze_settings",
+            "type": {
+              "option": "bool"
+            }
+          }
+        ],
+        "kind": "struct"
+      }
+    },
+    {
+      "name": "BankOperationalState",
+      "repr": {
+        "kind": "rust"
+      },
+      "type": {
+        "kind": "enum",
+        "variants": [
+          {
+            "name": "Paused"
+          },
+          {
+            "name": "Operational"
+          },
+          {
+            "name": "ReduceOnly"
+          }
+        ]
+      }
+    },
+    {
+      "name": "EditStakedSettingsEvent",
+      "type": {
+        "fields": [
+          {
+            "name": "group",
+            "type": "pubkey"
+          },
+          {
+            "name": "settings",
+            "type": {
+              "defined": {
+                "name": "StakedSettingsEditConfig"
+              }
+            }
+          }
+        ],
+        "kind": "struct"
+      }
+    },
+    {
+      "docs": [
+        "An emode configuration. Each bank has one such configuration, but this may also be the",
+        "intersection of many configurations (see `reconcile_emode_configs`). For example, the risk",
+        "engine creates such an intersection from all the emode config of all banks the user is borrowing",
+        "from."
+      ],
+      "name": "EmodeConfig",
+      "repr": {
+        "kind": "c"
+      },
+      "type": {
+        "fields": [
+          {
+            "name": "entries",
+            "type": {
+              "array": [
+                {
+                  "defined": {
+                    "name": "EmodeEntry"
+                  }
+                },
+                10
+              ]
+            }
+          }
+        ],
+        "kind": "struct"
+      }
+    },
+    {
+      "name": "EmodeEntry",
+      "repr": {
+        "kind": "c"
+      },
+      "type": {
+        "fields": [
+          {
+            "docs": [
+              "emode_tag of the bank(s) whose collateral you wish to treat preferentially."
+            ],
+            "name": "collateral_bank_emode_tag",
+            "type": "u16"
+          },
+          {
+            "docs": [
+              "* APPLIES_TO_ISOLATED (1) - (NOT YET IMPLEMENTED) if set, isolated banks with this tag",
+              "also benefit. If not set, isolated banks continue to offer zero collateral, even if they",
+              "use this tag.",
+              "* 2, 4, 8, 16, 32, etc - reserved for future use"
+            ],
+            "name": "flags",
+            "type": "u8"
+          },
+          {
+            "name": "pad0",
+            "type": {
+              "array": [
+                "u8",
+                5
+              ]
+            }
+          },
+          {
+            "docs": [
+              "Note: If set below the collateral bank's weight, does nothing."
+            ],
+            "name": "asset_weight_init",
+            "type": {
+              "defined": {
+                "name": "WrappedI80F48"
+              }
+            }
+          },
+          {
+            "docs": [
+              "Note: If set below the collateral bank's weight, does nothing."
+            ],
+            "name": "asset_weight_maint",
+            "type": {
+              "defined": {
+                "name": "WrappedI80F48"
+              }
+            }
+          }
+        ],
+        "kind": "struct"
+      }
+    },
+    {
+      "docs": [
+        "Controls the bank's e-mode configuration, allowing certain collateral sources to be treated more",
+        "favorably as collateral when used to borrow from this bank."
+      ],
+      "name": "EmodeSettings",
+      "repr": {
+        "kind": "c"
+      },
+      "type": {
+        "fields": [
+          {
+            "docs": [
+              "This bank's NON-unique id that other banks will use to determine what emode rate to use when",
+              "this bank is offered as collateral.",
+              "",
+              "For example, all stablecoin banks might share the same emode_tag, and in their entries, each",
+              "such stablecoin bank will recognize that collateral sources with this \"stable\" tag get",
+              "preferential weights. When a new stablecoin is added that is considered riskier, it may get",
+              "a new, less favorable emode tag, and eventually get upgraded to the same one as the other",
+              "stables",
+              "",
+              "* 0 is in an invalid tag and will do nothing."
+            ],
+            "name": "emode_tag",
+            "type": "u16"
+          },
+          {
+            "name": "pad0",
+            "type": {
+              "array": [
+                "u8",
+                6
+              ]
+            }
+          },
+          {
+            "docs": [
+              "Unix timestamp from the system clock when emode state was last updated"
+            ],
+            "name": "timestamp",
+            "type": "i64"
+          },
+          {
+            "docs": [
+              "* EMODE_ON (1) - If set, at least one entry is configured. Never update this flag manually,",
+              "it should always be equivalent to `EmodeConfig.has_entries`",
+              "* 2, 4, 8, etc, Reserved for future use"
+            ],
+            "name": "flags",
+            "type": "u64"
+          },
+          {
+            "name": "emode_config",
+            "type": {
+              "defined": {
+                "name": "EmodeConfig"
+              }
+            }
+          }
+        ],
+        "kind": "struct"
+      }
+    },
+    {
+      "docs": [
+        "Unique per-program. The Program Owner uses this account to administrate fees collected by the protocol"
+      ],
+      "name": "FeeState",
+      "repr": {
+        "kind": "c"
+      },
+      "serialization": "bytemuck",
+      "type": {
+        "fields": [
+          {
+            "docs": [
+              "The fee state's own key. A PDA derived from just `b\"feestate\"`"
+            ],
+            "name": "key",
+            "type": "pubkey"
+          },
+          {
+            "docs": [
+              "Can modify fees"
+            ],
+            "name": "global_fee_admin",
+            "type": "pubkey"
+          },
+          {
+            "docs": [
+              "The base wallet for all protocol fees. All SOL fees go to this wallet. All non-SOL fees go",
+              "to the canonical ATA of this wallet for that asset."
+            ],
+            "name": "global_fee_wallet",
+            "type": "pubkey"
+          },
+          {
+            "name": "placeholder0",
+            "type": "u64"
+          },
+          {
+            "docs": [
+              "Flat fee assessed when a new bank is initialized, in lamports.",
+              "* In SOL, in native decimals."
+            ],
+            "name": "bank_init_flat_sol_fee",
+            "type": "u32"
+          },
+          {
+            "name": "bump_seed",
+            "type": "u8"
+          },
+          {
+            "name": "_padding0",
+            "type": {
+              "array": [
+                "u8",
+                4
+              ]
+            }
+          },
+          {
+            "name": "_padding1",
+            "type": {
+              "array": [
+                "u8",
+                15
+              ]
+            }
+          },
+          {
+            "docs": [
+              "Fee collected by the program owner from all groups"
+            ],
+            "name": "program_fee_fixed",
+            "type": {
+              "defined": {
+                "name": "WrappedI80F48"
+              }
+            }
+          },
+          {
+            "docs": [
+              "Fee collected by the program owner from all groups"
+            ],
+            "name": "program_fee_rate",
+            "type": {
+              "defined": {
+                "name": "WrappedI80F48"
+              }
+            }
+          },
+          {
+            "name": "_reserved0",
+            "type": {
+              "array": [
+                "u8",
+                32
+              ]
+            }
+          },
+          {
+            "name": "_reserved1",
+            "type": {
+              "array": [
+                "u8",
+                64
+              ]
+            }
+          }
+        ],
+        "kind": "struct"
+      }
+    },
+    {
+      "name": "FeeStateCache",
+      "repr": {
+        "kind": "c"
+      },
+      "type": {
+        "fields": [
+          {
+            "name": "global_fee_wallet",
+            "type": "pubkey"
+          },
+          {
+            "name": "program_fee_fixed",
+            "type": {
+              "defined": {
+                "name": "WrappedI80F48"
+              }
+            }
+          },
+          {
+            "name": "program_fee_rate",
+            "type": {
+              "defined": {
+                "name": "WrappedI80F48"
+              }
+            }
+          },
+          {
+            "name": "last_update",
+            "type": "i64"
+          }
+        ],
+        "kind": "struct"
+      }
+    },
+    {
+      "name": "GroupEventHeader",
+      "type": {
+        "fields": [
+          {
+            "name": "signer",
+            "type": {
+              "option": "pubkey"
+            }
+          },
+          {
+            "name": "marginfi_group",
+            "type": "pubkey"
+          }
+        ],
+        "kind": "struct"
+      }
+    },
+    {
+      "docs": [
+        "A read-only cache of the internal risk engine's information. Only valid in borrow/withdraw if",
+        "the tx does not fail. To see the state in any context, e.g. to figure out if the risk engine is",
+        "failing due to some bad price information, use `pulse_health`."
+      ],
+      "name": "HealthCache",
+      "repr": {
+        "kind": "c"
+      },
+      "type": {
+        "fields": [
+          {
+            "docs": [
+              "Internal risk engine asset value, using initial weight (e.g. what is used for borrowing",
+              "purposes), with all confidence adjustments, and other discounts on price.",
+              "* Uses EMA price",
+              "* In dollars"
+            ],
+            "name": "asset_value",
+            "type": {
+              "defined": {
+                "name": "WrappedI80F48"
+              }
+            }
+          },
+          {
+            "docs": [
+              "Internal risk engine liability value, using initial weight (e.g. what is used for borrowing",
+              "purposes), with all confidence adjustments, and other discounts on price.",
+              "* Uses EMA price",
+              "* In dollars"
+            ],
+            "name": "liability_value",
+            "type": {
+              "defined": {
+                "name": "WrappedI80F48"
+              }
+            }
+          },
+          {
+            "docs": [
+              "Internal risk engine asset value, using maintenance weight (e.g. what is used for",
+              "liquidation purposes), with all confidence adjustments.",
+              "* Zero if the risk engine failed to load",
+              "* Uses SPOT price",
+              "* In dollars"
+            ],
+            "name": "asset_value_maint",
+            "type": {
+              "defined": {
+                "name": "WrappedI80F48"
+              }
+            }
+          },
+          {
+            "docs": [
+              "Internal risk engine liability value, using maintenance weight (e.g. what is used for",
+              "liquidation purposes), with all confidence adjustments.",
+              "* Zero if the risk engine failed to load",
+              "* Uses SPOT price",
+              "* In dollars"
+            ],
+            "name": "liability_value_maint",
+            "type": {
+              "defined": {
+                "name": "WrappedI80F48"
+              }
+            }
+          },
+          {
+            "docs": [
+              "The \"true\" value of assets without any confidence or weight adjustments. Internally, used",
+              "only for bankruptcies.",
+              "* Zero if the risk engine failed to load",
+              "* Uses EMA price",
+              "* In dollars"
+            ],
+            "name": "asset_value_equity",
+            "type": {
+              "defined": {
+                "name": "WrappedI80F48"
+              }
+            }
+          },
+          {
+            "docs": [
+              "The \"true\" value of liabilities without any confidence or weight adjustments.",
+              "Internally, used only for bankruptcies.",
+              "* Zero if the risk engine failed to load",
+              "* Uses EMA price",
+              "* In dollars"
+            ],
+            "name": "liability_value_equity",
+            "type": {
+              "defined": {
+                "name": "WrappedI80F48"
+              }
+            }
+          },
+          {
+            "docs": [
+              "Unix timestamp from the system clock when this cache was last updated"
+            ],
+            "name": "timestamp",
+            "type": "i64"
+          },
+          {
+            "docs": [
+              "The flags that indicate the state of the health cache. This is a u64 bitfield, where each",
+              "bit represents a flag.",
+              "",
+              "* HEALTHY = 1 - If set, the account cannot be liquidated. If 0, the account is unhealthy and",
+              "can be liquidated.",
+              "* ENGINE STATUS = 2 - If set, the engine did not error during the last health pulse. If 0,",
+              "the engine would have errored and this cache is likely invalid. `RiskEngineInitRejected`",
+              "is ignored and will allow the flag to be set anyways.",
+              "* ORACLE OK = 4 - If set, the engine did not error due to an oracle issue. If 0, engine was",
+              "passed a bad bank or oracle account, or an oracle was stale. Check the order in which",
+              "accounts were passed and ensure each balance has the correct banks/oracles, and that",
+              "oracle cranks ran recently enough. Check `internal_err` and `err_index` for more details",
+              "in some circumstances. Invalid if generated after borrow/withdraw (these instructions will",
+              "ignore oracle issues if health is still satisfactory with some balance zeroed out).",
+              "* 8, 16, 32, 64, 128, etc - reserved for future use"
+            ],
+            "name": "flags",
+            "type": "u32"
+          },
+          {
+            "docs": [
+              "If the engine errored, look here for the error code. If the engine returns ok, you may also",
+              "check here to see if the risk engine rejected this tx (3009)."
+            ],
+            "name": "mrgn_err",
+            "type": "u32"
+          },
+          {
+            "docs": [
+              "Each price corresponds to that index of Balances in the LendingAccount. Useful for debugging",
+              "or liquidator consumption, to determine how a user's position is priced internally.",
+              "* An f64 stored as bytes"
+            ],
+            "name": "prices",
+            "type": {
+              "array": [
+                {
+                  "array": [
+                    "u8",
+                    8
+                  ]
+                },
+                16
+              ]
+            }
+          },
+          {
+            "docs": [
+              "Errors in asset oracles are ignored (with prices treated as zero). If you see a zero price",
+              "and the `ORACLE_OK` flag is not set, check here to see what error was ignored internally."
+            ],
+            "name": "internal_err",
+            "type": "u32"
+          },
+          {
+            "docs": [
+              "Index in `balances` where `internal_err` appeared"
+            ],
+            "name": "err_index",
+            "type": "u8"
+          },
+          {
+            "docs": [
+              "Since 0.1.3, the version will be encoded here. See PROGRAM_VERSION."
+            ],
+            "name": "program_version",
+            "type": "u8"
+          },
+          {
+            "name": "pad0",
+            "type": {
+              "array": [
+                "u8",
+                2
+              ]
+            }
+          },
+          {
+            "name": "internal_liq_err",
+            "type": "u32"
+          },
+          {
+            "name": "internal_bankruptcy_err",
+            "type": "u32"
+          },
+          {
+            "name": "reserved0",
+            "type": {
+              "array": [
+                "u8",
+                32
+              ]
+            }
+          },
+          {
+            "name": "reserved1",
+            "type": {
+              "array": [
+                "u8",
+                16
+              ]
+            }
+          }
+        ],
+        "kind": "struct"
+      }
+    },
+    {
+      "name": "HealthPulseEvent",
+      "type": {
+        "fields": [
+          {
+            "name": "account",
+            "type": "pubkey"
+          },
+          {
+            "name": "health_cache",
+            "type": {
+              "defined": {
+                "name": "HealthCache"
+              }
+            }
+          }
+        ],
+        "kind": "struct"
+      }
+    },
+    {
+      "name": "InterestRateConfig",
+      "repr": {
+        "kind": "c"
+      },
+      "type": {
+        "fields": [
+          {
+            "name": "optimal_utilization_rate",
+            "type": {
+              "defined": {
+                "name": "WrappedI80F48"
+              }
+            }
+          },
+          {
+            "name": "plateau_interest_rate",
+            "type": {
+              "defined": {
+                "name": "WrappedI80F48"
+              }
+            }
+          },
+          {
+            "name": "max_interest_rate",
+            "type": {
+              "defined": {
+                "name": "WrappedI80F48"
+              }
+            }
+          },
+          {
+            "docs": [
+              "Goes to insurance, funds `collected_insurance_fees_outstanding`"
+            ],
+            "name": "insurance_fee_fixed_apr",
+            "type": {
+              "defined": {
+                "name": "WrappedI80F48"
+              }
+            }
+          },
+          {
+            "docs": [
+              "Goes to insurance, funds `collected_insurance_fees_outstanding`"
+            ],
+            "name": "insurance_ir_fee",
+            "type": {
+              "defined": {
+                "name": "WrappedI80F48"
+              }
+            }
+          },
+          {
+            "docs": [
+              "Earned by the group, goes to `collected_group_fees_outstanding`"
+            ],
+            "name": "protocol_fixed_fee_apr",
+            "type": {
+              "defined": {
+                "name": "WrappedI80F48"
+              }
+            }
+          },
+          {
+            "docs": [
+              "Earned by the group, goes to `collected_group_fees_outstanding`"
+            ],
+            "name": "protocol_ir_fee",
+            "type": {
+              "defined": {
+                "name": "WrappedI80F48"
+              }
+            }
+          },
+          {
+            "name": "protocol_origination_fee",
+            "type": {
+              "defined": {
+                "name": "WrappedI80F48"
+              }
+            }
+          },
+          {
+            "name": "_padding0",
+            "type": {
+              "array": [
+                "u8",
+                16
+              ]
+            }
+          },
+          {
+            "name": "_padding1",
+            "type": {
+              "array": [
+                {
+                  "array": [
+                    "u8",
+                    32
+                  ]
+                },
+                3
+              ]
+            }
+          }
+        ],
+        "kind": "struct"
+      }
+    },
+    {
+      "name": "InterestRateConfigCompact",
+      "repr": {
+        "kind": "c"
+      },
+      "type": {
+        "fields": [
+          {
+            "name": "optimal_utilization_rate",
+            "type": {
+              "defined": {
+                "name": "WrappedI80F48"
+              }
+            }
+          },
+          {
+            "name": "plateau_interest_rate",
+            "type": {
+              "defined": {
+                "name": "WrappedI80F48"
+              }
+            }
+          },
+          {
+            "name": "max_interest_rate",
+            "type": {
+              "defined": {
+                "name": "WrappedI80F48"
+              }
+            }
+          },
+          {
+            "name": "insurance_fee_fixed_apr",
+            "type": {
+              "defined": {
+                "name": "WrappedI80F48"
+              }
+            }
+          },
+          {
+            "name": "insurance_ir_fee",
+            "type": {
+              "defined": {
+                "name": "WrappedI80F48"
+              }
+            }
+          },
+          {
+            "name": "protocol_fixed_fee_apr",
+            "type": {
+              "defined": {
+                "name": "WrappedI80F48"
+              }
+            }
+          },
+          {
+            "name": "protocol_ir_fee",
+            "type": {
+              "defined": {
+                "name": "WrappedI80F48"
+              }
+            }
+          },
+          {
+            "name": "protocol_origination_fee",
+            "type": {
+              "defined": {
+                "name": "WrappedI80F48"
+              }
+            }
+          }
+        ],
+        "kind": "struct"
+      }
+    },
+    {
+      "name": "InterestRateConfigOpt",
+      "type": {
+        "fields": [
+          {
+            "name": "optimal_utilization_rate",
+            "type": {
+              "option": {
+                "defined": {
+                  "name": "WrappedI80F48"
+                }
+              }
+            }
+          },
+          {
+            "name": "plateau_interest_rate",
+            "type": {
+              "option": {
+                "defined": {
+                  "name": "WrappedI80F48"
+                }
+              }
+            }
+          },
+          {
+            "name": "max_interest_rate",
+            "type": {
+              "option": {
+                "defined": {
+                  "name": "WrappedI80F48"
+                }
+              }
+            }
+          },
+          {
+            "name": "insurance_fee_fixed_apr",
+            "type": {
+              "option": {
+                "defined": {
+                  "name": "WrappedI80F48"
+                }
+              }
+            }
+          },
+          {
+            "name": "insurance_ir_fee",
+            "type": {
+              "option": {
+                "defined": {
+                  "name": "WrappedI80F48"
+                }
+              }
+            }
+          },
+          {
+            "name": "protocol_fixed_fee_apr",
+            "type": {
+              "option": {
+                "defined": {
+                  "name": "WrappedI80F48"
+                }
+              }
+            }
+          },
+          {
+            "name": "protocol_ir_fee",
+            "type": {
+              "option": {
+                "defined": {
+                  "name": "WrappedI80F48"
+                }
+              }
+            }
+          },
+          {
+            "name": "protocol_origination_fee",
+            "type": {
+              "option": {
+                "defined": {
+                  "name": "WrappedI80F48"
+                }
+              }
+            }
+          }
+        ],
+        "kind": "struct"
+      }
+    },
+    {
+      "name": "LendingAccount",
+      "repr": {
+        "kind": "c"
+      },
+      "type": {
+        "fields": [
+          {
+            "name": "balances",
+            "type": {
+              "array": [
+                {
+                  "defined": {
+                    "name": "Balance"
+                  }
+                },
+                16
+              ]
+            }
+          },
+          {
+            "name": "_padding",
+            "type": {
+              "array": [
+                "u64",
+                8
+              ]
+            }
+          }
+        ],
+        "kind": "struct"
+      }
+    },
+    {
+      "name": "LendingAccountBorrowEvent",
+      "type": {
+        "fields": [
+          {
+            "name": "header",
+            "type": {
+              "defined": {
+                "name": "AccountEventHeader"
+              }
+            }
+          },
+          {
+            "name": "bank",
+            "type": "pubkey"
+          },
+          {
+            "name": "mint",
+            "type": "pubkey"
+          },
+          {
+            "name": "amount",
+            "type": "u64"
+          }
+        ],
+        "kind": "struct"
+      }
+    },
+    {
+      "name": "LendingAccountDepositEvent",
+      "type": {
+        "fields": [
+          {
+            "name": "header",
+            "type": {
+              "defined": {
+                "name": "AccountEventHeader"
+              }
+            }
+          },
+          {
+            "name": "bank",
+            "type": "pubkey"
+          },
+          {
+            "name": "mint",
+            "type": "pubkey"
+          },
+          {
+            "name": "amount",
+            "type": "u64"
+          }
+        ],
+        "kind": "struct"
+      }
+    },
+    {
+      "name": "LendingAccountLiquidateEvent",
+      "type": {
+        "fields": [
+          {
+            "name": "header",
+            "type": {
+              "defined": {
+                "name": "AccountEventHeader"
+              }
+            }
+          },
+          {
+            "name": "liquidatee_marginfi_account",
+            "type": "pubkey"
+          },
+          {
+            "name": "liquidatee_marginfi_account_authority",
+            "type": "pubkey"
+          },
+          {
+            "name": "asset_bank",
+            "type": "pubkey"
+          },
+          {
+            "name": "asset_mint",
+            "type": "pubkey"
+          },
+          {
+            "name": "liability_bank",
+            "type": "pubkey"
+          },
+          {
+            "name": "liability_mint",
+            "type": "pubkey"
+          },
+          {
+            "name": "liquidatee_pre_health",
+            "type": "f64"
+          },
+          {
+            "name": "liquidatee_post_health",
+            "type": "f64"
+          },
+          {
+            "name": "pre_balances",
+            "type": {
+              "defined": {
+                "name": "LiquidationBalances"
+              }
+            }
+          },
+          {
+            "name": "post_balances",
+            "type": {
+              "defined": {
+                "name": "LiquidationBalances"
+              }
+            }
+          }
+        ],
+        "kind": "struct"
+      }
+    },
+    {
+      "name": "LendingAccountRepayEvent",
+      "type": {
+        "fields": [
+          {
+            "name": "header",
+            "type": {
+              "defined": {
+                "name": "AccountEventHeader"
+              }
+            }
+          },
+          {
+            "name": "bank",
+            "type": "pubkey"
+          },
+          {
+            "name": "mint",
+            "type": "pubkey"
+          },
+          {
+            "name": "amount",
+            "type": "u64"
+          },
+          {
+            "name": "close_balance",
+            "type": "bool"
+          }
+        ],
+        "kind": "struct"
+      }
+    },
+    {
+      "name": "LendingAccountWithdrawEvent",
+      "type": {
+        "fields": [
+          {
+            "name": "header",
+            "type": {
+              "defined": {
+                "name": "AccountEventHeader"
+              }
+            }
+          },
+          {
+            "name": "bank",
+            "type": "pubkey"
+          },
+          {
+            "name": "mint",
+            "type": "pubkey"
+          },
+          {
+            "name": "amount",
+            "type": "u64"
+          },
+          {
+            "name": "close_balance",
+            "type": "bool"
+          }
+        ],
+        "kind": "struct"
+      }
+    },
+    {
+      "name": "LendingPoolBankAccrueInterestEvent",
+      "type": {
+        "fields": [
+          {
+            "name": "header",
+            "type": {
+              "defined": {
+                "name": "GroupEventHeader"
+              }
+            }
+          },
+          {
+            "name": "bank",
+            "type": "pubkey"
+          },
+          {
+            "name": "mint",
+            "type": "pubkey"
+          },
+          {
+            "name": "delta",
+            "type": "u64"
+          },
+          {
+            "name": "fees_collected",
+            "type": "f64"
+          },
+          {
+            "name": "insurance_collected",
+            "type": "f64"
+          }
+        ],
+        "kind": "struct"
+      }
+    },
+    {
+      "name": "LendingPoolBankCollectFeesEvent",
+      "type": {
+        "fields": [
+          {
+            "name": "header",
+            "type": {
+              "defined": {
+                "name": "GroupEventHeader"
+              }
+            }
+          },
+          {
+            "name": "bank",
+            "type": "pubkey"
+          },
+          {
+            "name": "mint",
+            "type": "pubkey"
+          },
+          {
+            "name": "group_fees_collected",
+            "type": "f64"
+          },
+          {
+            "name": "group_fees_outstanding",
+            "type": "f64"
+          },
+          {
+            "name": "insurance_fees_collected",
+            "type": "f64"
+          },
+          {
+            "name": "insurance_fees_outstanding",
+            "type": "f64"
+          }
+        ],
+        "kind": "struct"
+      }
+    },
+    {
+      "name": "LendingPoolBankConfigureEvent",
+      "type": {
+        "fields": [
+          {
+            "name": "header",
+            "type": {
+              "defined": {
+                "name": "GroupEventHeader"
+              }
+            }
+          },
+          {
+            "name": "bank",
+            "type": "pubkey"
+          },
+          {
+            "name": "mint",
+            "type": "pubkey"
+          },
+          {
+            "name": "config",
+            "type": {
+              "defined": {
+                "name": "BankConfigOpt"
+              }
+            }
+          }
+        ],
+        "kind": "struct"
+      }
+    },
+    {
+      "name": "LendingPoolBankConfigureFrozenEvent",
+      "type": {
+        "fields": [
+          {
+            "name": "header",
+            "type": {
+              "defined": {
+                "name": "GroupEventHeader"
+              }
+            }
+          },
+          {
+            "name": "bank",
+            "type": "pubkey"
+          },
+          {
+            "name": "mint",
+            "type": "pubkey"
+          },
+          {
+            "name": "deposit_limit",
+            "type": "u64"
+          },
+          {
+            "name": "borrow_limit",
+            "type": "u64"
+          }
+        ],
+        "kind": "struct"
+      }
+    },
+    {
+      "name": "LendingPoolBankConfigureOracleEvent",
+      "type": {
+        "fields": [
+          {
+            "name": "header",
+            "type": {
+              "defined": {
+                "name": "GroupEventHeader"
+              }
+            }
+          },
+          {
+            "name": "bank",
+            "type": "pubkey"
+          },
+          {
+            "name": "oracle_setup",
+            "type": "u8"
+          },
+          {
+            "name": "oracle",
+            "type": "pubkey"
+          }
+        ],
+        "kind": "struct"
+      }
+    },
+    {
+      "name": "LendingPoolBankCreateEvent",
+      "type": {
+        "fields": [
+          {
+            "name": "header",
+            "type": {
+              "defined": {
+                "name": "GroupEventHeader"
+              }
+            }
+          },
+          {
+            "name": "bank",
+            "type": "pubkey"
+          },
+          {
+            "name": "mint",
+            "type": "pubkey"
+          }
+        ],
+        "kind": "struct"
+      }
+    },
+    {
+      "name": "LendingPoolBankHandleBankruptcyEvent",
+      "type": {
+        "fields": [
+          {
+            "name": "header",
+            "type": {
+              "defined": {
+                "name": "AccountEventHeader"
+              }
+            }
+          },
+          {
+            "name": "bank",
+            "type": "pubkey"
+          },
+          {
+            "name": "mint",
+            "type": "pubkey"
+          },
+          {
+            "name": "bad_debt",
+            "type": "f64"
+          },
+          {
+            "name": "covered_amount",
+            "type": "f64"
+          },
+          {
+            "name": "socialized_amount",
+            "type": "f64"
+          }
+        ],
+        "kind": "struct"
+      }
+    },
+    {
+      "name": "LiquidationBalances",
+      "type": {
+        "fields": [
+          {
+            "name": "liquidatee_asset_balance",
+            "type": "f64"
+          },
+          {
+            "name": "liquidatee_liability_balance",
+            "type": "f64"
+          },
+          {
+            "name": "liquidator_asset_balance",
+            "type": "f64"
+          },
+          {
+            "name": "liquidator_liability_balance",
+            "type": "f64"
+          }
+        ],
+        "kind": "struct"
+      }
+    },
+    {
+      "name": "MarginfiAccount",
+      "repr": {
+        "kind": "c"
+      },
+      "serialization": "bytemuck",
+      "type": {
+        "fields": [
+          {
+            "name": "group",
+            "type": "pubkey"
+          },
+          {
+            "name": "authority",
+            "type": "pubkey"
+          },
+          {
+            "name": "lending_account",
+            "type": {
+              "defined": {
+                "name": "LendingAccount"
+              }
+            }
+          },
+          {
+            "docs": [
+              "The flags that indicate the state of the account. This is u64 bitfield, where each bit",
+              "represents a flag.",
+              "",
+              "Flags:MarginfiAccount",
+              "- 1: `ACCOUNT_DISABLED` - Indicates that the account is disabled and no further actions can",
+              "be taken on it.",
+              "- 2: `ACCOUNT_IN_FLASHLOAN` - Only set when an account is within a flash loan, e.g. when",
+              "start_flashloan is called, then unset when the flashloan ends.",
+              "- 4: `ACCOUNT_FLAG_DEPRECATED` - Deprecated, available for future use",
+              "- 8: `ACCOUNT_TRANSFER_AUTHORITY_ALLOWED` - the admin has flagged with account to be moved,",
+              "original owner can now call `set_account_transfer_authority`"
+            ],
+            "name": "account_flags",
+            "type": "u64"
+          },
+          {
+            "docs": [
+              "Set with `update_emissions_destination_account`. Emissions rewards can be withdrawn to the",
+              "canonical ATA of this wallet without the user's input (withdraw_emissions_permissionless).",
+              "If pubkey default, the user has not opted into this feature, and must claim emissions",
+              "manually (withdraw_emissions)."
+            ],
+            "name": "emissions_destination_account",
+            "type": "pubkey"
+          },
+          {
+            "name": "health_cache",
+            "type": {
+              "defined": {
+                "name": "HealthCache"
+              }
+            }
+          },
+          {
+            "docs": [
+              "If this account was migrated from another one, store the original account key"
+            ],
+            "name": "migrated_from",
+            "type": "pubkey"
+          },
+          {
+            "docs": [
+              "If this account has been migrated to another one, store the destination account key"
+            ],
+            "name": "migrated_to",
+            "type": "pubkey"
+          },
+          {
+            "name": "_padding0",
+            "type": {
+              "array": [
+                "u64",
+                13
+              ]
+            }
+          }
+        ],
+        "kind": "struct"
+      }
+    },
+    {
+      "name": "MarginfiAccountCreateEvent",
+      "type": {
+        "fields": [
+          {
+            "name": "header",
+            "type": {
+              "defined": {
+                "name": "AccountEventHeader"
+              }
+            }
+          }
+        ],
+        "kind": "struct"
+      }
+    },
+    {
+      "name": "MarginfiAccountTransferToNewAccount",
+      "type": {
+        "fields": [
+          {
+            "name": "header",
+            "type": {
+              "defined": {
+                "name": "AccountEventHeader"
+              }
+            }
+          },
+          {
+            "name": "old_account",
+            "type": "pubkey"
+          },
+          {
+            "name": "old_account_authority",
+            "type": "pubkey"
+          },
+          {
+            "name": "new_account_authority",
+            "type": "pubkey"
+          }
+        ],
+        "kind": "struct"
+      }
+    },
+    {
+      "name": "MarginfiGroup",
+      "repr": {
+        "kind": "c"
+      },
+      "serialization": "bytemuck",
+      "type": {
+        "fields": [
+          {
+            "docs": [
+              "Broadly able to modify anything, and can set/remove other admins at will."
+            ],
+            "name": "admin",
+            "type": "pubkey"
+          },
+          {
+            "docs": [
+              "Bitmask for group settings flags.",
+              "* 0: `PROGRAM_FEES_ENABLED` If set, program-level fees are enabled.",
+              "* 1: `ARENA_GROUP` If set, this is an arena group, which can only have two banks",
+              "* Bits 1-63: Reserved for future use."
+            ],
+            "name": "group_flags",
+            "type": "u64"
+          },
+          {
+            "docs": [
+              "Caches information from the global `FeeState` so the FeeState can be omitted on certain ixes"
+            ],
+            "name": "fee_state_cache",
+            "type": {
+              "defined": {
+                "name": "FeeStateCache"
+              }
+            }
+          },
+          {
+            "name": "banks",
+            "type": "u16"
+          },
+          {
+            "name": "pad0",
+            "type": {
+              "array": [
+                "u8",
+                6
+              ]
+            }
+          },
+          {
+            "docs": [
+              "This admin can configure collateral ratios above (but not below) the collateral ratio of",
+              "certain banks , e.g. allow SOL to count as 90% collateral when borrowing an LST instead of",
+              "the default rate."
+            ],
+            "name": "emode_admin",
+            "type": "pubkey"
+          },
+          {
+            "docs": [
+              "Can modify the fields in `config.interest_rate_config` but nothing else, for every bank under",
+              "this group"
+            ],
+            "name": "delegate_curve_admin",
+            "type": "pubkey"
+          },
+          {
+            "docs": [
+              "Can modify the `deposit_limit`, `borrow_limit`, `total_asset_value_init_limit` but nothing",
+              "else, for every bank under this group"
+            ],
+            "name": "delegate_limit_admin",
+            "type": "pubkey"
+          },
+          {
+            "docs": [
+              "Can modify the emissions `flags`, `emissions_rate` and `emissions_mint`, but nothing else,",
+              "for every bank under this group"
+            ],
+            "name": "delegate_emissions_admin",
+            "type": "pubkey"
+          },
+          {
+            "name": "_padding_0",
+            "type": {
+              "array": [
+                {
+                  "array": [
+                    "u64",
+                    2
+                  ]
+                },
+                18
+              ]
+            }
+          },
+          {
+            "name": "_padding_1",
+            "type": {
+              "array": [
+                {
+                  "array": [
+                    "u64",
+                    2
+                  ]
+                },
+                32
+              ]
+            }
+          },
+          {
+            "name": "_padding_4",
+            "type": "u64"
+          }
+        ],
+        "kind": "struct"
+      }
+    },
+    {
+      "name": "MarginfiGroupConfigureEvent",
+      "type": {
+        "fields": [
+          {
+            "name": "header",
+            "type": {
+              "defined": {
+                "name": "GroupEventHeader"
+              }
+            }
+          },
+          {
+            "name": "admin",
+            "type": "pubkey"
+          },
+          {
+            "name": "flags",
+            "type": "u64"
+          }
+        ],
+        "kind": "struct"
+      }
+    },
+    {
+      "name": "MarginfiGroupCreateEvent",
+      "type": {
+        "fields": [
+          {
+            "name": "header",
+            "type": {
+              "defined": {
+                "name": "GroupEventHeader"
+              }
+            }
+          }
+        ],
+        "kind": "struct"
+      }
+    },
+    {
+      "name": "OracleSetup",
+      "repr": {
+        "kind": "rust"
+      },
+      "type": {
+        "kind": "enum",
+        "variants": [
+          {
+            "name": "None"
+          },
+          {
+            "name": "PythLegacy"
+          },
+          {
+            "name": "SwitchboardV2"
+          },
+          {
+            "name": "PythPushOracle"
+          },
+          {
+            "name": "SwitchboardPull"
+          },
+          {
+            "name": "StakedWithPythPush"
+          }
+        ]
+      }
+    },
+    {
+      "name": "RiskTier",
+      "repr": {
+        "kind": "rust"
+      },
+      "type": {
+        "kind": "enum",
+        "variants": [
+          {
+            "name": "Collateral"
+          },
+          {
+            "name": "Isolated"
+          }
+        ]
+      }
+    },
+    {
+      "docs": [
+        "Unique per-group. Staked Collateral banks created under a group automatically use these",
+        "settings. Groups that have not created this struct cannot create staked collateral banks. When",
+        "this struct updates, changes must be permissionlessly propogated to staked collateral banks.",
+        "Administrators can also edit the bank manually, i.e. with configure_bank, to temporarily make",
+        "changes such as raising the deposit limit for a single bank."
+      ],
+      "name": "StakedSettings",
+      "repr": {
+        "kind": "c"
+      },
+      "serialization": "bytemuck",
+      "type": {
+        "fields": [
+          {
+            "docs": [
+              "This account's own key. A PDA derived from `marginfi_group` and `STAKED_SETTINGS_SEED`"
+            ],
+            "name": "key",
+            "type": "pubkey"
+          },
+          {
+            "docs": [
+              "Group for which these settings apply"
+            ],
+            "name": "marginfi_group",
+            "type": "pubkey"
+          },
+          {
+            "docs": [
+              "Generally, the Pyth push oracle for SOL"
+            ],
+            "name": "oracle",
+            "type": "pubkey"
+          },
+          {
+            "name": "asset_weight_init",
+            "type": {
+              "defined": {
+                "name": "WrappedI80F48"
+              }
+            }
+          },
+          {
+            "name": "asset_weight_maint",
+            "type": {
+              "defined": {
+                "name": "WrappedI80F48"
+              }
+            }
+          },
+          {
+            "name": "deposit_limit",
+            "type": "u64"
+          },
+          {
+            "name": "total_asset_value_init_limit",
+            "type": "u64"
+          },
+          {
+            "name": "oracle_max_age",
+            "type": "u16"
+          },
+          {
+            "name": "risk_tier",
+            "type": {
+              "defined": {
+                "name": "RiskTier"
+              }
+            }
+          },
+          {
+            "name": "_pad0",
+            "type": {
+              "array": [
+                "u8",
+                5
+              ]
+            }
+          },
+          {
+            "docs": [
+              "The following values are irrelevant because staked collateral positions do not support",
+              "borrowing."
+            ],
+            "name": "_reserved0",
+            "type": {
+              "array": [
+                "u8",
+                8
+              ]
+            }
+          },
+          {
+            "name": "_reserved1",
+            "type": {
+              "array": [
+                "u8",
+                32
+              ]
+            }
+          },
+          {
+            "name": "_reserved2",
+            "type": {
+              "array": [
+                "u8",
+                64
+              ]
+            }
+          }
+        ],
+        "kind": "struct"
+      }
+    },
+    {
+      "name": "StakedSettingsConfig",
+      "type": {
+        "fields": [
+          {
+            "name": "oracle",
+            "type": "pubkey"
+          },
+          {
+            "name": "asset_weight_init",
+            "type": {
+              "defined": {
+                "name": "WrappedI80F48"
+              }
+            }
+          },
+          {
+            "name": "asset_weight_maint",
+            "type": {
+              "defined": {
+                "name": "WrappedI80F48"
+              }
+            }
+          },
+          {
+            "name": "deposit_limit",
+            "type": "u64"
+          },
+          {
+            "name": "total_asset_value_init_limit",
+            "type": "u64"
+          },
+          {
+            "name": "oracle_max_age",
+            "type": "u16"
+          },
+          {
+            "docs": [
+              "WARN: You almost certainly want \"Collateral\", using Isolated risk tier makes the asset",
+              "worthless as collateral, and is generally useful only when creating a staked collateral pool",
+              "for rewards purposes only."
+            ],
+            "name": "risk_tier",
+            "type": {
+              "defined": {
+                "name": "RiskTier"
+              }
+            }
+          }
+        ],
+        "kind": "struct"
+      }
+    },
+    {
+      "name": "StakedSettingsEditConfig",
+      "type": {
+        "fields": [
+          {
+            "name": "oracle",
+            "type": {
+              "option": "pubkey"
+            }
+          },
+          {
+            "name": "asset_weight_init",
+            "type": {
+              "option": {
+                "defined": {
+                  "name": "WrappedI80F48"
+                }
+              }
+            }
+          },
+          {
+            "name": "asset_weight_maint",
+            "type": {
+              "option": {
+                "defined": {
+                  "name": "WrappedI80F48"
+                }
+              }
+            }
+          },
+          {
+            "name": "deposit_limit",
+            "type": {
+              "option": "u64"
+            }
+          },
+          {
+            "name": "total_asset_value_init_limit",
+            "type": {
+              "option": "u64"
+            }
+          },
+          {
+            "name": "oracle_max_age",
+            "type": {
+              "option": "u16"
+            }
+          },
+          {
+            "docs": [
+              "WARN: You almost certainly want \"Collateral\", using Isolated risk tier makes the asset",
+              "worthless as collateral, making all outstanding accounts eligible to be liquidated, and is",
+              "generally useful only when creating a staked collateral pool for rewards purposes only."
+            ],
+            "name": "risk_tier",
+            "type": {
+              "option": {
+                "defined": {
+                  "name": "RiskTier"
+                }
+              }
+            }
+          }
+        ],
+        "kind": "struct"
+      }
+    },
+    {
+      "name": "WrappedI80F48",
+      "repr": {
+        "align": 8,
+        "kind": "c"
+      },
+      "serialization": "bytemuck",
+      "type": {
+        "fields": [
+          {
+            "name": "value",
+            "type": {
+              "array": [
+                "u8",
+                16
+              ]
+            }
+          }
+        ],
+        "kind": "struct"
+      }
+    }
+  ]
+}

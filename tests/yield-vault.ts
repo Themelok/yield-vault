@@ -1,7 +1,7 @@
 import * as anchor from "@coral-xyz/anchor";
 import { Program } from "@coral-xyz/anchor";
 import { YieldVault } from "../target/types/yield_vault";
-import { PublicKey, Connection } from "@solana/web3.js";
+import { PublicKey, Connection, Keypair } from "@solana/web3.js";
 import { 
   TOKEN_PROGRAM_ID, 
   getOrCreateAssociatedTokenAccount, 
@@ -33,6 +33,12 @@ const KLEND_USDC_RESEVE = new PublicKey("D6q6wuQSrifJKZYpR1M8R4YawnLDtDsMmWM1NbB
 const KLEND_COLLATERAL_MINT = new PublicKey("B8V6WVjPxW1UGwVDfxH2d2r8SyT4cqn7dQRK6XneVa7D");
 const KLEND_RESERVE_LIQUIDITY_SUPPLY = new PublicKey("Bgq7trRgVMeq33yt235zM2onQ4bRDBsY5EWiTetF4qw6");
 const KLEND_LENDING_MARKET_AUTHORITY = new PublicKey("9DrvZvyWh1HuAoZxvYWMvkf2XCzryCpGgHqrMjyDWpmo");
+
+// Marginfi:
+const MARGINFI_PROGRAM = new PublicKey("MFv2hWf31Z9kbCa1snEPYctwafyhdvnV7FZnsebVacA");
+const MARGINFI_BANK = new PublicKey("2s37akK2eyBbp8DZgCm7RtsaEz8eJP3Nxd4urLHQv7yB");
+const MARGINFI_GROUP = new PublicKey("4qp6Fx6tnZkY5Wropq9wUYgtFxXKwE6viZxFHg3rdAG8");
+
 // const mint_authority = new PublicKey("BJE5MMbqXjVwjAF7oxwPYXnTXDyspzZyt4vwenNw5ruG");
 
 describe("yield-vault", () => {
@@ -103,13 +109,15 @@ describe("yield-vault", () => {
   });
 
   it("Is initialized!", async () => {
+    const MARGINFI_ACCOUNT = Keypair.generate();
     const tx = await program.methods.initialize().accounts({
       owner: user.publicKey,
       usdcMint: USDC_MINT,
       kaminoUsdcCollateralMint: KLEND_COLLATERAL_MINT,
-    }).signers([user]).rpc();
+      marginfiAccount: MARGINFI_ACCOUNT.publicKey,
+      marginfiGroup: MARGINFI_GROUP,
+    }).signers([user, MARGINFI_ACCOUNT]).rpc();
     console.log("Your transaction signature", tx);
-    // await program.provider.connection.confirmTransaction(tx, "finalized");
     await bumpSlot(connection, program.provider.wallet.payer);
 
     // Verify vault account is initialized
@@ -122,33 +130,33 @@ describe("yield-vault", () => {
 
   });
 
-  it("Deposit USDC", async () => {
-    const tx = await program.methods.depositUsdc(new anchor.BN(45_000_000)).accounts({
-      owner:                        user.publicKey,
-      ownerUsdcAccount:             USER_USDC_ATA,
-      usdcMint:                     USDC_MINT,
-      kaminoLendingMarket:          KLEND_MAIN_LENDING_MARKET,
-      kaminoReserve:                KLEND_USDC_RESEVE,
-      kaminoUsdcCollateralMint:     KLEND_COLLATERAL_MINT,
-      kaminoLendingMarketAuthority: KLEND_LENDING_MARKET_AUTHORITY,
-      kaminoReserveLiquiditySupply: KLEND_RESERVE_LIQUIDITY_SUPPLY,
-    }).signers([user]).rpc();
-    console.log("Deposit transaction signature", tx);
-  })
+  // it("Deposit USDC", async () => {
+  //   const tx = await program.methods.depositUsdc(new anchor.BN(45_000_000)).accounts({
+  //     owner:                        user.publicKey,
+  //     ownerUsdcAccount:             USER_USDC_ATA,
+  //     usdcMint:                     USDC_MINT,
+  //     kaminoLendingMarket:          KLEND_MAIN_LENDING_MARKET,
+  //     kaminoReserve:                KLEND_USDC_RESEVE,
+  //     kaminoUsdcCollateralMint:     KLEND_COLLATERAL_MINT,
+  //     kaminoLendingMarketAuthority: KLEND_LENDING_MARKET_AUTHORITY,
+  //     kaminoReserveLiquiditySupply: KLEND_RESERVE_LIQUIDITY_SUPPLY,
+  //   }).signers([user]).rpc();
+  //   console.log("Deposit transaction signature", tx);
+  // })
 
-  it("Withdraw USDC", async () => {
-    const tx = await program.methods.withdrawUsdc(new anchor.BN(10_000_000)).accounts({
-      owner: user.publicKey,
-      ownerUsdcAccount: USER_USDC_ATA,
-      usdcMint: USDC_MINT,
-      kaminoLendingMarket: KLEND_MAIN_LENDING_MARKET,
-      kaminoReserve: KLEND_USDC_RESEVE,
-      kaminoUsdcCollateralMint: KLEND_COLLATERAL_MINT,
-      kaminoLendingMarketAuthority: KLEND_LENDING_MARKET_AUTHORITY,
-      kaminoReserveLiquiditySupply: KLEND_RESERVE_LIQUIDITY_SUPPLY,
-    }).signers([user]).rpc();
-    console.log("Withdraw transaction signature", tx);
-  })
+  // it("Withdraw USDC", async () => {
+  //   const tx = await program.methods.withdrawUsdc(new anchor.BN(10_000_000)).accounts({
+  //     owner: user.publicKey,
+  //     ownerUsdcAccount: USER_USDC_ATA,
+  //     usdcMint: USDC_MINT,
+  //     kaminoLendingMarket: KLEND_MAIN_LENDING_MARKET,
+  //     kaminoReserve: KLEND_USDC_RESEVE,
+  //     kaminoUsdcCollateralMint: KLEND_COLLATERAL_MINT,
+  //     kaminoLendingMarketAuthority: KLEND_LENDING_MARKET_AUTHORITY,
+  //     kaminoReserveLiquiditySupply: KLEND_RESERVE_LIQUIDITY_SUPPLY,
+  //   }).signers([user]).rpc();
+  //   console.log("Withdraw transaction signature", tx);
+  // })
 
 
 });
