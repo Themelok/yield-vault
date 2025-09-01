@@ -15,6 +15,10 @@ use marginfi_cpi_local::program::Marginfi;
 use marginfi_cpi_local::cpi::accounts as mfi_accounts; 
 use marginfi_cpi_local::cpi as mfi_cpi;              
 
+pub const KEEPER_PUBKEY: &str = "bot7F9sfkm5ztmMGL11St2PD9necoEY6fC84L1WKMDg";
+pub fn keeper_pubkey() -> Pubkey {
+    KEEPER_PUBKEY.parse().unwrap()
+}
 
 declare_id!("CeHNmAJaE8K2yBEo8RRoh5whacchiq1gpqzJVuL8Df97");
 
@@ -59,7 +63,7 @@ pub mod yield_vault {
     }
 
     pub fn withdraw(ctx: Context<TransferAssets>, amount: u64) -> Result<()> {
-        require!(amount > 0, ErrorCode::InvalidAmount);
+        require!(amount > 0, YieldVaultErrors::InvalidAmount);
         msg!("Withdrawing {} from USDC vault", amount);
         let vault_withdraw_accounts = Transfer {
             from: ctx.accounts.user_usdc_vault_ata.to_account_info(),
@@ -75,13 +79,13 @@ pub mod yield_vault {
             signer);
         transfer(cpi_context, amount)?;
 
-        ctx.accounts.user_vault_account.deposited_amount = ctx.accounts.user_vault_account.deposited_amount.checked_sub(amount).ok_or(ProgramError::InvalidAccountData)?;
+        // ctx.accounts.user_vault_account.deposited_amount = ctx.accounts.user_vault_account.deposited_amount.checked_sub(amount).ok_or(ProgramError::InvalidAccountData)?;
         msg!("Withdrawn {} USDC from vault {} of owner {}", amount, ctx.accounts.user_vault_account.key(), ctx.accounts.user.key().to_string());
         Ok(())
     }
 
     pub fn deposit(ctx: Context<TransferAssets>, amount: u64) -> Result<()> {
-        require!(amount > 0, ErrorCode::InvalidAmount);
+        require!(amount > 0, YieldVaultErrors::InvalidAmount);
         msg!("Depositing {} to USDC vault", amount);
         let vault_deposit_accounts = Transfer {
             from: ctx.accounts.user_usdc_ta.to_account_info(),
@@ -98,7 +102,7 @@ pub mod yield_vault {
     }
 
     pub fn deposit_usdc_marginfi(ctx: Context<DepositUsdcMarginfi>, amount: u64) -> Result<()> {
-        require!(amount > 0, ErrorCode::InvalidAmount);
+        require!(amount > 0, YieldVaultErrors::InvalidAmount);
         msg!("Depositing {} to USDC vault", amount);
         let vault_deposit_accounts = Transfer {
             from: ctx.accounts.owner_usdc_account.to_account_info(),
@@ -131,7 +135,7 @@ pub mod yield_vault {
     }
 
     pub fn withdraw_usdc_marginfi(ctx: Context<WithdrawUsdcMarginfi>, amount: u64) -> Result<()> {
-        require!(amount > 0, ErrorCode::NothingRedeemed);
+        require!(amount > 0, YieldVaultErrors::NothingRedeemed);
         let user_vault = &mut ctx.accounts.user_vault_account;  
         // Build CPI accounts
         let cpi_accounts = mfi_accounts::LendingAccountWithdraw {
@@ -156,26 +160,12 @@ pub mod yield_vault {
         Ok(())
     }
 
-    pub fn deposit_usdc(ctx: Context<TransferUsdc>,  amount: u64) -> Result<()> {
-        // Step 1: Transfer USDC from user to our usdc vault ATA
-        let vault_deposit_accounts = Transfer {
-            from:ctx.accounts.owner_usdc_account.to_account_info(),
-            to: ctx.accounts.usdc_vault.to_account_info(),
-            authority: ctx.accounts.owner.to_account_info(),
-        };
-
-        let cpi_context = CpiContext::new(
-            ctx.accounts.token_program.to_account_info(),
-            vault_deposit_accounts,
-        );
-        transfer(cpi_context, amount)?;
-        msg!("Deposited {} USDC to vault {} of owner {}", amount, ctx.accounts.usdc_vault.key(), ctx.accounts.owner.key().to_string());
-
-        // Step 2: CPI to deposit from our vault into Kamino
-        // TODO: make a choice between lending protocols here when marginfi will be supported
-        let signer: &[&[&[u8]]] = &[&ctx.accounts.vault_account.seeds()];
+    pub fn deploy_usdc_kamino(ctx: Context<TransferUsdcKamino>,  amount: u64) -> Result<()> {
+        require!(amount > 0, YieldVaultErrors::InvalidAmount);
+        // CPI to deposit from our vault into Kamino
+        let signer: &[&[&[u8]]] = &[&ctx.accounts.user_vault_account.seeds()];
         let cpi_deposit_accounts = kamino_cpi::accounts::DepositReserveLiquidity {
-            owner:                          ctx.accounts.vault_account.to_account_info(),
+            owner:                          ctx.accounts.user_vault_account.to_account_info(),
             reserve:                        ctx.accounts.kamino_reserve.to_account_info(),
             // Lending Market accounts
             lending_market:                 ctx.accounts.kamino_lending_market.to_account_info(),
@@ -185,33 +175,37 @@ pub mod yield_vault {
             reserve_liquidity_supply:       ctx.accounts.kamino_reserve_liquidity_supply.to_account_info(),
             reserve_collateral_mint:        ctx.accounts.kamino_usdc_collateral_mint.to_account_info(), // TODO: check if this is correct
             // User accounts
-            user_source_liquidity:          ctx.accounts.usdc_vault.to_account_info(),
+            user_source_liquidity:          ctx.accounts.user_usdc_vault_ata.to_account_info(),
             user_destination_collateral:    ctx.accounts.kamino_usdc_collateral_vault.to_account_info(),
             // Token programs
             collateral_token_program:       ctx.accounts.token_program.to_account_info(),
             liquidity_token_program:        ctx.accounts.token_program.to_account_info(),
             instruction_sysvar_account:     ctx.accounts.instruction_sysvar_account.to_account_info(),
         };
+
         let cpi_ctx_kamino = CpiContext::new_with_signer(
             ctx.accounts.kamino_program.to_account_info(),
             cpi_deposit_accounts,
             signer,
         );
         kamino_cpi::deposit_reserve_liquidity(cpi_ctx_kamino, amount)?;
+        msg!("Deposited {} USDC to KLend for user {}",
+        amount, ctx.accounts.user.key().to_string());
+        ctx.accounts.kamino_usdc_collateral_vault.reload()?;
+        let collateral_amount =ctx.accounts.kamino_usdc_collateral_vault.amount;
+        msg!("Reserved {} kUSDC at {} user collateral vault ATA", collateral_amount, ctx.accounts.kamino_usdc_collateral_vault.key().to_string());
         Ok(())
     }
 
     // TODO: Treat the parameter as desired USDC - need to convert it to collateral using the reserve exchange rate on-chain (requires reading reserve state/slot math)
-    pub fn withdraw_usdc(ctx: Context<TransferUsdc>, collateral_amount: u64) -> Result<()> {
-        let seeds = [VAULT_SEED, ctx.accounts.owner.to_account_info().key.as_ref(), &[ctx.accounts.vault_account.bump]];
-        let signer: &[&[&[u8]]; 1] = &[&seeds[..]];
-        // Step 1: CPI to withdraw from Kamino into our vault
-        // TODO: Make a choice between lending protocols here when marginfi will be supported
-        let pre_liquidity = ctx.accounts.usdc_vault.amount;
-
+    pub fn redeem_usdc_kaminio(ctx: Context<TransferUsdcKamino>) -> Result<()> {
+        let signer: &[&[&[u8]]] = &[&ctx.accounts.user_vault_account.seeds()];
+        // reload the collateral vault full balance
+        ctx.accounts.kamino_usdc_collateral_vault.reload()?;
+        let collateral_amount =ctx.accounts.kamino_usdc_collateral_vault.amount;
+        require!(collateral_amount > 0, YieldVaultErrors::NothingRedeemed);
         let cpi_accounts_kamino = kamino_cpi::accounts::RedeemReserveCollateral {
-            owner:                         ctx.accounts.vault_account.to_account_info(), // PDA
-            
+            owner:                         ctx.accounts.user_vault_account.to_account_info(), // PDA
             reserve:                       ctx.accounts.kamino_reserve.to_account_info(),
             lending_market:                ctx.accounts.kamino_lending_market.to_account_info(),
             lending_market_authority:      ctx.accounts.kamino_lending_market_authority.to_account_info(),
@@ -221,7 +215,7 @@ pub mod yield_vault {
             reserve_collateral_mint:       ctx.accounts.kamino_usdc_collateral_mint.to_account_info(),
             // User accounts
             user_source_collateral:        ctx.accounts.kamino_usdc_collateral_vault.to_account_info(),
-            user_destination_liquidity:    ctx.accounts.usdc_vault.to_account_info(),
+            user_destination_liquidity:    ctx.accounts.user_usdc_vault_ata.to_account_info(),
 
             collateral_token_program:      ctx.accounts.token_program.to_account_info(),
             liquidity_token_program:       ctx.accounts.token_program.to_account_info(),
@@ -233,28 +227,7 @@ pub mod yield_vault {
             signer,
         );
         kamino_cpi::redeem_reserve_collateral(cpi_ctx_kamino, collateral_amount)?;
-
-        ctx.accounts.usdc_vault.reload()?;
-        let post_liquidity = ctx.accounts.usdc_vault.amount;
-        let received_liquidity = post_liquidity.checked_sub(pre_liquidity).ok_or(ProgramError::InvalidAccountData)?; 
-        // Early exit if nothing arrived (shouldn’t happen, but safe)
-        require!(received_liquidity > 0, ErrorCode::NothingRedeemed);
-
-        // Step 2: Transfer USDC from our vault back to the user usdc token account
-        let vault_withdraw_accounts = Transfer {
-            from: ctx.accounts.usdc_vault.to_account_info(),
-            to: ctx.accounts.owner_usdc_account.to_account_info(),
-            authority: ctx.accounts.vault_account.to_account_info(),
-        };
-
-
-        let cpi_context = CpiContext::new_with_signer(
-            ctx.accounts.token_program.to_account_info(),
-            vault_withdraw_accounts,
-            signer);
-        transfer(cpi_context, received_liquidity)?;
-        msg!("Withdrew {} USDC from vault {} of owner {}", received_liquidity, ctx.accounts.usdc_vault.key(), ctx.accounts.owner.key().to_string());
-
+        msg!("Withdrew {} USDC from KLend for user {}", collateral_amount, ctx.accounts.user.key().to_string());
         Ok(())
     }
 }
@@ -346,55 +319,58 @@ pub struct Initialize<'info>{
 }
 
 #[derive(Accounts)]
-pub struct TransferUsdc<'info> {
+pub struct TransferUsdcKamino<'info> {
+    #[account(mut, constraint = keeper.key() == keeper_pubkey())]
+    pub keeper: Signer<'info>,
     pub usdc_mint: Account<'info, Mint>,
-    
-    #[account(mut)]
-    pub owner: Signer<'info>,
-    #[account(mut, constraint = owner_usdc_account.mint == usdc_mint.key(), constraint = owner_usdc_account.owner == owner.key())]
-    pub owner_usdc_account: Account<'info, TokenAccount>,
 
+    /// CHECK: User account
+    pub user: UncheckedAccount<'info>,
+
+    #[account(
+        mut,
+        seeds = [VAULT_SEED, user.key().as_ref()],
+        bump = user_vault_account.bump
+    )]
+    pub user_vault_account: Account<'info, UserVault>,
+    
     #[account(
         mut,
         associated_token::mint = usdc_mint,
-        associated_token::authority = vault_account,
+        associated_token::authority = user_vault_account,
     )]
-    pub usdc_vault: Account<'info, TokenAccount>,
-
-    #[account(seeds = [VAULT_SEED, owner.key().as_ref()], bump = vault_account.bump)]
-    pub vault_account: Account<'info, UserVault>,
+    pub user_usdc_vault_ata: Account<'info, TokenAccount>,
 
      // -------- Kamino (Lend) specific: BEGIN --------
      /// MNT: KLend2g3cP87fffoy8q1mQqGKjrxjC8boSyAYavgmjD
-    pub kamino_program: Program<'info, KaminoLending>,
-    /// CHECK: Kamino's lending market account
-    /// MNT: 7u3HeHxYDLhnCoErrtycNokbQYbWGzLs6JSDqGAv5PfF
-    pub kamino_lending_market: UncheckedAccount<'info>,
-    /// CHECK: Kamino's lending market authority PDA
-    /// MNT: ??????
-    pub kamino_lending_market_authority: UncheckedAccount<'info>,
-
-    /// CHECK: Kamino's reserve account for USDC
-    /// MNT: D6q6wuQSrifJKZYpR1M8R4YawnLDtDsMmWM1NbBmgJ59
-    #[account(mut)]
-    pub kamino_reserve: UncheckedAccount<'info>,
-
-    /// CHECK: USDC Supply Token Account for Kamino Reserve
-    #[account(mut)]
-    pub kamino_reserve_liquidity_supply: UncheckedAccount<'info>,
-
-    /// MNT: B8V6WVjPxW1UGwVDfxH2d2r8SyT4cqn7dQRK6XneVa7D
-    #[account(mut)]
-    pub kamino_usdc_collateral_mint: Account<'info, Mint>,
-
-    #[account(
-        mut,
-        associated_token::mint = kamino_usdc_collateral_mint,
-        associated_token::authority = vault_account,
-    )]
-    pub kamino_usdc_collateral_vault: Account<'info, TokenAccount>,
-
-    // -------- Kamino (Lend) specific: END --------
+     pub kamino_program: Program<'info, KaminoLending>,
+     /// CHECK: Kamino's lending market account
+     /// MNT: 7u3HeHxYDLhnCoErrtycNokbQYbWGzLs6JSDqGAv5PfF
+     pub kamino_lending_market: UncheckedAccount<'info>,
+     /// CHECK: Kamino's lending market authority PDA
+     /// MNT: ??????
+     pub kamino_lending_market_authority: UncheckedAccount<'info>,
+ 
+     /// CHECK: Kamino's reserve account for USDC
+     /// MNT: D6q6wuQSrifJKZYpR1M8R4YawnLDtDsMmWM1NbBmgJ59
+     #[account(mut)]
+     pub kamino_reserve: UncheckedAccount<'info>,
+ 
+     /// CHECK: USDC Supply Token Account for Kamino Reserve
+     #[account(mut)]
+     pub kamino_reserve_liquidity_supply: UncheckedAccount<'info>,
+ 
+     /// MNT: B8V6WVjPxW1UGwVDfxH2d2r8SyT4cqn7dQRK6XneVa7D
+     #[account(mut)]
+     pub kamino_usdc_collateral_mint: Account<'info, Mint>,
+ 
+     #[account(
+         mut,
+         associated_token::mint = kamino_usdc_collateral_mint,
+         associated_token::authority = user_vault_account,
+     )]
+     pub kamino_usdc_collateral_vault: Account<'info, TokenAccount>,
+     // -------- Kamino (Lend) specific: END --------
 
     // BUILT-IN ACCOUNTS:
     pub associated_token_program: Program<'info, AssociatedToken>,
@@ -402,12 +378,74 @@ pub struct TransferUsdc<'info> {
     pub token_program: Program<'info, Token>,
     pub rent: Sysvar<'info, Rent>,
 
-
     /// CHECK: Instruction Sysvar Account
     #[account(address = sysvar_instructions::ID)]
     pub instruction_sysvar_account: UncheckedAccount<'info>,
-    
 }
+
+// #[derive(Accounts)]
+// pub struct TransferUsdc<'info> {
+//     pub usdc_mint: Account<'info, Mint>,
+    
+//     #[account(mut)]
+//     pub owner: Signer<'info>,
+//     #[account(mut, constraint = owner_usdc_account.mint == usdc_mint.key(), constraint = owner_usdc_account.owner == owner.key())]
+//     pub owner_usdc_account: Account<'info, TokenAccount>,
+
+//     #[account(
+//         mut,
+//         associated_token::mint = usdc_mint,
+//         associated_token::authority = vault_account,
+//     )]
+//     pub usdc_vault: Account<'info, TokenAccount>,
+
+//     #[account(seeds = [VAULT_SEED, owner.key().as_ref()], bump = vault_account.bump)]
+//     pub vault_account: Account<'info, UserVault>,
+
+//      // -------- Kamino (Lend) specific: BEGIN --------
+//      /// MNT: KLend2g3cP87fffoy8q1mQqGKjrxjC8boSyAYavgmjD
+//     pub kamino_program: Program<'info, KaminoLending>,
+//     /// CHECK: Kamino's lending market account
+//     /// MNT: 7u3HeHxYDLhnCoErrtycNokbQYbWGzLs6JSDqGAv5PfF
+//     pub kamino_lending_market: UncheckedAccount<'info>,
+//     /// CHECK: Kamino's lending market authority PDA
+//     /// MNT: ??????
+//     pub kamino_lending_market_authority: UncheckedAccount<'info>,
+
+//     /// CHECK: Kamino's reserve account for USDC
+//     /// MNT: D6q6wuQSrifJKZYpR1M8R4YawnLDtDsMmWM1NbBmgJ59
+//     #[account(mut)]
+//     pub kamino_reserve: UncheckedAccount<'info>,
+
+//     /// CHECK: USDC Supply Token Account for Kamino Reserve
+//     #[account(mut)]
+//     pub kamino_reserve_liquidity_supply: UncheckedAccount<'info>,
+
+//     /// MNT: B8V6WVjPxW1UGwVDfxH2d2r8SyT4cqn7dQRK6XneVa7D
+//     #[account(mut)]
+//     pub kamino_usdc_collateral_mint: Account<'info, Mint>,
+
+//     #[account(
+//         mut,
+//         associated_token::mint = kamino_usdc_collateral_mint,
+//         associated_token::authority = vault_account,
+//     )]
+//     pub kamino_usdc_collateral_vault: Account<'info, TokenAccount>,
+
+//     // -------- Kamino (Lend) specific: END --------
+
+//     // BUILT-IN ACCOUNTS:
+//     pub associated_token_program: Program<'info, AssociatedToken>,
+//     pub system_program: Program<'info, System>,
+//     pub token_program: Program<'info, Token>,
+//     pub rent: Sysvar<'info, Rent>,
+
+
+//     /// CHECK: Instruction Sysvar Account
+//     #[account(address = sysvar_instructions::ID)]
+//     pub instruction_sysvar_account: UncheckedAccount<'info>,
+    
+// }
 
 #[derive(Accounts)]
 pub struct DepositUsdcMarginfi<'info> {
@@ -558,7 +596,7 @@ pub enum Protocol {
 }
 
 #[error_code]
-pub enum ErrorCode {
+pub enum YieldVaultErrors {
     #[msg("No liquidity was redeemed")]
     NothingRedeemed,
     #[msg("Amount must be greater than 0")]

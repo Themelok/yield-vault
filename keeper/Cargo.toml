@@ -1,0 +1,22 @@
+[package]
+name = "keeper"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]
+anchor-client = "0.31.1"
+anchor-lang = "0.31.1"
+anchor-spl = "0.31.1"
+anyhow = "1.0.99"
+
+# HTTP + runtime
+axum = "0.7"
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+spl-associated-token-account = "7.0.0"
+spl-token = "8.0.0"
+tokio = { version = "1.38", features = ["rt-multi-thread", "macros"] }
+
+# logging
+tracing = "0.1"
+tracing-subscriber = { version = "0.3", features = ["fmt", "env-filter"] }

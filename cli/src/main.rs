@@ -1,10 +1,8 @@
 use clap::{Parser, Subcommand};
-use anyhow::{anyhow, Result};
-use solana_sdk::{
-    signature::{read_keypair_file}, signer::Signer,
-};
+use anyhow::{Result};
 mod commands;
 mod consts;
+mod http_client;
 
 #[derive(Parser, Debug)]
 struct Cli {
@@ -25,9 +23,6 @@ enum Command {
         keypair_path: std::path::PathBuf,
     },
     Withdraw {
-        #[arg(short, long)]
-        amount: u64,
-
         keypair_path: std::path::PathBuf,
     },
 }
@@ -44,15 +39,14 @@ fn main() -> Result<()> {
             commands::deposit(keypair_path, amount)?;
    
         }
-        Command::Withdraw { keypair_path, amount } => {
-            println!("Withdraw {}", amount);
-            commands::withdraw(keypair_path, amount)?;
+        Command::Withdraw { keypair_path } => {
+            println!("Withdraw");
+            commands::withdraw(keypair_path)?;
         }
     
     }
     Ok(())
 }
 
-// let content = std::fs::read_to_string(&args.keypair_path).with_context(|| format!("could not read file `{}`", args.keypair_path.display()))?;
 
  
