@@ -6,7 +6,7 @@ resolution = true
 skip-lint = false
 
 [programs.localnet]
-yield_vault = "5urWt3YZS2aXYPhr7LbkQxTHB9o9FDPevV8N1PEeYkYu"
+yield_vault = "CeHNmAJaE8K2yBEo8RRoh5whacchiq1gpqzJVuL8Df97"
 
 [registry]
 url = "https://api.apr.dev"
@@ -72,4 +72,3 @@ address = "MFv2hWf31Z9kbCa1snEPYctwafyhdvnV7FZnsebVacA"
 
 [[test.validator.clone]]
 address = "3uxNepDbmkDNq6JhRja5Z8QwbTrfmkKP8AKZV5chYDGG"
-

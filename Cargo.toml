@@ -3,6 +3,7 @@ members = [
     "programs/*"
 ]
 resolver = "2"
+exclude = ["cli"]  
 
 [profile.release]
 overflow-checks = true

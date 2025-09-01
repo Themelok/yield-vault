@@ -16,11 +16,19 @@ use marginfi_cpi_local::cpi::accounts as mfi_accounts;
 use marginfi_cpi_local::cpi as mfi_cpi;              
 
 
-declare_id!("5urWt3YZS2aXYPhr7LbkQxTHB9o9FDPevV8N1PEeYkYu");
+declare_id!("CeHNmAJaE8K2yBEo8RRoh5whacchiq1gpqzJVuL8Df97");
 
 // Most lending protocols (Kamino included) define:
 // •	deposit_reserve_liquidity(amount) → amount in liquidity units (USDC)
 // •	redeem_reserve_collateral(amount) → amount in collateral units (kUSDC)
+// Here’s why this new structure works perfectly for that goal:
+// Separation of Concerns: The most important change is the separation between user actions and keeper actions.
+//  - Users can only deposit to and withdraw from your vault's internal holding account. They have no direct control over which lending protocol is being used.
+//  - The Keeper has exclusive permission to call the deploy_to_kamino, withdraw_from_kamino, deploy_to_marginfi, and withdraw_from_marginfi functions.
+// The Rebalancing Flow: When your off-chain keeper finds a better APY on MarginFi while the funds are in Kamino, 
+// it will execute the automatic swap by calling two instructions in sequence:
+// Transaction 1: Call withdraw_from_kamino(...) to pull all the USDC and collateral out of Kamino and back into the vault's secure internal accounts.
+// Transaction 2: Immediately after, call deploy_to_marginfi(...) to send that same USDC from the vault's accounts into the MarginFi lending pool.
 #[program]
 pub mod yield_vault {
 
@@ -50,6 +58,44 @@ pub mod yield_vault {
         Ok(())
     }
 
+    pub fn withdraw(ctx: Context<TransferAssets>, amount: u64) -> Result<()> {
+        require!(amount > 0, ErrorCode::InvalidAmount);
+        msg!("Withdrawing {} from USDC vault", amount);
+        let vault_withdraw_accounts = Transfer {
+            from: ctx.accounts.user_usdc_vault_ata.to_account_info(),
+            to: ctx.accounts.user_usdc_ta.to_account_info(),
+            authority: ctx.accounts.user_vault_account.to_account_info(),
+        };
+
+
+        let signer: &[&[&[u8]]] = &[&ctx.accounts.user_vault_account.seeds()];
+        let cpi_context = CpiContext::new_with_signer(
+            ctx.accounts.token_program.to_account_info(), 
+            vault_withdraw_accounts,
+            signer);
+        transfer(cpi_context, amount)?;
+
+        ctx.accounts.user_vault_account.deposited_amount = ctx.accounts.user_vault_account.deposited_amount.checked_sub(amount).ok_or(ProgramError::InvalidAccountData)?;
+        msg!("Withdrawn {} USDC from vault {} of owner {}", amount, ctx.accounts.user_vault_account.key(), ctx.accounts.user.key().to_string());
+        Ok(())
+    }
+
+    pub fn deposit(ctx: Context<TransferAssets>, amount: u64) -> Result<()> {
+        require!(amount > 0, ErrorCode::InvalidAmount);
+        msg!("Depositing {} to USDC vault", amount);
+        let vault_deposit_accounts = Transfer {
+            from: ctx.accounts.user_usdc_ta.to_account_info(),
+            to: ctx.accounts.user_usdc_vault_ata.to_account_info(),
+            authority: ctx.accounts.user.to_account_info(),
+
+        };
+        let cpi_context = CpiContext::new(ctx.accounts.token_program.to_account_info(), vault_deposit_accounts);
+        transfer(cpi_context, amount)?;
+
+        ctx.accounts.user_vault_account.deposited_amount = ctx.accounts.user_vault_account.deposited_amount.checked_add(amount).ok_or(ProgramError::InvalidAccountData)?;
+        msg!("Deposited {} USDC to vault {} of owner {}", amount, ctx.accounts.user_vault_account.key(), ctx.accounts.user.key().to_string());
+        Ok(())
+    }
 
     pub fn deposit_usdc_marginfi(ctx: Context<DepositUsdcMarginfi>, amount: u64) -> Result<()> {
         require!(amount > 0, ErrorCode::InvalidAmount);
@@ -214,6 +260,39 @@ pub mod yield_vault {
 }
 
 
+
+#[derive(Accounts)]
+pub struct TransferAssets<'info> {
+    #[account(mut)]
+    pub user: Signer<'info>,
+    pub usdc_mint: Account<'info, Mint>,
+    #[account(
+        mut,
+        seeds = [VAULT_SEED, user.key().as_ref()],
+        bump = user_vault_account.bump
+    )]
+    pub user_vault_account: Account<'info, UserVault>,
+
+    #[account(
+        mut, 
+        constraint = user_usdc_ta.mint == usdc_mint.key(), 
+        constraint = user_usdc_ta.owner == user.key())]
+    pub user_usdc_ta: Account<'info, TokenAccount>,
+
+
+    #[account(
+        mut,
+        associated_token::mint = usdc_mint,
+        associated_token::authority = user_vault_account,
+    )]
+    pub user_usdc_vault_ata: Account<'info, TokenAccount>,
+
+    pub token_program: Program<'info, Token>, 
+    pub associated_token_program: Program<'info, AssociatedToken>,
+    pub system_program: Program<'info, System>,
+
+}
+    
 #[derive(Accounts)]
 pub struct Initialize<'info>{
     #[account(mut)]
@@ -322,11 +401,12 @@ pub struct TransferUsdc<'info> {
     pub system_program: Program<'info, System>,
     pub token_program: Program<'info, Token>,
     pub rent: Sysvar<'info, Rent>,
-    pub clock: Sysvar<'info, Clock>,
+
 
     /// CHECK: Instruction Sysvar Account
     #[account(address = sysvar_instructions::ID)]
     pub instruction_sysvar_account: UncheckedAccount<'info>,
+    
 }
 
 #[derive(Accounts)]
@@ -385,6 +465,7 @@ pub struct DepositUsdcMarginfi<'info> {
     pub token_program: Program<'info, Token>,
     pub system_program: Program<'info, System>,
     pub associated_token_program: Program<'info, AssociatedToken>,
+ 
 }
 
 #[derive(Accounts)]
@@ -449,6 +530,7 @@ pub struct UserVault {
     pub owner: Pubkey,          // Owner of the vault
     // pub usdc_vault: Pubkey,     // Token Account for USDC
     pub marginfi_account: Pubkey, // Marginfi account
+    pub deposited_amount: u64,   // Amount of USDC deposited to the vault
 }
 
 impl UserVault {
@@ -456,7 +538,8 @@ impl UserVault {
     8 + // discriminator
     1 + // bump
     32 + // owner
-    32; // marginfi_account
+    32 + // marginfi_account
+    8; // deposited_amount
 
     /// Returns the PDA seeds used to sign as this vault's PDA.
     pub fn seeds<'a>(&'a self) -> [&'a [u8]; 3] {
@@ -467,6 +550,12 @@ impl UserVault {
 pub const VAULT_SEED: &[u8] = b"vault";
 // pub const USDC_VAULT_TOKEN_ACCOUNT_SEED: &[u8] = b"usdc_vault";
 
+#[derive(AnchorSerialize, AnchorDeserialize, Clone, PartialEq, Eq, Copy)]
+pub enum Protocol {
+    None,
+    Kamino,
+    Marginfi,
+}
 
 #[error_code]
 pub enum ErrorCode {
@@ -474,4 +563,10 @@ pub enum ErrorCode {
     NothingRedeemed,
     #[msg("Amount must be greater than 0")]
     InvalidAmount,
+    #[msg("Unauthorized action")]
+    Unauthorized,
+    #[msg("Funds are already deployed to a protocol")]
+    ProtocolAlreadyActive,
+    #[msg("Funds are not in the specified protocol")]
+    IncorrectProtocol,
 }

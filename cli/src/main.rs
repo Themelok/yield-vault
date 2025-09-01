@@ -15,32 +15,38 @@ struct Cli {
 #[derive(Subcommand, Debug)]
 #[command(name = "vault-cli", version, about = "CLI for Yield Vault")]
 enum Command {
-    Init{keypair_path: std::path::PathBuf,},
+    Init {
+        keypair_path: std::path::PathBuf
+    },
     Deposit {
         #[arg(short, long)]
         amount: u64,
+
+        keypair_path: std::path::PathBuf,
     },
     Withdraw {
         #[arg(short, long)]
         amount: u64,
+
+        keypair_path: std::path::PathBuf,
     },
 }
 
 fn main() -> Result<()> {
     let args = Cli::parse();
 
-
     match args.cmd {
         Command::Init { keypair_path } => {
             commands::init(keypair_path)?;
         }
-        Command::Deposit { amount } => {
+        Command::Deposit { keypair_path, amount } => {
             println!("Deposit {}", amount);
+            commands::deposit(keypair_path, amount)?;
    
         }
-        Command::Withdraw { amount } => {
+        Command::Withdraw { keypair_path, amount } => {
             println!("Withdraw {}", amount);
-       
+            commands::withdraw(keypair_path, amount)?;
         }
     
     }
