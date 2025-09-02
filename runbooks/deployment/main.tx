@@ -36,6 +36,11 @@ action "setup" "svm::setup_surfnet" {
         public_key = signer.user.address
         lamports = 333000000000
     }
+    // Set keeper account
+    set_account {
+        public_key = signer.keeper.address
+        lamports = 555000000000
+    }
     set_token_account {
         public_key = signer.user.address
         token = "usdc"
