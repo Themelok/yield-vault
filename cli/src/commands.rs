@@ -170,6 +170,9 @@ pub fn withdraw(keypair_path: std::path::PathBuf) -> Result<()> {
 
     let signature = program.request().instruction(tx).signer(kp).send()?;
     println!("✅ Withdraw Transaction signature: {}", signature.to_string());
+
+    let resp = http.delete_lender(&public_key.to_string())?;
+    println!("✅ Delete lender {}: {}", public_key.to_string(), resp.status());
     Ok(())
 }
 

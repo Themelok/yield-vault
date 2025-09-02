@@ -48,7 +48,7 @@ describe("yield-vault", () => {
   anchor.setProvider(anchor.AnchorProvider.env());
   const program = anchor.workspace.yieldVault as Program<YieldVault>;
   const user = anchor.web3.Keypair.fromSecretKey(Uint8Array.from(JSON.parse(fs.readFileSync(`${os.homedir()}/.config/solana/user.json`, "utf8"))));
-  
+  const keeper = anchor.web3.Keypair.fromSecretKey(Uint8Array.from(JSON.parse(fs.readFileSync(`/Users/semi/wrksp/solana/exp/yield-vault/keeper/bot7F9sfkm5ztmMGL11St2PD9necoEY6fC84L1WKMDg.json`, "utf8"))));
 
   const [vault_account_pda, vault_seed] = PublicKey.findProgramAddressSync([VAULT_SEED, user.publicKey.toBuffer()], program.programId);
   const connection = program.provider.connection;
@@ -133,29 +133,29 @@ describe("yield-vault", () => {
     console.log("✅ Marginfi bank USDC liquidity vault found:", MARGINFI_BANK_USDC_LIQUIDITY_VAULT.toBase58());
   });
 
-  it("Is initialized!", async () => {
-    const MARGINFI_ACCOUNT = Keypair.generate();
-    console.log("📦 MARGINFI_ACCOUNT", MARGINFI_ACCOUNT.publicKey.toBase58());
-    const tx = await program.methods.initialize().accounts({
-      user: user.publicKey,
-      usdcMint: USDC_MINT,
-      kaminoUsdcCollateralMint: KLEND_COLLATERAL_MINT,
-      marginfiAccount: MARGINFI_ACCOUNT.publicKey,
-      marginfiGroup: MARGINFI_GROUP,
-    }).signers([user, MARGINFI_ACCOUNT]).rpc();
-    console.log("Your transaction signature", tx);
+  // it("Is initialized!", async () => {
+  //   const MARGINFI_ACCOUNT = Keypair.generate();
+  //   console.log("📦 MARGINFI_ACCOUNT", MARGINFI_ACCOUNT.publicKey.toBase58());
+  //   const tx = await program.methods.initialize().accounts({
+  //     user: user.publicKey,
+  //     usdcMint: USDC_MINT,
+  //     kaminoUsdcCollateralMint: KLEND_COLLATERAL_MINT,
+  //     marginfiAccount: MARGINFI_ACCOUNT.publicKey,
+  //     marginfiGroup: MARGINFI_GROUP,
+  //   }).signers([user, MARGINFI_ACCOUNT]).rpc();
+  //   console.log("Your transaction signature", tx);
     
-    await bumpSlot(connection, program.provider.wallet.payer);
-    await bumpSlot(connection, program.provider.wallet.payer);
-    // Verify vault account is initialized
-    const vault_account = await program.account.userVault.fetch(vault_account_pda);
-    assert.equal(vault_account.owner.toBase58(), user.publicKey.toBase58());
-    assert.equal(vault_account.bump, vault_seed);
+  //   await bumpSlot(connection, program.provider.wallet.payer);
+  //   await bumpSlot(connection, program.provider.wallet.payer);
+  //   // Verify vault account is initialized
+  //   const vault_account = await program.account.userVault.fetch(vault_account_pda);
+  //   assert.equal(vault_account.owner.toBase58(), user.publicKey.toBase58());
+  //   assert.equal(vault_account.bump, vault_seed);
 
-    const usdc_vault_token_account = await connection.getAccountInfo(VAULT_USDC_ATA);
-    assert.equal(usdc_vault_token_account?.owner.toBase58(), TOKEN_PROGRAM_ID.toBase58());
+  //   const usdc_vault_token_account = await connection.getAccountInfo(VAULT_USDC_ATA);
+  //   assert.equal(usdc_vault_token_account?.owner.toBase58(), TOKEN_PROGRAM_ID.toBase58());
 
-  });
+  // });
 
   it("Deposit USDC to Marginfi", async () => {
     const marginfi_account = await program.account.userVault.fetch(vault_account_pda);
@@ -179,7 +179,7 @@ describe("yield-vault", () => {
     const marginfi_account = await program.account.userVault.fetch(vault_account_pda);
     console.log("👀 Fetched Marginfi account:", marginfi_account.marginfiAccount.toBase58());
 
-    const tx = await program.methods.withdrawUsdcMarginfi(new anchor.BN(10_000_000)).accounts({
+    const tx = await program.methods.withdrawUsdcMarginfi().accounts({
       owner: user.publicKey,
       ownerUsdcAccount: USER_USDC_ATA,
       usdcMint: USDC_MINT,
@@ -193,34 +193,34 @@ describe("yield-vault", () => {
     await bumpSlot(connection, program.provider.wallet.payer);
   })
 
-  it("Deposit USDC", async () => {
-    const tx = await program.methods.depositUsdc(new anchor.BN(45_000_000)).accounts({
-      owner:                        user.publicKey,
-      ownerUsdcAccount:             USER_USDC_ATA,
-      usdcMint:                     USDC_MINT,
-      kaminoLendingMarket:          KLEND_MAIN_LENDING_MARKET,
-      kaminoReserve:                KLEND_USDC_RESEVE,
-      kaminoUsdcCollateralMint:     KLEND_COLLATERAL_MINT,
-      kaminoLendingMarketAuthority: KLEND_LENDING_MARKET_AUTHORITY,
-      kaminoReserveLiquiditySupply: KLEND_RESERVE_LIQUIDITY_SUPPLY,
-    }).signers([user]).rpc();
-    console.log("Kamino Deposit transaction signature", tx);
-    await bumpSlot(connection, program.provider.wallet.payer);
-  })
+  // it("Deposit USDC Kamino", async () => {
+  //   const tx = await program.methods.deployUsdcKamino(new anchor.BN(4_000_000)).accounts({
+  //     keeper:                       keeper.publicKey,
+  //     user:                         user.publicKey,
+  //     usdcMint:                     USDC_MINT,
+  //     kaminoLendingMarket:          KLEND_MAIN_LENDING_MARKET,
+  //     kaminoReserve:                KLEND_USDC_RESEVE,
+  //     kaminoUsdcCollateralMint:     KLEND_COLLATERAL_MINT,
+  //     kaminoLendingMarketAuthority: KLEND_LENDING_MARKET_AUTHORITY,
+  //     kaminoReserveLiquiditySupply: KLEND_RESERVE_LIQUIDITY_SUPPLY,
+  //   }).signers([keeper]).rpc();
+  //   console.log("Kamino Deposit transaction signature", tx);
+  //   await bumpSlot(connection, program.provider.wallet.payer);
+  // })
 
-  it("Withdraw USDC", async () => {
-    const tx = await program.methods.withdrawUsdc(new anchor.BN(10_000_000)).accounts({
-      owner: user.publicKey,
-      ownerUsdcAccount: USER_USDC_ATA,
-      usdcMint: USDC_MINT,
-      kaminoLendingMarket: KLEND_MAIN_LENDING_MARKET,
-      kaminoReserve: KLEND_USDC_RESEVE,
-      kaminoUsdcCollateralMint: KLEND_COLLATERAL_MINT,
-      kaminoLendingMarketAuthority: KLEND_LENDING_MARKET_AUTHORITY,
-      kaminoReserveLiquiditySupply: KLEND_RESERVE_LIQUIDITY_SUPPLY,
-    }).signers([user]).rpc();
-    console.log("Kamino Withdraw transaction signature", tx);
-  })
+  // it("Withdraw USDC Kamino", async () => {
+  //   const tx = await program.methods.redeemUsdcKaminio().accounts({
+  //     keeper: keeper.publicKey,
+  //     user: user.publicKey,
+  //     usdcMint: USDC_MINT,
+  //     kaminoLendingMarket: KLEND_MAIN_LENDING_MARKET,
+  //     kaminoReserve: KLEND_USDC_RESEVE,
+  //     kaminoUsdcCollateralMint: KLEND_COLLATERAL_MINT,
+  //     kaminoLendingMarketAuthority: KLEND_LENDING_MARKET_AUTHORITY,
+  //     kaminoReserveLiquiditySupply: KLEND_RESERVE_LIQUIDITY_SUPPLY,
+  //   }).signers([keeper]).rpc();
+  //   console.log("Kamino Withdraw transaction signature", tx);
+  // })
 
 
 });

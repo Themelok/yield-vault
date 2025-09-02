@@ -1,5 +1,5 @@
-use std::{fs, sync::Arc};
-use anyhow::{Result, Context, anyhow};
+use std::{sync::Arc, collections::HashSet};
+use anyhow::{Result, anyhow};
 use anchor_lang::prelude::*;
 use anchor_client::solana_sdk::{
         signature::{read_keypair_file, Keypair}, signer::Signer,
@@ -7,12 +7,17 @@ use anchor_client::solana_sdk::{
 use std::net::SocketAddr;
 use tracing_subscriber::{fmt, EnvFilter};
 
+
+
 declare_program!(yield_vault);
 use yield_vault::{client::accounts, client::args};
 mod http;
 mod config;
 mod consts;
 mod rpc;
+mod tracker;
+mod marginfi_apy;
+
 
 
 #[tokio::main]
@@ -32,9 +37,17 @@ async fn main() -> Result<()> {
         bot_pubkey: bot_pubkey,
         strategy: Arc::new(tokio::sync::RwLock::new(config::Strategy::Marginfi)),
         rpc:  Arc::new(rpc::Rpc::new(bot_kp)?),
+        lenders: Arc::new(tokio::sync::RwLock::new(HashSet::new())), 
     }));
 
     tracing::info!(%bot_pubkey, program_id = %yield_vault::ID, "Keeper starting up");
+
+
+    // 1) One-shot: compute APYs and set initial strategy at startup
+    tracker::bootstrap_once(config.clone()).await;
+
+    // 2) Background: hourly tracker loop
+    tracker::run_tracker(config.clone());
 
     http::run_http(SocketAddr::from(([0, 0, 0, 0], 8080)), config.clone()).await?;
 

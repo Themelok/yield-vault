@@ -1,5 +1,5 @@
 // keeper/src/rpc.rs
-use anyhow::{anyhow, Context, Result};
+use anyhow::{anyhow, Result};
 use std::sync::Arc;
 
 use anchor_client::{
@@ -90,6 +90,16 @@ impl Rpc {
     pub fn ata(owner: &Pubkey, mint: &Pubkey) -> Pubkey {
         get_associated_token_address(owner, mint)
     }
+    
+    pub fn spl_balance(&self, token_account: Pubkey) -> Result<u64> {
+        let resp = self.program.rpc().get_token_account_balance(&token_account)
+            .map_err(|e| anyhow!("get_token_account_balance failed: {}", e))?;
+        // `amount` is a string, parse into u64
+        let amount_u64: u64 = resp.amount.parse()
+            .map_err(|e| anyhow!("failed to parse balance: {}", e))?;
+        Ok(amount_u64)
+    }
+
     pub fn withdraw_from_marginfi(&self, user: Pubkey) -> Result<String> {
         info!(%user, "withdrawing from marginfi for");
         let (vault_pda, _bump) = Self::vault_pda(&user);

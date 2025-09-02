@@ -1,5 +1,5 @@
 use anyhow::Result;
-use axum::{Json, extract::State, routing::{get, post}, Router};
+use axum::{Json, extract::{State, Path}, routing::{get, post, delete}, Router};
 use axum::http::StatusCode;
 use serde::{Serialize, Deserialize};
 use tracing::info;
@@ -81,6 +81,23 @@ async fn health(State(st): State<config::AppState>) -> Json<Health> {
     }
 }
 
+async fn delete_lender(
+    State(st): State<config::AppState>,
+    Path(user_str): Path<String>,
+) -> Result<StatusCode, (StatusCode, String)> {
+    // parse user pubkey
+    let user: Pubkey = user_str.parse()
+        .map_err(|e| (StatusCode::BAD_REQUEST, format!("invalid user pubkey: {e}")))?;
+
+    // idempotent remove
+    {
+        let mut set = st.lenders.write().await;
+        set.remove(&user);
+    }
+
+    Ok(StatusCode::NO_CONTENT)
+}
+
 async fn withdraw(
     State(st): State<config::AppState>, 
     Json(req): Json<WithdrawReq>) -> Result<Json<WithdrawResp>, (StatusCode, String)>  {
@@ -123,13 +140,16 @@ async fn deposit(
     .map_err(|e: anyhow::Error| (StatusCode::INTERNAL_SERVER_ERROR, e.to_string()))?;
 
     let (vault, _) = crate::rpc::Rpc::vault_pda(&user);
-
+    {
+        let mut set = st.lenders.write().await;
+        set.insert(user);
+    }
     Ok(Json(DepositResp {
         ok: true,
         tx: sig,
         user: user.to_string(),
         vault: vault.to_string(),
-        protocol: format!("{:?}", st.strategy),
+        protocol: format!("{:?}", *strat),
         requested: req.amount,
     }))
 }
@@ -142,10 +162,9 @@ pub async fn run_http(
     .route("/health", get(health))
     .route("/deposit", post(deposit))
     .route("/withdraw", post(withdraw))
+    .route("/lenders/:pubkey", delete(delete_lender))
     .with_state(app_state);
     
-
-
     info!(%addr, "Starting HTTP server");
     let listener = TcpListener::bind(&addr).await?;
     axum::serve(listener, app.into_make_service())

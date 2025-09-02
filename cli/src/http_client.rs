@@ -1,5 +1,5 @@
 use anyhow::{Result, anyhow};
-use reqwest::blocking::Client;
+use reqwest::blocking::{Client, Response};
 use serde::{Deserialize, Serialize};
 use std::time::Duration;
 
@@ -55,6 +55,7 @@ impl KeeperHttp {
         Ok(resp)
     }
 
+
     pub fn withdraw(&self, user: &str) -> Result<WithdrawResp> {
         let url = format!("{}/withdraw", self.base);
         let req = WithdrawReq { user: user.to_string() };
@@ -63,6 +64,13 @@ impl KeeperHttp {
             .send()?
             .error_for_status()?
             .json::<WithdrawResp>()?;
+        Ok(resp)
+    }
+
+    pub fn delete_lender(&self, user: &str) -> Result<Response> {
+        let url = format!("{}/lenders/{}", self.base, user);
+        let resp =self.client.delete(url).send()?
+            .error_for_status()?;
         Ok(resp)
     }
 }
