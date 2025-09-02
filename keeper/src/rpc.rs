@@ -3,21 +3,15 @@ use anyhow::{anyhow, Context, Result};
 use std::sync::Arc;
 
 use anchor_client::{
-    Client, Cluster, Program,
     solana_sdk::{
-        commitment_config::CommitmentConfig,
-        pubkey::Pubkey,
-        system_program,
-        sysvar,
-        signature::Keypair,
-        signer::Signer,
-    },
+     commitment_config::CommitmentConfig, pubkey::Pubkey, signature::Keypair, signer::Signer, system_program, sysvar
+    }, Client, Cluster, Program
 };
-use anchor_lang::prelude::*;
-
+use anchor_lang::{prelude::*};
+use tracing::info;
 use spl_associated_token_account::get_associated_token_address;
 
-use crate::consts::*;
+use crate::{consts::*, yield_vault::accounts::UserVault};
 declare_program!(yield_vault);
 use yield_vault::{client::accounts, client::args};
 
@@ -25,6 +19,7 @@ use yield_vault::{client::accounts, client::args};
 pub struct Rpc {
     pub program: Program<Arc<Keypair>>,
     // parsed ids (from consts.rs)
+    // Kamino
     pub usdc_mint: Pubkey,
     pub klend_program: Pubkey,
     pub klend_market: Pubkey,
@@ -32,6 +27,15 @@ pub struct Rpc {
     pub klend_reserve: Pubkey,
     pub klend_reserve_liq_supply: Pubkey,
     pub klend_collateral_mint: Pubkey,
+
+    // Marginfi
+    pub mfi_program: Pubkey,
+    pub mfi_group: Pubkey,
+    pub mfi_bank: Pubkey,
+    pub mfi_bank_liq_vault: Pubkey,
+    pub mfi_bank_liq_vault_auth: Pubkey,
+
+    // Bot(Keeper) credentials
     pub bot_pubkey: Pubkey,
     pub bot_kp: Keypair,
 }
@@ -54,6 +58,13 @@ impl Rpc {
         let klend_reserve_liq_supply = Pubkey::from_str_const(KLEND_RESERVE_LIQUIDITY_SUPPLY);
         let klend_collateral_mint = Pubkey::from_str_const(KLEND_COLLATERAL_MINT);
         
+        let mfi_program = Pubkey::from_str_const(MARGINFI_PROGRAM);
+        let mfi_group = Pubkey::from_str_const(MARGINFI_GROUP);
+        let mfi_bank = Pubkey::from_str_const(MARGINFI_BANK);
+        let mfi_bank_liq_vault = Pubkey::from_str_const(MARGINFI_BANK_USDC_LIQUIDITY_VAULT);
+        let mfi_bank_liq_vault_auth = Pubkey::from_str_const(MARGINFI_BANK_USDC_LIQUIDITY_VAULT_AUTH);
+
+
         Ok(Self { 
             program,
             usdc_mint,
@@ -63,6 +74,11 @@ impl Rpc {
             klend_reserve,
             klend_reserve_liq_supply,
             klend_collateral_mint,
+            mfi_program,
+            mfi_group,
+            mfi_bank,
+            mfi_bank_liq_vault,
+            mfi_bank_liq_vault_auth,
             bot_pubkey,
             bot_kp,
         })
@@ -74,8 +90,89 @@ impl Rpc {
     pub fn ata(owner: &Pubkey, mint: &Pubkey) -> Pubkey {
         get_associated_token_address(owner, mint)
     }
+    pub fn withdraw_from_marginfi(&self, user: Pubkey) -> Result<String> {
+        info!(%user, "withdrawing from marginfi for");
+        let (vault_pda, _bump) = Self::vault_pda(&user);
+        let vault_usdc_ata = Self::ata(&vault_pda, &self.usdc_mint);
+
+        let vault_pda_acc: UserVault = self.program.account(vault_pda)?;
+        let marginfi_account = vault_pda_acc.marginfi_account;
+        info!(%marginfi_account, %vault_pda, "marginfi account from vault");
+        let accounts = accounts::RedeemUsdcMarginfi{
+            keeper: self.bot_pubkey,
+            user: user,
+            usdc_mint: self.usdc_mint,
+            user_vault_account: vault_pda,
+            user_usdc_vault_ata: vault_usdc_ata,
+            // marginfi CPI accounts
+            marginfi_program: self.mfi_program,
+            marginfi_group: self.mfi_group,
+            marginfi_account: vault_pda_acc.marginfi_account, // or the stored marginfi_account pubkey from your vault
+            marginfi_bank: self.mfi_bank,
+            marginfi_bank_liquidity_vault_authority: self.mfi_bank_liq_vault_auth,
+            marginfi_bank_liquidity_vault: self.mfi_bank_liq_vault,
+            token_program: spl_token::id(),
+        };
+        let tx = self.program
+            .request()
+            .accounts(accounts)
+            .args(args::RedeemUsdcMarginfi).instructions()?.remove(0);
+
+        let signature = self.program
+            .request()
+            .instruction(tx)
+            .signer(self.bot_kp.insecure_clone())
+            .send()?;
+        Ok(signature.to_string())
+    }
+
+    pub fn deposit_to_marginfi(&self, user: Pubkey, amount: u64) -> Result<String> {
+        info!(%user, "deposing to marginfi for");
+        if amount == 0 {
+            return Err(anyhow!("amount must be > 0"));
+        }
+        let (vault_pda, _bump) = Self::vault_pda(&user);
+        let vault_usdc_ata = Self::ata(&vault_pda, &self.usdc_mint);
+        let vault_pda_acc: UserVault = self.program.account(vault_pda)?;
+        let marginfi_account = vault_pda_acc.marginfi_account;
+        info!(%marginfi_account, %vault_pda, "marginfi account from vault");
+
+        let accounts = accounts::DeployUsdcMarginfi{
+            keeper: self.bot_pubkey,
+            user: user,
+            usdc_mint: self.usdc_mint,
+            user_vault_account: vault_pda,
+            user_usdc_vault_ata: vault_usdc_ata,
+            // marginfi CPI accounts
+            marginfi_program: self.mfi_program,
+            marginfi_group: self.mfi_group,
+            marginfi_account: vault_pda_acc.marginfi_account,
+            marginfi_bank: self.mfi_bank,
+            
+            marginfi_bank_liquidity_vault: self.mfi_bank_liq_vault,
+            token_program: spl_token::id(),
+            system_program: system_program::ID,
+            associated_token_program: spl_associated_token_account::id(),
+        };
+
+        let tx = self.program.
+            request()
+            .accounts(accounts)
+            .args(args::DeployUsdcMarginfi{amount: amount})
+            .instructions()?
+            .remove(0);
+
+        let signature = self.program
+            .request()
+            .instruction(tx)
+            .signer(self.bot_kp.insecure_clone())
+            .send()?;
+            Ok(signature.to_string())
+
+    }
 
     pub fn withdraw_from_kamino(&self, user: Pubkey) -> Result<String> {
+        info!(%user, "withdrawing from KLend for");
         let (vault_pda, _bump) = Self::vault_pda(&user);
         let vault_usdc_ata = Self::ata(&vault_pda, &self.usdc_mint);
         let vault_k_collateral_ata = Self::ata(&vault_pda, &self.klend_collateral_mint);
@@ -110,6 +207,7 @@ impl Rpc {
     }
 
     pub fn deposit_to_kamino(&self, user: Pubkey, amount: u64) -> Result<String> {
+        info!(%user, "deposing to Klend for");
         if amount == 0 {
             return Err(anyhow!("amount must be > 0"));
         }

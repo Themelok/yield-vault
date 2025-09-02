@@ -21,3 +21,16 @@ abuild:
 	anchor build \
 	&& cp target/idl/yield_vault.json cli/idls/yield_vault.json \
 	&& cp target/idl/yield_vault.json keeper/idls/yield_vault.json
+
+# Keeper HTTP Calls
+.PHONY: keeper_health
+keeper_health:
+	curl -s http://127.0.0.1:8080/health
+
+.PHONY: keeper_wd
+keeper_wd:
+	curl -s -X POST http://127.0.0.1:8080/withdraw -H 'content-type: application/json' -d '{"user":"sergAK7rTYLao2v7whZytuXrwyw5snxvA7sLoaoMKLk"}'
+
+.PHONY: keeper_dep
+keeper_dep
+ 	curl -s -X POST http://127.0.0.1:8080/deposit -H 'content-type: application/json' -d '{"user":"sergAK7rTYLao2v7whZytuXrwyw5snxvA7sLoaoMKLk","amount":4000000}

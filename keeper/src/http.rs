@@ -42,7 +42,7 @@ struct DepositResp {
 
 #[derive(Deserialize)]
 struct WithdrawReq {
-    user: String,   // base58 pubkey
+    user: String,
 }
 
 #[derive(Serialize)]
@@ -53,25 +53,47 @@ struct WithdrawResp {
 }
 
 
-
 async fn health(State(st): State<config::AppState>) -> Json<Health> {
-    Json(Health {
-        ok: true,
-        service: "keeper",
-        bot_kp: st.bot_pubkey.to_string(),
-        program_id: st.program_id.to_string(),
-        strategy: format!("{:?}", st.strategy),
-    })
+    info!("Health Check");
+
+    let state_clone = st.clone();
+    let strat = state_clone.strategy.read().await;
+    match *strat {
+        config::Strategy::Kamino   => {
+            Json(Health {
+                ok: true,
+                service: "keeper_kamino",
+                bot_kp: st.bot_pubkey.to_string(),
+                program_id: st.program_id.to_string(),
+                strategy: format!("{:?}", *strat),
+            })
+        },
+
+       config::Strategy::Marginfi =>  {
+        Json(Health {
+            ok: true,
+            service: "keeper_marginfi",
+            bot_kp: st.bot_pubkey.to_string(),
+            program_id: st.program_id.to_string(),
+            strategy: format!("{:?}", *strat),
+        })
+       }
+    }
 }
 
 async fn withdraw(
     State(st): State<config::AppState>, 
     Json(req): Json<WithdrawReq>) -> Result<Json<WithdrawResp>, (StatusCode, String)>  {
 
+    let strat = st.strategy.read().await;
     let user: Pubkey = req.user.parse()
         .map_err(|e| (StatusCode::BAD_REQUEST, format!("invalid user pubkey: {e}")))?;
+    info!("Making Withdraw RPC call..");
     let sig = tokio::task::block_in_place(|| {
-        st.rpc.withdraw_from_kamino(user)
+        match *strat {
+            config::Strategy::Kamino   => st.rpc.withdraw_from_kamino(user),
+            config::Strategy::Marginfi => st.rpc.withdraw_from_marginfi(user),
+        }
     })
     .map_err(|e: anyhow::Error| (StatusCode::INTERNAL_SERVER_ERROR, e.to_string()))?;
 
@@ -89,9 +111,14 @@ async fn deposit(
     let user: Pubkey = req.user.parse()
         .map_err(|e| (StatusCode::BAD_REQUEST, format!("invalid user pubkey: {e}")))?;
     
+    info!("Making Deposit RPC call..");
+    let strat = st.strategy.read().await;
     // http.rs (inside POST /deposit handler)
     let sig = tokio::task::block_in_place(|| {
-        st.rpc.deposit_to_kamino(user, req.amount)
+        match *strat {
+            config::Strategy::Kamino   => st.rpc.deposit_to_kamino(user, req.amount),
+            config::Strategy::Marginfi => st.rpc.deposit_to_marginfi(user, req.amount),
+        }
     })
     .map_err(|e: anyhow::Error| (StatusCode::INTERNAL_SERVER_ERROR, e.to_string()))?;
 
@@ -109,14 +136,7 @@ async fn deposit(
 
 pub async fn run_http(
     addr: SocketAddr, 
-    config: &'static config::Config,
-    rpc: Arc<Rpc>) -> Result<()> {
-    let app_state = config::AppState {
-        program_id: config.program_id,
-        bot_pubkey: config.bot_pubkey,
-        strategy: &config.strategy,
-        rpc: rpc,
-    };
+    app_state: config::AppState) -> Result<()> {
 
     let app = Router::new()
     .route("/health", get(health))

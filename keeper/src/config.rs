@@ -2,7 +2,7 @@ use anchor_lang::prelude::*;
 use anchor_client::solana_sdk::signature::Keypair;
 use crate::rpc::Rpc;
 use std::sync::Arc;
-
+use tokio::sync::RwLock;
 
 pub struct Config {
     pub program_id: Pubkey,
@@ -13,14 +13,16 @@ pub struct Config {
 
 #[derive(Debug, Clone)]
 pub enum Strategy {
-    Kamino(u64),
-    Marginfi(u64),
+    Kamino,
+    Marginfi,
 }
 
 #[derive(Clone)]
 pub struct AppState {
     pub program_id: Pubkey,
     pub bot_pubkey: Pubkey,
-    pub strategy: &'static Strategy,
+    pub strategy: Arc<RwLock<Strategy>>,
     pub rpc: Arc<Rpc>,
 }
+
+// pub type SharedState = Arc<RwLock<AppState>>;

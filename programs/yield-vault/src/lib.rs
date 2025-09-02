@@ -101,7 +101,7 @@ pub mod yield_vault {
         Ok(())
     }
 
-    pub fn deposit_usdc_marginfi(ctx: Context<DepositUsdcMarginfi>, amount: u64) -> Result<()> {
+    pub fn deploy_usdc_marginfi(ctx: Context<DepositUsdcMarginfi>, amount: u64) -> Result<()> {
         require!(amount > 0, YieldVaultErrors::InvalidAmount);
 
         // Marginfi CPI: Deposit USDC into the marginfi account
@@ -111,7 +111,7 @@ pub mod yield_vault {
             marginfi_account:       ctx.accounts.marginfi_account.to_account_info(),
             authority:              user_vault.to_account_info(),
             bank:                   ctx.accounts.marginfi_bank.to_account_info(),
-            signer_token_account:   ctx.accounts.user_usdc_vault.to_account_info(),
+            signer_token_account:   ctx.accounts.user_usdc_vault_ata.to_account_info(),
             liquidity_vault:        ctx.accounts.marginfi_bank_liquidity_vault.to_account_info(),
             token_program:          ctx.accounts.token_program.to_account_info(),
         };
@@ -125,7 +125,7 @@ pub mod yield_vault {
         Ok(())
     }
 
-    pub fn withdraw_usdc_marginfi(ctx: Context<WithdrawUsdcMarginfi>) -> Result<()> {
+    pub fn redeem_usdc_marginfi(ctx: Context<WithdrawUsdcMarginfi>) -> Result<()> {
         let user_vault = &mut ctx.accounts.user_vault_account;  
         // Build CPI accounts
         let cpi_accounts = mfi_accounts::LendingAccountWithdraw {
@@ -133,7 +133,7 @@ pub mod yield_vault {
             marginfi_account:            ctx.accounts.marginfi_account.to_account_info(),
             authority:                   user_vault.to_account_info(),
             bank:                        ctx.accounts.marginfi_bank.to_account_info(),
-            destination_token_account:   ctx.accounts.user_usdc_vault.to_account_info(),
+            destination_token_account:   ctx.accounts.user_usdc_vault_ata.to_account_info(),
             bank_liquidity_vault_authority: ctx.accounts.marginfi_bank_liquidity_vault_authority.to_account_info(),
             liquidity_vault:                ctx.accounts.marginfi_bank_liquidity_vault.to_account_info(),
             token_program:                  ctx.accounts.token_program.to_account_info(),
@@ -148,9 +148,9 @@ pub mod yield_vault {
         // amount=1 is a placehonder, as long the third argument enforces to withdraw all
         mfi_cpi::lending_account_withdraw(cpi_ctx, 1, Some(true))?;
 
-        ctx.accounts.user_usdc_vault.reload()?;
-        let amount = ctx.accounts.user_usdc_vault.amount;
-        msg!("Withdrew {} USDC from vault {} of owner {}", amount, user_vault.key(), ctx.accounts.owner.key().to_string());
+        ctx.accounts.user_usdc_vault_ata.reload()?;
+        let amount = ctx.accounts.user_usdc_vault_ata.amount;
+        msg!("Withdrew {} USDC from vault {} of owner {}", amount, user_vault.key(), ctx.accounts.user.key().to_string());
         Ok(())
     }
 
@@ -379,35 +379,29 @@ pub struct TransferUsdcKamino<'info> {
 
 #[derive(Accounts)]
 pub struct DepositUsdcMarginfi<'info> {
-    // user signs to move their USDC into the vault (same as your Kamino path)
-    #[account(mut)]
-    pub owner: Signer<'info>,
+    #[account(mut, constraint = keeper.key() == keeper_pubkey())]
+    pub keeper: Signer<'info>, 
+
+    /// CHECK: User account
+    pub user: UncheckedAccount<'info>,
 
     pub usdc_mint: Account<'info, Mint>,
-
-    // user's source ATA (to collect from, or skip if you already moved to vault ATA)
-    #[account(
-        mut,
-        constraint = owner_usdc_account.mint == usdc_mint.key(),
-        constraint = owner_usdc_account.owner == owner.key()
-    )]
-    pub owner_usdc_account: Account<'info, TokenAccount>,
 
     // vault state PDA (authority for CPIs)
     #[account(
         mut,
-        seeds = [VAULT_SEED, owner.key().as_ref()],
+        seeds = [VAULT_SEED, user.key().as_ref()],
         bump = user_vault_account.bump
     )]
     pub user_vault_account: Account<'info, UserVault>,
 
-    // vault’s USDC ATA (the CPI will pull from here)
+    // vault’s USDC ATA
     #[account(
         mut,
         associated_token::mint = usdc_mint,
         associated_token::authority = user_vault_account,
     )]
-    pub user_usdc_vault: Account<'info, TokenAccount>,
+    pub user_usdc_vault_ata: Account<'info, TokenAccount>,
 
     // ---- Marginfi specific ----
     /// CHECK: owner-checked for safety
@@ -433,28 +427,21 @@ pub struct DepositUsdcMarginfi<'info> {
     pub token_program: Program<'info, Token>,
     pub system_program: Program<'info, System>,
     pub associated_token_program: Program<'info, AssociatedToken>,
- 
 }
 
 #[derive(Accounts)]
 pub struct WithdrawUsdcMarginfi<'info> {
-    // User receiving USDC
-    #[account(mut)]
-    pub owner: Signer<'info>,
-    pub usdc_mint: Account<'info, Mint>,
+    #[account(mut, constraint = keeper.key() == keeper_pubkey())]
+    pub keeper: Signer<'info>, 
+    /// CHECK: User account
+    pub user: UncheckedAccount<'info>,
 
-    // Destination ATA (USDC back to user)
-    #[account(
-        mut,
-        constraint = owner_usdc_account.mint == usdc_mint.key(),
-        constraint = owner_usdc_account.owner == owner.key()
-    )]
-    pub owner_usdc_account: Account<'info, TokenAccount>,
+    pub usdc_mint: Account<'info, Mint>,
 
     // Vault PDA (authority) that “signs” CPIs via seeds
     #[account(
         mut,
-        seeds = [VAULT_SEED, owner.key().as_ref()],
+        seeds = [VAULT_SEED, user.key().as_ref()],
         bump = user_vault_account.bump
     )]
     pub user_vault_account: Account<'info, UserVault>,
@@ -464,7 +451,7 @@ pub struct WithdrawUsdcMarginfi<'info> {
         associated_token::mint = usdc_mint,
         associated_token::authority = user_vault_account,
     )]
-    pub user_usdc_vault: Account<'info, TokenAccount>,
+    pub user_usdc_vault_ata: Account<'info, TokenAccount>,
 
     // ---- Marginfi specific ----
     /// CHECK: group owned by Marginfi
