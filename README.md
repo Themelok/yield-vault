@@ -55,12 +55,20 @@ A Solana-based yield aggregator built with Anchor. It manages USDC deposits and 
 ---
 
 ## How It Works Together
-
 1. **User Flow**:
-   - CLI invokes `deposit`: transfers USDC from user to vault.
-   - Keeper endpoint (HTTP) may be triggered to deploy funds to preferred lending protocol.
+    - CLI invokes `initialize` to:
+        - create vault account for user.
+        - create USDC Associated Token Account (ATA) for user.
+        - create and initialize marginfi account for user.
+   - CLI invokes `deposit`: transfers USDC:
+     - from user to vault ATA;
+     - from vault ATA to Lending Protocol;
+    - CLI invokes `withdraw`: transfers USDC:
+     - from Lending Protocol to vault ATA;
+     - from vault ATA to user;
 
 2. **Rebalancing Flow**:
+Keeper runs hourly APY tracker to:
    - Tracker runs hourly.
    - Fetches Kamino and Marginfi supply APYs.
    - If a better APY is found:
@@ -76,7 +84,10 @@ A Solana-based yield aggregator built with Anchor. It manages USDC deposits and 
 ### Prerequisites
 
 - Install Rust, Solana CLI, and Anchor.
-- For local testing, use `anchor test` which auto-starts a local validator.
+- [install Surfpool](https://github.com/txtx/surfpool?tab=readme-ov-file#installation) local validator and:
+    - generate `bot.json` and `user.json` for keeper and user with `solana-keygen new`;
+    - put `bot.json` in `~/.config/solana/` for keeper;
+    - put `user.json` in `~/.config/solana/` for user;
 
 ### Running Locally
 
@@ -84,5 +95,23 @@ A Solana-based yield aggregator built with Anchor. It manages USDC deposits and 
 ```bash
 cd programs/yield-vault
 anchor build
-anchor deploy --provider.cluster localhost
+surfpool start --no-tui > sp.log
 ```
+surfpool dashboard will be available at http://127.0.0.1:18488
+
+#### Off-chain Program
+##### Keeper
+```bash
+cd keeper
+RUST_LOG=info cargo run -- <PATH_TO_BOT_JSON_KEYPAIR>
+```
+
+##### CLI
+In the separate terminal:
+```bash
+cd cli
+cargo run -- init <PATH_TO_USER_JSON_KEYPAIR>
+cargo run -- deposit -a 100000000 <PATH_TO_USER_JSON_KEYPAIR>
+cargo run -- withdraw <PATH_TO_USER_JSON_KEYPAIR>
+```
+

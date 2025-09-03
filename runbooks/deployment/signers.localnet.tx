@@ -17,5 +17,5 @@ signer "user" "svm::secret_key" {
 
 signer "keeper" "svm::secret_key" {
     description = "Keeper"
-    keypair_json = "/Users/semi/wrksp/solana/exp/yield-vault/keeper/bot7F9sfkm5ztmMGL11St2PD9necoEY6fC84L1WKMDg.json"
+    keypair_json = "~/.config/solana/bot.json"
 }
