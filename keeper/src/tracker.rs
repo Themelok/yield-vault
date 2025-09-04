@@ -92,6 +92,7 @@ async fn tick_once(app: &AppState) -> Result<()> {
     info!(kam_apy = ?kam_apy, mfi_apy = ?mfi_apy, "tracker: APYs fetched");
 
     // Decide desired strategy
+    // TODO: add logic to decide based on APYs, risk tolerance, transactions fees etc.
     let desired = if kam_apy > mfi_apy { Strategy::Kamino } else { Strategy::Marginfi };
 
     // Compare to current and flip if needed

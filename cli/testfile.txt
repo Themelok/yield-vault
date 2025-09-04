@@ -1,6 +1,0 @@
-first line
-second line
-third some line
-fourth line
-fifth line
-sixth someline

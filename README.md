@@ -88,6 +88,7 @@ Keeper runs hourly APY tracker to:
     - generate `bot.json` and `user.json` for keeper and user with `solana-keygen new`;
     - put `bot.json` in `~/.config/solana/` for keeper;
     - put `user.json` in `~/.config/solana/` for user;
+    - change `KEEPER_PUBKEY` in `programs/yield-vault/src/lib.rs` to the pubkey of the keeper;
 
 ### Running Locally
 
